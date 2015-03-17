@@ -47,3 +47,7 @@ end
 group :test do
   gem 'factory_girl_rails'
 end
+
+# Use devise and cancancan for uthentication and role management
+gem 'devise'
+gem 'cancancan', '~> 1.10'
