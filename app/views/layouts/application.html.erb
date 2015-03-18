@@ -13,7 +13,18 @@
   <% if alert %>
     <p class="alert"><%= alert %></p>
   <% end %>
-
+  <% if current_user %>
+    <p class="welcome">Connecté: <%= current_user.name %></p>
+    <%= link_to "Log out", destroy_user_session_path, :method => :delete %><br />
+  <% else %>
+    <p class="welcome">Non connecté
+      <%- if controller_name != 'sessions' %>
+        <%= link_to "Log in", new_user_session_path %><br />
+        <%= link_to "Sign up", new_user_registration_path %><br />
+      <% end -%>
+    </p>
+  <% end %>
+  Menu :
 <%= yield %>
 
 </body>
