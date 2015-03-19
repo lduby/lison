@@ -39,6 +39,17 @@ development:
   username: rails_lison_user
   password: lison
 
+test:
+  <<: *default
+  database: rails_lison_test
+  username: rails_lison_user
+  password: lison
+
+# test:
+#   adapter: sqlite3
+#   database: db/test.sqlite3
+#   pool: 5
+#   timeout: 5000
 
 production:
   <<: *default
