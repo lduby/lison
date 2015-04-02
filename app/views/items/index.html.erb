@@ -1,1 +1,15 @@
 <h1>All items</h1>
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Text</th>
+  </tr>
+
+  <% @items.each do |item| %>
+    <tr>
+      <td><%= item.title %></td>
+      <td></td>
+    </tr>
+  <% end %>
+</table>
+<p><%= link_to 'New item', new_item_path %></p>
