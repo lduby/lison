@@ -6,11 +6,11 @@ describe ItemsController do
     it "populates an array of items" do
       item = FactoryGirl.create(:item)
       get :index
-      assigns(:items).should eq([item])
+      expect(assigns(:items)).to eq([item])
     end
     it "renders the items :index view" do
       get :index
-      response.should render_template :index
+      expect(response).to render_template :index
     end
   end
 
@@ -18,11 +18,11 @@ describe ItemsController do
     it "assigns the requested item to @item" do
       item = FactoryGirl.create(:item)
       get :show, id: item
-      assigns(:item).should eq(item)
+      expect(assigns(:item)).to eq(item)
     end
     it "renders the item :show template" do
       get :show, id: FactoryGirl.create(:item)
-      response.should render_template :show
+      expect(response).to render_template :show
     end
   end
 
@@ -34,7 +34,7 @@ describe ItemsController do
     end
     it "renders the item :new template" do
       get :new
-      response.should render_template :new
+      expect(response).to render_template :new
     end
   end
 
@@ -47,7 +47,7 @@ describe ItemsController do
       end
       it "redirects to the items :index page" do
         post :create, item: FactoryGirl.attributes_for(:item)
-        response.should redirect_to Item.last
+        expect(response).to redirect_to Item.last
       end
     end
 
@@ -59,7 +59,7 @@ describe ItemsController do
       end
       it "re-renders the item :new template" do
         post :create, item: FactoryGirl.attributes_for(:invalid_item)
-        response.should render_template :new
+        expect(response).to render_template :new
       end
     end
   end
