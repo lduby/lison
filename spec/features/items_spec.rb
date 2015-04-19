@@ -16,6 +16,30 @@ describe "Items" do
       end
     end
 
+    it "Shows an item details" do
+      item = FactoryGirl.create(:item, title: "To be viewed item")
+      visit items_url
+      expect{
+        click_link "show_item_#{item.id}"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "To be viewed item"
+      end
+    end
+
+    it "Updates an item and displays the results" do
+      item = FactoryGirl.create(:item, title: "To be updated item")
+      visit items_url
+      expect{
+        click_link "edit_item_#{item.id}"
+        fill_in 'Title', with: "Updated Item"
+        click_button "Save Item"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "Updated Item"
+      end
+    end
+
     it "Deletes an item" do
       item = FactoryGirl.create(:item, title: "To be deleted item")
       visit items_path

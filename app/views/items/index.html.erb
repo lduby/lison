@@ -10,8 +10,8 @@
     <tr name="item_<%= item.id %>">
       <td><%= item.title %></td>
       <td></td>
-      <td><%= link_to 'Show', item_path(item) %></td>
-      <td><%= link_to 'Edit', edit_item_path(item) %></td>
+      <td><%= link_to 'Show', item_path(item), id: "show_item_#{item.id}" %></td>
+      <td><%= link_to 'Edit', edit_item_path(item), id: "edit_item_#{item.id}" %></td>
       <td><%= link_to 'Destroy', item_path(item), id: "del_item_#{item.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
     </tr>
   <% end %>
