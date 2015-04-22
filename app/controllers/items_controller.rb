@@ -1,7 +1,11 @@
 class ItemsController < ApplicationController
 
   def index
-    @items = Item.all
+    # if params[:author_id]
+    #   @items = (Author.find(params[:author_id])).items
+    # else
+      @items = Item.all
+    # end
   end
 
   def show
@@ -10,11 +14,20 @@ class ItemsController < ApplicationController
 
   def new
     @item = Item.new
+    @authors = Author.all
   end
 
   def create
     @item = Item.new(item_params)
-
+    # Associating the authors
+    if (params[:author_ids])
+      params[:author_ids].each do |author|
+        if author >= 1
+          @author = Author.find(author)
+          @item.authors << @author
+        end
+      end
+    end
     if @item.save
       redirect_to @item
     else
@@ -45,7 +58,7 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:title)
+    params.require(:item).permit(:title, :author_ids => [])
   end
 
 

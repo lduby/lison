@@ -1,0 +1,25 @@
+<% if @item.errors.any? %>
+  <div id="error_explanation">
+  <h2><%= pluralize(@item.errors.count, "error") %> prohibited
+    this item from being saved:</h2>
+  <ul>
+  <% @item.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+  <% end %>
+  </ul>
+  </div>
+<% end %>
+<p>
+  <%= f.label :title %><br>
+  <%= f.text_field :title %>
+</p>
+
+<p>
+  <b>Authors</b> (<%= link_to 'New', new_author_path %>)<br />
+  <div class="field">
+    <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
+  </div>
+</p>
+<p>
+  <%= f.submit %>
+</p>

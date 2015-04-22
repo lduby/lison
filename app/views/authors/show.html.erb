@@ -1,4 +1,6 @@
 <h1><%= @author.name %></h1>
 <h2>About</h2>
 <p><%= @author.about %></p>
+<h2>List of associated items</h2>
+<p><%= @author.items.map {|i| i.title}.join(', ') %></p>
 <%= link_to 'Back', authors_path %> | <%= link_to 'Edit', edit_author_path(@author) %>
