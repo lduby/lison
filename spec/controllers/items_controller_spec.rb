@@ -32,6 +32,11 @@ describe ItemsController do
       expect(assigns(:item)).to be_a_new(Item)
       # expect(assigns(:business).addresses.first).to be_a_new(Address)
     end
+    it "populates an array of authors" do
+      author = FactoryGirl.create(:author)
+      get :new
+      expect(assigns(:authors)).to eq([author])
+    end
     it "renders the item :new template" do
       get :new
       expect(response).to render_template :new
@@ -48,6 +53,11 @@ describe ItemsController do
       it "redirects to the items :index page" do
         post :create, item: FactoryGirl.attributes_for(:item)
         expect(response).to redirect_to Item.last
+      end
+      it "associates authors to the item" do
+        author = FactoryGirl.create(:author)
+        post :create, item: FactoryGirl.attributes_for(:item, author_ids: [author.id])
+        expect(assigns(:item).authors).to eq([author])
       end
     end
 

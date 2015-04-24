@@ -15,5 +15,8 @@
 /log/*.log
 /tmp
 
+# Ignore code coverage files
+/coverage
+
 # Ignore rake tasks
 /.rake_tasks~

@@ -19,15 +19,7 @@ class ItemsController < ApplicationController
 
   def create
     @item = Item.new(item_params)
-    # Associating the authors
-    if (params[:author_ids])
-      params[:author_ids].each do |author|
-        if author >= 1
-          @author = Author.find(author)
-          @item.authors << @author
-        end
-      end
-    end
+    # no need to add code for authors associations, Rails do it automatically because of the HATBM relation
     if @item.save
       redirect_to @item
     else
@@ -37,6 +29,7 @@ class ItemsController < ApplicationController
 
   def edit
     @item = Item.find(params[:id])
+    @authors = Author.all
   end
 
   def update

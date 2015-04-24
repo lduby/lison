@@ -55,10 +55,13 @@ describe "Authors" do
       DatabaseCleaner.clean
       author = FactoryGirl.create(:author, firstname: "John", lastname: "Doe")
       visit authors_path
+      sleep 1
       expect{
           click_link "del_author_#{author.id}"
+          sleep 1
           alert = page.driver.browser.switch_to.alert
           alert.accept
+          sleep 1
       }.to change(Author,:count).by(-1)
       expect(page).to have_content "All authors"
       expect(page).to_not have_content "John Doe"

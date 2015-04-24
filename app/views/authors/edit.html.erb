@@ -1,7 +1,7 @@
 <h1>Editing author</h1>
 
 <%= form_for :author, url: author_path(@author), method: :patch do |f| %>
-  <%= render "form" %>
+  <%= render "form", f: f %>
 <% end %>
 
 <%= link_to 'Back', authors_path %>

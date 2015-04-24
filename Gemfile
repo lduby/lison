@@ -52,6 +52,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'guard-rspec'
   gem 'launchy'
+  gem 'simplecov', :require => false
 end
 
 # Use devise and cancancan for uthentication and role management
