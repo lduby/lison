@@ -8,6 +8,11 @@ class ItemsController < ApplicationController
     # end
   end
 
+  def list
+    @author = Author.find(params[:author_id])
+    @items = @author.items
+  end
+
   def show
     @item = Item.find(params[:id])
   end

@@ -14,6 +14,24 @@ describe ItemsController do
     end
   end
 
+  describe "GET #list" do
+    it "populates an array of items associated to an author" do
+      author = FactoryGirl.create(:author)
+      item = FactoryGirl.create(:item, author_ids: [author.id])
+      item2 = FactoryGirl.create(:item, author_ids: [])
+      get :index
+      expect(author.items).to eq([item])
+      expect(author.items).to_not include(item2)
+    end
+    it "renders the items :list view" do
+      author = FactoryGirl.create(:author)
+      item = FactoryGirl.create(:item, author_ids: [author.id])
+      item2 = FactoryGirl.create(:item, author_ids: [])
+      get :list, author_id: author.id
+      expect(response).to render_template :list
+    end
+  end
+
   describe "GET #show" do
     it "assigns the requested item to @item" do
       item = FactoryGirl.create(:item)

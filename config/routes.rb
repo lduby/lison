@@ -18,7 +18,9 @@ Rails.application.routes.draw do
   #   resources :products
   resources :items
   resources :authors do
-    resources :items
+    resources :items do
+      get :list, :on => :collection, :as => :list
+    end
   end
 
   # Example resource route with options:
