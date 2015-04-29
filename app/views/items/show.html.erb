@@ -1,3 +1,9 @@
 <h1><%= @item.title %></h1>
-<p id=item_authors><strong>Authors: </strong><%= @item.authors.map {|a| a.name}.join(', ') %></p>
+<p id=item_authors><strong>Authors: </strong>
+  <ul>
+  <% @item.authors.each do |author| %>
+  <li><%= link_to author.name, author_path(author), id: "show_author_#{author.id}" %></li>
+  <% end %>
+  </ul>
+</p>
 <%= link_to 'Back', items_path %> | <%= link_to 'Edit', edit_item_path(@item) %>

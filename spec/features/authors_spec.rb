@@ -28,6 +28,21 @@ describe "Authors" do
       end
     end
 
+    it "Shows an author details from an item details" do
+      author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
+      visit items_url
+      click_link "show_item_#{item.id}"
+      within 'h1' do
+        expect(page).to have_content "Wazabi"
+      end
+      click_link "show_author_#{author.id}"
+      within 'h1' do
+        expect(page).to have_content "Larry Smith"
+      end
+
+    end
+
     it "Shows an author items" do
       author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
       item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])

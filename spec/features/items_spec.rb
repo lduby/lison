@@ -47,6 +47,33 @@ describe "Items" do
       end
     end
 
+    it "Shows an item details from an author items list" do
+      author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
+      item2 = FactoryGirl.create(:item, title: "Hanabi", author_ids: [author.id])
+      visit authors_url
+      click_link "show_items_of_author_#{author.id}"
+      click_link "show_item_#{item.id}"
+      within 'h1' do
+        expect(page).to have_content "Wazabi"
+      end
+    end
+
+    it "Updates an item from an author items list and displays the results" do
+      author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
+      visit authors_url
+      click_link "show_items_of_author_#{author.id}"
+      expect{
+        click_link "edit_item_#{item.id}"
+        fill_in 'Title', with: "Hanabi"
+        click_button "Save Item"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "Hanabi"
+      end
+    end
+
     it "Updates an item and displays the results" do
       item = FactoryGirl.create(:item, title: "To be updated item")
       visit items_url
@@ -69,6 +96,22 @@ describe "Items" do
       }.to change(Item,:count).by(-1)
       expect(page).to have_content "All items"
       expect(page).to_not have_content "To be deleted item"
+    end
+
+    it "Deletes an item from an author items list" do
+      author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
+      item2 = FactoryGirl.create(:item, title: "Hanabi", author_ids: [author.id])
+      visit authors_url
+      click_link "show_items_of_author_#{author.id}"
+      expect{
+          click_link "del_item_#{item2.id}"
+      }.to change(Item,:count).by(-1)
+      expect(page).to have_content "All items"
+      expect(page).to_not have_content "Hanabi"
+      visit authors_url
+      click_link "show_author_#{author.id}"
+      expect(page).to_not have_content "Hanabi"
     end
 
     it "Deletes an item with js dialog", js: true do
