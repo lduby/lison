@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "Au thors to items relationship" do
+describe "Authors to items relationship" do
 
   before(:all) do
     @smashup = FactoryGirl.create(:item, :title => 'Smash Up')

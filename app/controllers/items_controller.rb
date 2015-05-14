@@ -1,16 +1,14 @@
 class ItemsController < ApplicationController
 
   def index
-    # if params[:author_id]
-    #   @items = (Author.find(params[:author_id])).items
-    # else
-      @items = Item.all
-    # end
+    @items = Item.all
   end
 
   def list
-    @author = Author.find(params[:author_id])
-    @items = @author.items
+    if params[:author_id]
+      @author = Author.find(params[:author_id])
+      @items = @author.items
+    end
   end
 
   def show
