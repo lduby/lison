@@ -35,6 +35,25 @@ describe "Items" do
 
     end
 
+    it "Adds a new item with an illustrator and displays the results" do
+      illustrator = FactoryGirl.create(:illustrator)
+      visit items_url
+      expect{
+        click_link 'New item'
+        fill_in 'Title', with: "Example Item"
+        check "item_illustrator_ids_#{illustrator.id}"
+        click_button "Save Item"
+      }.to change(Item,:count).by(1)
+      within 'h1' do
+        expect(page).to have_content "Example Item"
+      end
+      expect(page).to have_content("Illustrators: #{illustrator.name}")
+      visit illustrators_url
+      click_link "show_illustrator_#{illustrator.id}"
+      expect(page).to have_content "#{Item.last.title}"
+
+    end
+
 
     it "Shows an item details" do
       item = FactoryGirl.create(:item, title: "To be viewed item")
@@ -59,11 +78,23 @@ describe "Items" do
       end
     end
 
-    it "Updates an item from an author items list and displays the results" do
-      author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
-      item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
-      visit authors_url
-      click_link "show_items_of_author_#{author.id}"
+    it "Shows an item details from an illustrator items list" do
+      illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", illustrator_ids: [illustrator.id])
+      item2 = FactoryGirl.create(:item, title: "Hanabi", illustrator_ids: [illustrator.id])
+      visit illustrators_url
+      click_link "show_items_of_illustrator_#{illustrator.id}"
+      click_link "show_item_#{item.id}"
+      within 'h1' do
+        expect(page).to have_content "Wazabi"
+      end
+    end
+
+    it "Updates an item from an illustrator items list and displays the results" do
+      illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", illustrator_ids: [illustrator.id])
+      visit illustrators_url
+      click_link "show_items_of_illustrator_#{illustrator.id}"
       expect{
         click_link "edit_item_#{item.id}"
         fill_in 'Title', with: "Hanabi"
@@ -111,6 +142,22 @@ describe "Items" do
       expect(page).to_not have_content "Hanabi"
       visit authors_url
       click_link "show_author_#{author.id}"
+      expect(page).to_not have_content "Hanabi"
+    end
+
+    it "Deletes an item from an illustrator items list" do
+      illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", illustrator_ids: [illustrator.id])
+      item2 = FactoryGirl.create(:item, title: "Hanabi", illustrator_ids: [illustrator.id])
+      visit illustrators_url
+      click_link "show_items_of_illustrator_#{illustrator.id}"
+      expect{
+          click_link "del_item_#{item2.id}"
+      }.to change(Item,:count).by(-1)
+      expect(page).to have_content "All items"
+      expect(page).to_not have_content "Hanabi"
+      visit illustrators_url
+      click_link "show_illustrator_#{illustrator.id}"
       expect(page).to_not have_content "Hanabi"
     end
 

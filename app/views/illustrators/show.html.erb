@@ -1,0 +1,6 @@
+<h1><%= @illustrator.name %></h1>
+<h2>About</h2>
+<p><%= @illustrator.about %></p>
+<h2>List of associated items</h2>
+<p><%= @illustrator.items.map {|i| i.title}.join(', ') %></p>
+<%= link_to 'Back', illustrators_path %> | <%= link_to 'Edit', edit_illustrator_path(@illustrator) %>

@@ -9,6 +9,10 @@ class ItemsController < ApplicationController
       @author = Author.find(params[:author_id])
       @items = @author.items
     end
+    if params[:illustrator_id]
+      @illustrator = Illustrator.find(params[:illustrator_id])
+      @items = @illustrator.items
+    end
   end
 
   def show
@@ -18,6 +22,7 @@ class ItemsController < ApplicationController
   def new
     @item = Item.new
     @authors = Author.all
+    @illustrators = Illustrator.all
   end
 
   def create
@@ -33,6 +38,7 @@ class ItemsController < ApplicationController
   def edit
     @item = Item.find(params[:id])
     @authors = Author.all
+    @illustrators = Illustrator.all
   end
 
   def update
@@ -54,7 +60,7 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:title, :author_ids => [])
+    params.require(:item).permit(:title, :author_ids => [], :illustrator_ids => [])
   end
 
 

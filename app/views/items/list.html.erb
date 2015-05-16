@@ -1,4 +1,8 @@
-<h1><%= @author.name %>''s items</h1>
+<% if !@author.nil? %>
+  <h1><%= @author.name %>''s items</h1>
+<% elsif !@illustrator.nil? %>
+  <h1><%= @illustrator.name %>''s items</h1>
+<% end %>
 <table>
   <tr>
     <th>Title</th>

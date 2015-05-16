@@ -23,11 +23,26 @@ describe ItemsController do
       expect(author.items).to eq([item])
       expect(author.items).to_not include(item2)
     end
-    it "renders the items :list view" do
+    it "renders the items :list view when an author is specified" do
       author = FactoryGirl.create(:author)
       item = FactoryGirl.create(:item, author_ids: [author.id])
       item2 = FactoryGirl.create(:item, author_ids: [])
       get :list, author_id: author.id
+      expect(response).to render_template :list
+    end
+    it "populates an array of items associated to an illustrator" do
+      illustrator = FactoryGirl.create(:illustrator)
+      item = FactoryGirl.create(:item, illustrator_ids: [illustrator.id])
+      item2 = FactoryGirl.create(:item, illustrator_ids: [])
+      get :index
+      expect(illustrator.items).to eq([item])
+      expect(illustrator.items).to_not include(item2)
+    end
+    it "renders the items :list view when an illustrator is specified" do
+      illustrator = FactoryGirl.create(:illustrator)
+      item = FactoryGirl.create(:item, illustrator_ids: [illustrator.id])
+      item2 = FactoryGirl.create(:item, illustrator_ids: [])
+      get :list, illustrator_id: illustrator.id
       expect(response).to render_template :list
     end
   end
@@ -55,6 +70,11 @@ describe ItemsController do
       get :new
       expect(assigns(:authors)).to eq([author])
     end
+    it "populates an array of illustrators" do
+      illustrator = FactoryGirl.create(:illustrator)
+      get :new
+      expect(assigns(:illustrators)).to eq([illustrator])
+    end
     it "renders the item :new template" do
       get :new
       expect(response).to render_template :new
@@ -76,6 +96,11 @@ describe ItemsController do
         author = FactoryGirl.create(:author)
         post :create, item: FactoryGirl.attributes_for(:item, author_ids: [author.id])
         expect(assigns(:item).authors).to eq([author])
+      end
+      it "associates illustrators to the item" do
+        illustrator = FactoryGirl.create(:illustrator)
+        post :create, item: FactoryGirl.attributes_for(:item, illustrator_ids: [illustrator.id])
+        expect(assigns(:item).illustrators).to eq([illustrator])
       end
     end
 

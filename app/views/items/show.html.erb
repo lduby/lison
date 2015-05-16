@@ -6,4 +6,11 @@
   <% end %>
   </ul>
 </p>
+<p id=item_illustrators><strong>Illustrators: </strong>
+  <ul>
+  <% @item.illustrators.each do |illustrator| %>
+  <li><%= link_to illustrator.name, illustrator_path(illustrator), id: "show_illustrator_#{illustrator.id}" %></li>
+  <% end %>
+  </ul>
+</p>
 <%= link_to 'Back', items_path %> | <%= link_to 'Edit', edit_item_path(@item) %>

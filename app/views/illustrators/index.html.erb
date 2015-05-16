@@ -1,0 +1,19 @@
+<h1>All illustrators</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>#Items</th>
+    <th colspan="3"></th>
+  </tr>
+
+  <% @illustrators.each do |illustrator| %>
+    <tr name="illustrator_<%= illustrator.id %>">
+      <td><%= illustrator.name %></td>
+      <td><%= link_to "#{illustrator.items.count}", list_illustrator_items_path(illustrator), id: "show_items_of_illustrator_#{illustrator.id}" %></td>
+      <td><%= link_to 'Show', illustrator_path(illustrator), id: "show_illustrator_#{illustrator.id}" %></td>
+      <td><%= link_to 'Edit', edit_illustrator_path(illustrator), id: "edit_illustrator_#{illustrator.id}" %></td>
+      <td><%= link_to 'Destroy', illustrator_path(illustrator), id: "del_illustrator_#{illustrator.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+</table>
+<p><%= link_to 'New illustrator', new_illustrator_path %></p>

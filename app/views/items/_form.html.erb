@@ -20,6 +20,13 @@
     <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
   </div>
 </p>
+
+<p>
+  <b>Illustrators</b> (<%= link_to 'New', new_illustrator_path %>)<br />
+  <div class="field">
+    <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
+  </div>
+</p>
 <p>
   <%= f.submit %>
 </p>
