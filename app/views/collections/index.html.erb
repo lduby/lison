@@ -1,0 +1,19 @@
+<h1>All collections</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>#Items</th>
+    <th colspan="3"></th>
+  </tr>
+
+  <% @collections.each do |collection| %>
+    <tr name="collection<%= collection.id %>">
+      <td><%= collection.name %></td>
+      <td><%= link_to "#{collection.items.count}", list_collection_items_path(collection), id: "show_items_of_collection_#{collection.id}" %></td>
+      <td><%= link_to 'Show', collection_path(collection), id: "show_collection_#{collection.id}" %></td>
+      <td><%= link_to 'Edit', edit_collection_path(collection), id: "edit_collection_#{collection.id}" %></td>
+      <td><%= link_to 'Destroy', collection_path(collection), id: "del_collection_#{collection.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+</table>
+<p><%= link_to 'New collection', new_collection_path %></p>

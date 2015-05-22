@@ -73,6 +73,25 @@ describe "Items" do
 
     end
 
+    it "Adds a new item with a collection and displays the results" do
+      collection = FactoryGirl.create(:collection)
+      visit items_url
+      expect{
+        click_link 'New item'
+        fill_in 'Title', with: "Example Item"
+        select "#{collection.name}", :from => 'item_collection_id'
+        click_button "Save Item"
+      }.to change(Item,:count).by(1)
+      within 'h1' do
+        expect(page).to have_content "Example Item"
+      end
+      expect(page).to have_content("Collection: #{collection.name}")
+      visit collections_url
+      click_link "show_collection_#{collection.id}"
+      expect(page).to have_content "#{Item.last.title}"
+
+    end
+
 
     it "Shows an item details" do
       item = FactoryGirl.create(:item, title: "To be viewed item")
@@ -115,6 +134,18 @@ describe "Items" do
       item2 = FactoryGirl.create(:item, title: "Hanabi", publisher_id: publisher.id)
       visit publishers_url
       click_link "show_items_of_publisher_#{publisher.id}"
+      click_link "show_item_#{item.id}"
+      within 'h1' do
+        expect(page).to have_content "Wazabi"
+      end
+    end
+
+    it "Shows an item details from a collection items list" do
+      collection = FactoryGirl.create(:collection, name: "Iello")
+      item = FactoryGirl.create(:item, title: "Wazabi", collection_id: collection.id)
+      item2 = FactoryGirl.create(:item, title: "Hanabi", collection_id: collection.id)
+      visit collections_url
+      click_link "show_items_of_collection_#{collection.id}"
       click_link "show_item_#{item.id}"
       within 'h1' do
         expect(page).to have_content "Wazabi"
@@ -166,6 +197,21 @@ describe "Items" do
       end
     end
 
+    it "Updates an item from a collection items list and displays the results" do
+      collection = FactoryGirl.create(:collection, name: "Iello")
+      item = FactoryGirl.create(:item, title: "Wazabi", collection_id: collection.id)
+      visit collections_url
+      click_link "show_items_of_collection_#{collection.id}"
+      expect{
+        click_link "edit_item_#{item.id}"
+        fill_in 'Title', with: "Hanabi"
+        click_button "Save Item"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "Hanabi"
+      end
+    end
+
     it "Updates an item and displays the results" do
       item = FactoryGirl.create(:item, title: "To be updated item")
       visit items_url
@@ -179,6 +225,13 @@ describe "Items" do
       end
 
     end
+
+    it "Adds an author and displays the results"
+    it "Removes an author and displays the results"
+    it "Adds an illustrator and displays the resuts"
+    it "Removes an illustrator and displays the results"
+    it "Changes an item publisher and displays the results"
+    it "Changes an item collection and displays the results"
 
     it "Deletes an item" do
       item = FactoryGirl.create(:item, title: "To be deleted item")
@@ -235,6 +288,22 @@ describe "Items" do
       expect(page).to_not have_content "Hanabi"
       visit publishers_url
       click_link "show_publisher_#{publisher.id}"
+      expect(page).to_not have_content "Hanabi"
+    end
+
+    it "Deletes an item from a collection items list" do
+      collection = FactoryGirl.create(:collection, name: "Iello")
+      item = FactoryGirl.create(:item, title: "Wazabi", collection_id: collection.id)
+      item2 = FactoryGirl.create(:item, title: "Hanabi", collection_id: collection.id)
+      visit collections_url
+      click_link "show_items_of_collection_#{collection.id}"
+      expect{
+          click_link "del_item_#{item2.id}"
+      }.to change(Item,:count).by(-1)
+      expect(page).to have_content "All items"
+      expect(page).to_not have_content "Hanabi"
+      visit collections_url
+      click_link "show_collection_#{collection.id}"
       expect(page).to_not have_content "Hanabi"
     end
 

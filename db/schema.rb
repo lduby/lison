@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150516210008) do
+ActiveRecord::Schema.define(version: 20150522114832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,13 @@ ActiveRecord::Schema.define(version: 20150516210008) do
   create_table "authors_items", id: false, force: true do |t|
     t.integer "author_id"
     t.integer "item_id"
+  end
+
+  create_table "collections", force: true do |t|
+    t.string   "name"
+    t.text     "about"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "illustrators", force: true do |t|
@@ -47,8 +54,10 @@ ActiveRecord::Schema.define(version: 20150516210008) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "publisher_id"
+    t.integer  "collection_id"
   end
 
+  add_index "items", ["collection_id"], name: "index_items_on_collection_id", using: :btree
   add_index "items", ["publisher_id"], name: "index_items_on_publisher_id", using: :btree
 
   create_table "publishers", force: true do |t|

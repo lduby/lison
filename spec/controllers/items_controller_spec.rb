@@ -60,6 +60,21 @@ describe ItemsController do
       get :list, publisher_id: publisher.id
       expect(response).to render_template :list
     end
+    it "populates an array of items associated to a collection" do
+      collection = FactoryGirl.create(:collection)
+      item = FactoryGirl.create(:item, collection_id: collection.id)
+      item2 = FactoryGirl.create(:item)
+      get :index
+      expect(collection.items).to eq([item])
+      expect(collection.items).to_not include(item2)
+    end
+    it "renders the items :list view when a collection is specified" do
+      collection = FactoryGirl.create(:collection)
+      item = FactoryGirl.create(:item, collection_id: collection.id)
+      item2 = FactoryGirl.create(:item)
+      get :list, collection_id: collection.id
+      expect(response).to render_template :list
+    end
   end
 
   describe "GET #show" do
@@ -95,6 +110,11 @@ describe ItemsController do
       get :new
       expect(assigns(:publishers)).to eq([publisher])
     end
+    it "populates an array of collections" do
+      collection = FactoryGirl.create(:collection)
+      get :new
+      expect(assigns(:collections)).to eq([collection])
+    end
     it "renders the item :new template" do
       get :new
       expect(response).to render_template :new
@@ -128,6 +148,12 @@ describe ItemsController do
         expect(assigns(:item).publisher).to eq(publisher)
         expect(publisher.items).to include(assigns(:item))
       end
+      it "associates a collection to the item" do
+        collection = FactoryGirl.create(:collection)
+        post :create, item: FactoryGirl.attributes_for(:item, collection_id: collection.id)
+        expect(assigns(:item).collection).to eq(collection)
+        expect(collection.items).to include(assigns(:item))
+      end
     end
 
     context "with invalid attributes" do
@@ -160,6 +186,13 @@ describe ItemsController do
         @item.reload
         expect(@item.title).to eq("Updated test item")
       end
+
+      it "adds an author"
+      it "adds an illustrator"
+      it "deletes an author"
+      it "deletes an illustrator"
+      it "changes the publisher"
+      it "changes the collection"
 
       it "redirects to the updated item" do
         put :update, id: @item, item: FactoryGirl.attributes_for(:item)

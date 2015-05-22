@@ -36,5 +36,12 @@
 </p>
 
 <p>
+  <b>Collection</b> (<%= link_to 'New', new_collection_path %>)<br />
+  <div class="field">
+    <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
+  </div>
+</p>
+
+<p>
   <%= f.submit %>
 </p>

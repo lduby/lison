@@ -53,6 +53,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :collections do
+    resources :items do
+      get :list, :on => :collection, :as => :list
+    end
+  end
+
   # Example resource route with more complex sub-resources:
   #   resources :products do
   #     resources :comments

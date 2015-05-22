@@ -17,6 +17,10 @@ class ItemsController < ApplicationController
       @publisher = Publisher.find(params[:publisher_id])
       @items = @publisher.items
     end
+    if params[:collection_id]
+      @collection = Collection.find(params[:collection_id])
+      @items = @collection.items
+    end
   end
 
   def show
@@ -28,6 +32,7 @@ class ItemsController < ApplicationController
     @authors = Author.all
     @illustrators = Illustrator.all
     @publishers = Publisher.all
+    @collections = Collection.all
   end
 
   def create
@@ -45,6 +50,7 @@ class ItemsController < ApplicationController
     @authors = Author.all
     @illustrators = Illustrator.all
     @publishers = Publisher.all
+    @collections = Collection.all
   end
 
   def update
@@ -66,7 +72,7 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:title, :publisher_id, :author_ids => [], :illustrator_ids => [])
+    params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [])
   end
 
 
