@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150522114832) do
+ActiveRecord::Schema.define(version: 20150522193648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,10 @@ ActiveRecord::Schema.define(version: 20150522114832) do
     t.text     "about"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "publisher_id"
   end
+
+  add_index "collections", ["publisher_id"], name: "index_collections_on_publisher_id", using: :btree
 
   create_table "illustrators", force: true do |t|
     t.string   "firstname"

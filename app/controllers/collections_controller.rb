@@ -4,12 +4,21 @@ class CollectionsController < ApplicationController
     @collections = Collection.all
   end
 
+  def list
+    if params[:publisher_id]
+      @publisher = Publisher.find(params[:publisher_id])
+      @collections = @publisher.collections
+    end
+  end
+
+
   def show
     @collection = Collection.find(params[:id])
   end
 
   def new
     @collection = Collection.new
+    @publishers = Publisher.all
   end
 
   def create
@@ -24,6 +33,7 @@ class CollectionsController < ApplicationController
 
   def edit
     @collection = Collection.find(params[:id])
+    @publishers = Publisher.all
   end
 
   def update
@@ -45,7 +55,7 @@ class CollectionsController < ApplicationController
 
   private
   def collection_params
-    params.require(:collection).permit(:name, :about, :item_ids => [])
+    params.require(:collection).permit(:name, :about, :publisher_id, :item_ids => [])
   end
 
 

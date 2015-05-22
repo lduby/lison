@@ -48,6 +48,9 @@ Rails.application.routes.draw do
   end
 
   resources :publishers do
+    resources :collections do
+      get :list, :on => :collection, :as => :list
+    end
     resources :items do
       get :list, :on => :collection, :as => :list
     end

@@ -33,6 +33,11 @@ RSpec.describe CollectionsController, type: :controller do
       expect(assigns(:collection)).to be_a_new(Collection)
       # expect(assigns(:business).addresses.first).to be_a_new(Address)
     end
+    it "populates an array of publishers" do
+      publisher = FactoryGirl.create(:publisher)
+      get :new
+      expect(assigns(:publishers)).to eq([publisher])
+    end
     it "renders the collection :new template" do
       get :new
       expect(response).to render_template :new
@@ -49,6 +54,12 @@ RSpec.describe CollectionsController, type: :controller do
       it "redirects to the collections :index page" do
         post :create, collection: FactoryGirl.attributes_for(:collection)
         expect(response).to redirect_to Collection.last
+      end
+      it "associates a publisher to the collection" do
+        publisher = FactoryGirl.create(:publisher)
+        post :create, collection: FactoryGirl.attributes_for(:collection, publisher_id: publisher.id)
+        expect(assigns(:collection).publisher).to eq(publisher)
+        expect(publisher.collections).to include(assigns(:collection))
       end
     end
 
@@ -82,6 +93,8 @@ RSpec.describe CollectionsController, type: :controller do
         @collection.reload
         expect(@collection.name).to eq("Iello")
       end
+
+      it "changes the associated publisher"
 
       it "redirects to the updated collection" do
         put :update, id: @collection, collection: FactoryGirl.attributes_for(:collection)

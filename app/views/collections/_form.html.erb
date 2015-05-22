@@ -10,6 +10,12 @@
     </div>
   <% end %>
   <p>
+    <b>Publisher</b> (<%= link_to 'New', new_publisher_path %>)<br />
+    <div class="field">
+      <%= collection_select(:collection, :publisher_id, @publishers, :id, :name) %>
+    </div>
+  </p>
+  <p>
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </p>

@@ -42,6 +42,21 @@ describe "Publishers" do
 
     end
 
+    it "Shows a publisher details from a collection details" do
+      publisher = FactoryGirl.create(:publisher, name: "Iello")
+      collection = FactoryGirl.create(:collection, name: "Great Collection", publisher_id: publisher.id)
+      visit collections_url
+      click_link "show_collection_#{collection.id}"
+      within 'h1' do
+        expect(page).to have_content "Great Collection"
+      end
+      click_link "show_publisher_#{publisher.id}"
+      within 'h1' do
+        expect(page).to have_content "Iello"
+      end
+
+    end
+
     it "Shows a publisher items" do
       publisher = FactoryGirl.create(:publisher, name: "Iello")
       item = FactoryGirl.create(:item, title: "Wazabi", publisher_id: publisher.id)
@@ -53,6 +68,20 @@ describe "Publishers" do
       end
       expect(page).to have_content "Wazabi"
       expect(page).to_not have_content "Hanabi"
+    end
+
+
+    it "Shows a publisher collections" do
+      publisher = FactoryGirl.create(:publisher, name: "Iello")
+      collection = FactoryGirl.create(:collection, name: "Great Collection", publisher_id: publisher.id)
+      collection2 = FactoryGirl.create(:collection, name: "Bad Collection")
+      visit publishers_url
+      click_link "show_collections_of_publisher_#{publisher.id}"
+      within 'h1' do
+        expect(page).to have_content "Iello collections"
+      end
+      expect(page).to have_content "Great Collection"
+      expect(page).to_not have_content "Bad Collection"
     end
 
     it "Updates a publisher and displays the results" do

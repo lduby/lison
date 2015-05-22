@@ -1,6 +1,12 @@
 <h1><%= @publisher.name %></h1>
 <h2>About</h2>
 <p><%= @publisher.about %></p>
+<h2>List of associated collections (<%= link_to 'New', new_publisher_collection_path(@publisher) %>)</h2>
+<ul>
+  <% @publisher.collections.each do |coll| %>
+    <li><%= link_to "#{coll.name}", collection_path(coll), id: "show_collection_#{coll.id}" %></li>
+  <% end %>
+</ul>
 <h2>List of associated items</h2>
 <p><%= @publisher.items.map {|i| i.title}.join(', ') %></p>
 <%= link_to 'Back', publishers_path %> | <%= link_to 'Edit', edit_publisher_path(@publisher) %>

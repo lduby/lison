@@ -3,6 +3,7 @@
   <tr>
     <th>Name</th>
     <th>#Items</th>
+    <th>#Collections</th>
     <th colspan="3"></th>
   </tr>
 
@@ -10,6 +11,7 @@
     <tr name="publisher<%= publisher.id %>">
       <td><%= publisher.name %></td>
       <td><%= link_to "#{publisher.items.count}", list_publisher_items_path(publisher), id: "show_items_of_publisher_#{publisher.id}" %></td>
+      <td><%= link_to "#{publisher.collections.count}", list_publisher_collections_path(publisher), id: "show_collections_of_publisher_#{publisher.id}" %></td>
       <td><%= link_to 'Show', publisher_path(publisher), id: "show_publisher_#{publisher.id}" %></td>
       <td><%= link_to 'Edit', edit_publisher_path(publisher), id: "edit_publisher_#{publisher.id}" %></td>
       <td><%= link_to 'Destroy', publisher_path(publisher), id: "del_publisher_#{publisher.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>

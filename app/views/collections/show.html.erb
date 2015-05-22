@@ -1,4 +1,9 @@
 <h1><%= @collection.name %></h1>
+<h2>Publisher:
+  <% if @collection.publisher %>
+   <%= link_to @collection.publisher.name, publisher_path(@collection.publisher), id: "show_publisher_#{@collection.publisher.id}" %>
+  <% end %>
+</h2>
 <h2>About</h2>
 <p><%= @collection.about %></p>
 <h2>List of associated items</h2>

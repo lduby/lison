@@ -45,7 +45,7 @@ class PublishersController < ApplicationController
 
   private
   def publisher_params
-    params.require(:publisher).permit(:name, :about, :item_ids => [])
+    params.require(:publisher).permit(:name, :about, :item_ids => [], :collection_ids => [])
   end
 
 
