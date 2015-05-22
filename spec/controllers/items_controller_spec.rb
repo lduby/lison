@@ -45,6 +45,21 @@ describe ItemsController do
       get :list, illustrator_id: illustrator.id
       expect(response).to render_template :list
     end
+    it "populates an array of items associated to a publisher" do
+      publisher = FactoryGirl.create(:publisher)
+      item = FactoryGirl.create(:item, publisher_id: publisher.id)
+      item2 = FactoryGirl.create(:item)
+      get :index
+      expect(publisher.items).to eq([item])
+      expect(publisher.items).to_not include(item2)
+    end
+    it "renders the items :list view when a publisher is specified" do
+      publisher = FactoryGirl.create(:publisher)
+      item = FactoryGirl.create(:item, publisher_id: publisher.id)
+      item2 = FactoryGirl.create(:item)
+      get :list, publisher_id: publisher.id
+      expect(response).to render_template :list
+    end
   end
 
   describe "GET #show" do
@@ -75,6 +90,11 @@ describe ItemsController do
       get :new
       expect(assigns(:illustrators)).to eq([illustrator])
     end
+    it "populates an array of publishers" do
+      publisher = FactoryGirl.create(:publisher)
+      get :new
+      expect(assigns(:publishers)).to eq([publisher])
+    end
     it "renders the item :new template" do
       get :new
       expect(response).to render_template :new
@@ -101,6 +121,12 @@ describe ItemsController do
         illustrator = FactoryGirl.create(:illustrator)
         post :create, item: FactoryGirl.attributes_for(:item, illustrator_ids: [illustrator.id])
         expect(assigns(:item).illustrators).to eq([illustrator])
+      end
+      it "associates a publisher to the item" do
+        publisher = FactoryGirl.create(:publisher)
+        post :create, item: FactoryGirl.attributes_for(:item, publisher_id: publisher.id)
+        expect(assigns(:item).publisher).to eq(publisher)
+        expect(publisher.items).to include(assigns(:item))
       end
     end
 

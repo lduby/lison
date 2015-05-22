@@ -1,0 +1,5 @@
+<h1> New Publisher </h1>
+<%= form_for :publisher, url: publishers_path do |f| %>
+  <%= render "form", f: f %>
+<% end %>
+<%= link_to 'Back', publishers_path %>

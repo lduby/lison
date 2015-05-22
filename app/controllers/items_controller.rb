@@ -13,6 +13,10 @@ class ItemsController < ApplicationController
       @illustrator = Illustrator.find(params[:illustrator_id])
       @items = @illustrator.items
     end
+    if params[:publisher_id]
+      @publisher = Publisher.find(params[:publisher_id])
+      @items = @publisher.items
+    end
   end
 
   def show
@@ -23,11 +27,12 @@ class ItemsController < ApplicationController
     @item = Item.new
     @authors = Author.all
     @illustrators = Illustrator.all
+    @publishers = Publisher.all
   end
 
   def create
     @item = Item.new(item_params)
-    # no need to add code for authors associations, Rails do it automatically because of the HATBM relation
+    # no need to add code for habtm associations, Rails do it automatically because of the HATBM relation
     if @item.save
       redirect_to @item
     else
@@ -39,6 +44,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     @authors = Author.all
     @illustrators = Illustrator.all
+    @publishers = Publisher.all
   end
 
   def update
@@ -60,7 +66,7 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:title, :author_ids => [], :illustrator_ids => [])
+    params.require(:item).permit(:title, :publisher_id, :author_ids => [], :illustrator_ids => [])
   end
 
 

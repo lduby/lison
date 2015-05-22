@@ -1,0 +1,6 @@
+<h1><%= @publisher.name %></h1>
+<h2>About</h2>
+<p><%= @publisher.about %></p>
+<h2>List of associated items</h2>
+<p><%= @publisher.items.map {|i| i.title}.join(', ') %></p>
+<%= link_to 'Back', publishers_path %> | <%= link_to 'Edit', edit_publisher_path(@publisher) %>

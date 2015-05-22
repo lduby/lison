@@ -13,4 +13,9 @@
   <% end %>
   </ul>
 </p>
+<p id=item_publisher><strong>Publisher: </strong>
+  <% if @item.publisher %>
+    <%=link_to @item.publisher.name, publisher_path(@item.publisher), id: "show_publisher_#{@item.publisher.id}" %>
+  <% end %>
+</p>
 <%= link_to 'Back', items_path %> | <%= link_to 'Edit', edit_item_path(@item) %>

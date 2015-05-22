@@ -27,6 +27,14 @@
     <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
   </div>
 </p>
+
+<p>
+  <b>Publisher</b> (<%= link_to 'New', new_publisher_path %>)<br />
+  <div class="field">
+    <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
+  </div>
+</p>
+
 <p>
   <%= f.submit %>
 </p>

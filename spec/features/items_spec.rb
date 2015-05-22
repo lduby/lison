@@ -54,6 +54,25 @@ describe "Items" do
 
     end
 
+    it "Adds a new item with a publisher and displays the results" do
+      publisher = FactoryGirl.create(:publisher)
+      visit items_url
+      expect{
+        click_link 'New item'
+        fill_in 'Title', with: "Example Item"
+        select "#{publisher.name}", :from => 'item_publisher_id'
+        click_button "Save Item"
+      }.to change(Item,:count).by(1)
+      within 'h1' do
+        expect(page).to have_content "Example Item"
+      end
+      expect(page).to have_content("Publisher: #{publisher.name}")
+      visit publishers_url
+      click_link "show_publisher_#{publisher.id}"
+      expect(page).to have_content "#{Item.last.title}"
+
+    end
+
 
     it "Shows an item details" do
       item = FactoryGirl.create(:item, title: "To be viewed item")
@@ -90,11 +109,53 @@ describe "Items" do
       end
     end
 
+    it "Shows an item details from a publisher items list" do
+      publisher = FactoryGirl.create(:publisher, name: "Iello")
+      item = FactoryGirl.create(:item, title: "Wazabi", publisher_id: publisher.id)
+      item2 = FactoryGirl.create(:item, title: "Hanabi", publisher_id: publisher.id)
+      visit publishers_url
+      click_link "show_items_of_publisher_#{publisher.id}"
+      click_link "show_item_#{item.id}"
+      within 'h1' do
+        expect(page).to have_content "Wazabi"
+      end
+    end
+
+    it "Updates an item from an author items list and displays the results" do
+      author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
+      item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
+      visit authors_url
+      click_link "show_items_of_author_#{author.id}"
+      expect{
+        click_link "edit_item_#{item.id}"
+        fill_in 'Title', with: "Hanabi"
+        click_button "Save Item"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "Hanabi"
+      end
+    end
+
     it "Updates an item from an illustrator items list and displays the results" do
       illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
       item = FactoryGirl.create(:item, title: "Wazabi", illustrator_ids: [illustrator.id])
       visit illustrators_url
       click_link "show_items_of_illustrator_#{illustrator.id}"
+      expect{
+        click_link "edit_item_#{item.id}"
+        fill_in 'Title', with: "Hanabi"
+        click_button "Save Item"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "Hanabi"
+      end
+    end
+
+    it "Updates an item from a publisher items list and displays the results" do
+      publisher = FactoryGirl.create(:publisher, name: "Iello")
+      item = FactoryGirl.create(:item, title: "Wazabi", publisher_id: publisher.id)
+      visit publishers_url
+      click_link "show_items_of_publisher_#{publisher.id}"
       expect{
         click_link "edit_item_#{item.id}"
         fill_in 'Title', with: "Hanabi"
@@ -158,6 +219,22 @@ describe "Items" do
       expect(page).to_not have_content "Hanabi"
       visit illustrators_url
       click_link "show_illustrator_#{illustrator.id}"
+      expect(page).to_not have_content "Hanabi"
+    end
+
+    it "Deletes an item from a publisher items list" do
+      publisher = FactoryGirl.create(:publisher, name: "Iello")
+      item = FactoryGirl.create(:item, title: "Wazabi", publisher_id: publisher.id)
+      item2 = FactoryGirl.create(:item, title: "Hanabi", publisher_id: publisher.id)
+      visit publishers_url
+      click_link "show_items_of_publisher_#{publisher.id}"
+      expect{
+          click_link "del_item_#{item2.id}"
+      }.to change(Item,:count).by(-1)
+      expect(page).to have_content "All items"
+      expect(page).to_not have_content "Hanabi"
+      visit publishers_url
+      click_link "show_publisher_#{publisher.id}"
       expect(page).to_not have_content "Hanabi"
     end
 
