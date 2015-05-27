@@ -230,8 +230,52 @@ describe "Items" do
     it "Removes an author and displays the results"
     it "Adds an illustrator and displays the resuts"
     it "Removes an illustrator and displays the results"
-    it "Changes an item publisher and displays the results"
-    it "Changes an item collection and displays the results"
+
+    it "Changes an item publisher and displays the results" do
+      publisher = FactoryGirl.create(:publisher, name: "Iello")
+      item = FactoryGirl.create(:item, title: "Great Game", publisher_id: publisher.id)
+      secpublisher = FactoryGirl.create(:publisher, name: "Days of Wonder")
+      visit publishers_url
+      click_link "show_items_of_publisher_#{publisher.id}"
+      expect{
+        click_link "edit_item_#{item.id}"
+        select  "#{secpublisher.name}", :from => 'item_publisher_id'
+        click_button "Save Item"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "Great Game"
+      end
+      expect(page).to have_content "Days of Wonder"
+      visit publishers_url
+      click_link "show_publisher_#{publisher.id}"
+      expect(page).to_not have_content "Great Game"
+      visit publishers_url
+      click_link "show_publisher_#{secpublisher.id}"
+      expect(page).to have_content "Great Game"
+    end
+
+    it "Changes an item collection and displays the results"  do
+      collec = FactoryGirl.create(:collection, name: "Bad Collection")
+      item = FactoryGirl.create(:item, title: "Great Game", collection_id: collec.id)
+      seccollec = FactoryGirl.create(:collection, name: "Great Collection")
+      visit collections_url
+      click_link "show_items_of_collection_#{collec.id}"
+      expect{
+        click_link "edit_item_#{item.id}"
+        select  "#{seccollec.name}", :from => 'item_collection_id'
+        click_button "Save Item"
+      }.to_not change(Item,:count)
+      within 'h1' do
+        expect(page).to have_content "Great Game"
+      end
+      expect(page).to have_content "Great Collection"
+      visit collections_url
+      click_link "show_collection_#{collec.id}"
+      expect(page).to_not have_content "Great Game"
+      visit collections_url
+      click_link "show_collection_#{seccollec.id}"
+      expect(page).to have_content "Great Game"
+    end
 
     it "Deletes an item" do
       item = FactoryGirl.create(:item, title: "To be deleted item")

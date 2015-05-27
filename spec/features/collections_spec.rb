@@ -120,24 +120,28 @@ describe "Collections" do
       end
     end
 
-    it "changes the publisher of a collection" # do
-    #   publisher = FactoryGirl.create(:publisher, name: "Iello")
-    #   collection = FactoryGirl.create(:collection, name: "Great Collection", publisher_id: publisher.id)
-    #   secpublisher = FactoryGirl.create(:publisher, name: "Days of Wonder")
-    #   visit publishers_url
-    #   click_link "show_collections_of_publisher_#{publisher.id}"
-    #   expect{
-    #     click_link "edit_collection_#{collection.id}"
-    #     select  "#{secpublisher.name}", :from => 'collection_publisher_id'
-    #     click_button "Save Collection"
-    #   }.to_not change(Collection,:count)
-    #   within 'h1' do
-    #     expect(page).to_not have_content "Great Collection"
-    #   end
-    #   visit publishers_url
-    #   click_link "show_publisher_#{secpublisher.id}"
-    #   expect(page).to have_content "Great Collection"
-    # end
+    it "changes the publisher of a collection" do
+      publisher = FactoryGirl.create(:publisher, name: "Iello")
+      collection = FactoryGirl.create(:collection, name: "Great Collection", publisher_id: publisher.id)
+      secpublisher = FactoryGirl.create(:publisher, name: "Days of Wonder")
+      visit publishers_url
+      click_link "show_collections_of_publisher_#{publisher.id}"
+      expect{
+        click_link "edit_collection_#{collection.id}"
+        select  "#{secpublisher.name}", :from => 'collection_publisher_id'
+        click_button "Save Collection"
+      }.to_not change(Collection,:count)
+      within 'h1' do
+        expect(page).to have_content "Great Collection"
+      end
+      expect(page).to have_content "Days of Wonder"
+      visit publishers_url
+      click_link "show_publisher_#{publisher.id}"
+      expect(page).to_not have_content "Great Collection"
+      visit publishers_url
+      click_link "show_publisher_#{secpublisher.id}"
+      expect(page).to have_content "Great Collection"
+    end
 
     it "Deletes a collection" do
       collection = FactoryGirl.create(:collection, name: "Iello")
