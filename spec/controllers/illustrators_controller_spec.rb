@@ -24,7 +24,13 @@ RSpec.describe IllustratorsController, type: :controller do
       get :show, id: FactoryGirl.create(:illustrator)
       expect(response).to render_template :show
     end
-    it 'gets the illustrator items'
+    it 'gets the illustrator items' do
+      illustrator = FactoryGirl.create(:illustrator)
+      item1 = FactoryGirl.create(:item, illustrator_ids: [illustrator.id] )
+      item2 = FactoryGirl.create(:item, illustrator_ids: [illustrator.id] )
+      get :show, id: illustrator
+      expect(assigns(:illustrator).items).to eq([item1, item2])
+    end
   end
 
   describe "GET #new" do

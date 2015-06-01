@@ -120,7 +120,7 @@ describe "Collections" do
       end
     end
 
-    it "changes the publisher of a collection" do
+    it "Changes the publisher of a collection" do
       publisher = FactoryGirl.create(:publisher, name: "Iello")
       collection = FactoryGirl.create(:collection, name: "Great Collection", publisher_id: publisher.id)
       secpublisher = FactoryGirl.create(:publisher, name: "Days of Wonder")

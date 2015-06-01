@@ -24,7 +24,14 @@ RSpec.describe CollectionsController, type: :controller do
       get :show, id: FactoryGirl.create(:collection)
       expect(response).to render_template :show
     end
-    it 'gets the collection items'
+    it 'gets the collection items' do
+      collection = FactoryGirl.create(:collection)
+      item1 = FactoryGirl.create(:item, collection_id: collection.id )
+      item2 = FactoryGirl.create(:item, collection_id: collection.id )
+      get :show, id: collection
+      expect(assigns(:collection).items).to include(item1)
+      expect(assigns(:collection).items).to include(item2)
+    end
   end
 
   describe "GET #new" do
@@ -78,7 +85,8 @@ RSpec.describe CollectionsController, type: :controller do
 
   describe 'PUT #update' do
     before :each do
-      @collection = FactoryGirl.create(:collection, name: "Days of Wonder")
+      @publisher = FactoryGirl.create(:publisher)
+      @collection = FactoryGirl.create(:collection, name: "Days of Wonder", :publisher => @publisher)
     end
 
     context "with valid attributes" do
@@ -87,14 +95,19 @@ RSpec.describe CollectionsController, type: :controller do
         expect(assigns(:collection)).to eq(@collection)
       end
 
-      it "changes @collection's attributes" do
+      it "changes collection's attributes" do
         put :update, id: @collection,
           collection: FactoryGirl.attributes_for(:collection, name: "Iello")
         @collection.reload
         expect(@collection.name).to eq("Iello")
       end
 
-      it "changes the associated publisher"
+      it "changes the associated publisher" do
+        publisher2 = FactoryGirl.create(:publisher)
+        put :update, id: @collection, collection: FactoryGirl.attributes_for(:collection, publisher_id: publisher2.id)
+        @collection.reload
+        expect(@collection.publisher).to eq(publisher2)
+      end
 
       it "redirects to the updated collection" do
         put :update, id: @collection, collection: FactoryGirl.attributes_for(:collection)

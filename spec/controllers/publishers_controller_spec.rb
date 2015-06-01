@@ -24,7 +24,14 @@ RSpec.describe PublishersController, type: :controller do
       get :show, id: FactoryGirl.create(:publisher)
       expect(response).to render_template :show
     end
-    it 'gets the publisher items'
+    it 'gets the publisher items' do
+      publisher = FactoryGirl.create(:publisher)
+      item1 = FactoryGirl.create(:item, publisher_id: publisher.id )
+      item2 = FactoryGirl.create(:item, publisher_id: publisher.id )
+      get :show, id: publisher
+      expect(assigns(:publisher).items).to include(item1)
+      expect(assigns(:publisher).items).to include(item2)
+    end
   end
 
   describe "GET #new" do

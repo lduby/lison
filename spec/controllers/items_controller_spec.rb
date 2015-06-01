@@ -171,7 +171,11 @@ describe ItemsController do
 
   describe 'PUT #update' do
     before :each do
-      @item = FactoryGirl.create(:item, title: "Test Item")
+      @auth = FactoryGirl.create(:author)
+      @illust = FactoryGirl.create(:illustrator)
+      @pub = FactoryGirl.create(:publisher)
+      @coll = FactoryGirl.create(:collection, publisher_id: @pub.id)
+      @item = FactoryGirl.create(:item, title: "Test Item", author_ids: [@auth.id], illustrator_ids: [@illust.id], publisher_id: @pub.id, collection_id: @coll.id)
     end
 
     context "with valid attributes" do
@@ -187,12 +191,64 @@ describe ItemsController do
         expect(@item.title).to eq("Updated test item")
       end
 
-      it "adds an author"
-      it "adds an illustrator"
-      it "deletes an author"
-      it "deletes an illustrator"
-      it "changes the publisher"
-      it "changes the collection"
+      it "adds an author" do
+        author = FactoryGirl.create(:author)
+        authors = @item.author_ids
+        authors_nb=authors.size
+        authors << author.id
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, author_ids: authors)
+        @item.reload
+        expect(@item.authors.count).to eq(authors_nb+1)
+        expect(@item.authors).to include(author)
+      end
+
+      it "adds an illustrator" do
+        illustrator = FactoryGirl.create(:illustrator)
+        illustrators = @item.illustrator_ids
+        illustrators_nb = illustrators.size
+        illustrators << illustrator.id
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, illustrator_ids: illustrators)
+        @item.reload
+        expect(@item.illustrators.count).to eq(illustrators_nb+1)
+        expect(@item.illustrators).to include(illustrator)
+      end
+
+      it "deletes an author"  do
+        author = @item.authors.last
+        authors = @item.author_ids
+        authors_nb=authors.size
+        authors.delete(author.id)
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, author_ids: authors)
+        @item.reload
+        expect(@item.authors.count).to eq(authors_nb-1)
+        expect(@item.authors).to_not include(author)
+      end
+
+      it "deletes an illustrator"  do
+        illustrator = @item.illustrators.last
+        illustrators = @item.illustrator_ids
+        illustrators_nb=illustrators.size
+        illustrators.delete(illustrator.id)
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, illustrator_ids: illustrators)
+        @item.reload
+        expect(@item.illustrators.count).to eq(illustrators_nb-1)
+        expect(@item.illustrators).to_not include(illustrator)
+      end
+
+      it "changes the publisher" do
+        pub2 = FactoryGirl.create(:publisher)
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: pub2.id)
+        @item.reload
+        expect(@item.publisher).to eq(pub2)
+        expect(@item.collection).to eq(nil)
+      end
+
+      it "changes the collection"  do
+        coll2 = FactoryGirl.create(:collection, publisher_id: @pub.id)
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: coll2.id)
+        @item.reload
+        expect(@item.collection).to eq(coll2)
+      end
 
       it "redirects to the updated item" do
         put :update, id: @item, item: FactoryGirl.attributes_for(:item)

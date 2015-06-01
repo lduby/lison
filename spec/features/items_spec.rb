@@ -226,10 +226,77 @@ describe "Items" do
 
     end
 
-    it "Adds an author and displays the results"
-    it "Removes an author and displays the results"
-    it "Adds an illustrator and displays the resuts"
-    it "Removes an illustrator and displays the results"
+    it "Adds an author and displays the results" do
+      author1 = FactoryGirl.create(:author)
+      author2 = FactoryGirl.create(:author)
+      item = FactoryGirl.create(:item, author_ids: [author1.id] )
+      visit items_url
+      click_link "edit_item_#{item.id}"
+      check "item_author_ids_#{author2.id}"
+      click_button "Save Item"
+      expect(page).to have_content "#{item.title}"
+      expect(page).to have_content "Authors: #{author1.name} #{author2.name}"
+      visit authors_url
+      click_link "show_items_of_author_#{author1.id}"
+      expect(page).to have_content "#{item.title}"
+      visit authors_url
+      click_link "show_items_of_author_#{author2.id}"
+      expect(page).to have_content "#{item.title}"
+    end
+
+    it "Removes an author and displays the results" do
+      author1 = FactoryGirl.create(:author)
+      author2 = FactoryGirl.create(:author)
+      item = FactoryGirl.create(:item, author_ids: [author1.id, author2.id] )
+      visit items_url
+      click_link "edit_item_#{item.id}"
+      uncheck "item_author_ids_#{author2.id}"
+      click_button "Save Item"
+      expect(page).to have_content "#{item.title}"
+      expect(page).to have_content "Authors: #{author1.name}"
+      visit authors_url
+      click_link "show_items_of_author_#{author1.id}"
+      expect(page).to have_content "#{item.title}"
+      visit authors_url
+      click_link "show_items_of_author_#{author2.id}"
+      expect(page).to_not have_content "#{item.title}"
+    end
+
+    it "Adds an illustrator and displays the resuts" do
+      illu1 = FactoryGirl.create(:illustrator)
+      illu2 = FactoryGirl.create(:illustrator)
+      item = FactoryGirl.create(:item, illustrator_ids: [illu1.id] )
+      visit items_url
+      click_link "edit_item_#{item.id}"
+      check "item_illustrator_ids_#{illu2.id}"
+      click_button "Save Item"
+      expect(page).to have_content "#{item.title}"
+      expect(page).to have_content "Illustrators: #{illu1.name}"
+      visit illustrators_url
+      click_link "show_items_of_illustrator_#{illu1.id}"
+      expect(page).to have_content "#{item.title}"
+      visit illustrators_url
+      click_link "show_items_of_illustrator_#{illu2.id}"
+      expect(page).to have_content "#{item.title}"
+    end
+
+    it "Removes an illustrator and displays the results" do
+      illu1 = FactoryGirl.create(:illustrator)
+      illu2 = FactoryGirl.create(:illustrator)
+      item = FactoryGirl.create(:item, illustrator_ids: [illu1.id, illu2.id] )
+      visit items_url
+      click_link "edit_item_#{item.id}"
+      uncheck "item_illustrator_ids_#{illu2.id}"
+      click_button "Save Item"
+      expect(page).to have_content "#{item.title}"
+      expect(page).to have_content "Illustrators: #{illu1.name}"
+      visit illustrators_url
+      click_link "show_items_of_illustrator_#{illu1.id}"
+      expect(page).to have_content "#{item.title}"
+      visit illustrators_url
+      click_link "show_items_of_illustrator_#{illu2.id}"
+      expect(page).to_not have_content "#{item.title}"
+    end
 
     it "Changes an item publisher and displays the results" do
       publisher = FactoryGirl.create(:publisher, name: "Iello")

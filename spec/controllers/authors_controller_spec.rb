@@ -24,7 +24,13 @@ RSpec.describe AuthorsController, type: :controller do
       get :show, id: FactoryGirl.create(:author)
       expect(response).to render_template :show
     end
-    it 'gets the author items'
+    it 'gets the author items' do
+      author = FactoryGirl.create(:author)
+      item1 = FactoryGirl.create(:item, author_ids: [author.id] )
+      item2 = FactoryGirl.create(:item, author_ids: [author.id] )
+      get :show, id: author
+      expect(assigns(:author).items).to eq([item1, item2])
+    end
   end
 
   describe "GET #new" do
