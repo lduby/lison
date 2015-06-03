@@ -55,8 +55,13 @@ class ItemsController < ApplicationController
 
   def update
     @item = Item.find(params[:id])
-
     if @item.update(item_params)
+      # Removing the collection if the publisher changes
+      if !item_params[:publisher_id].nil? && item_params[:publisher_id]!=@item.publisher_id
+        if !@item.collection.nil?
+          @item.collection.delete()
+        end
+      end
       redirect_to @item
     else
       render 'edit'
