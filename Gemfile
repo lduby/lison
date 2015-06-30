@@ -53,6 +53,7 @@ group :test do
   gem 'guard-rspec'
   gem 'launchy'
   gem 'simplecov', :require => false
+  gem 'email_spec'
 end
 
 # Use devise and cancancan for uthentication and role management
