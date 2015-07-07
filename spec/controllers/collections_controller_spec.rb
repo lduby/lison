@@ -3,10 +3,7 @@ require 'rails_helper'
 RSpec.describe CollectionsController, type: :controller do
 
   before :each do
-    @role = FactoryGirl.create(:role, name: 'Team')
-    @user = FactoryGirl.create(:user, :donald)
-    sign_in @user
-
+    
     @ability = Object.new
     @ability.extend(CanCan::Ability)
 

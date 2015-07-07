@@ -23,7 +23,9 @@ class Ability
       # can :crud, Collection
       # can :read, Collection
       # can :create, Collection
-      can :crud, [ Item, Author, Illustrator, Publisher, Collection ]
+      # can :crud, [ Item, Author, Illustrator, Publisher, Collection ]
+      can :manage, [ Item, Author, Illustrator, Publisher, Collection ]
+
     elsif user.role?('Admin')
       can :manage, :all
     # else
