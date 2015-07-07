@@ -239,6 +239,7 @@ DEPENDENCIES
   launchy
   pg
   rails (= 4.1.8)
+  rspec-mocks
   rspec-rails
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

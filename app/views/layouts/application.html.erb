@@ -14,7 +14,7 @@
     <p class="alert"><%= alert %></p>
   <% end %>
   <% if current_user %>
-    <p class="welcome">Connecté: <%= current_user.email %>
+    <p class="welcome">Connecté: <%= current_user.email %> as <%= current_user.roles.map {|r| r.name}.join(', ') %>
     <%= link_to "Edit", edit_user_registration_path %>
     <%= link_to "Log out", destroy_user_session_path, :method => :delete %><br />
     </p>

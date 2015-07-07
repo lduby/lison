@@ -47,6 +47,7 @@ end
 
 group :test do
   gem 'faker'
+  gem 'rspec-mocks'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'selenium-webdriver'

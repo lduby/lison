@@ -1,4 +1,5 @@
 class CollectionsController < ApplicationController
+  load_and_authorize_resource :class => Collection, :instance_name => "collection", :except => :index
 
   def index
     @collections = Collection.all
@@ -14,6 +15,7 @@ class CollectionsController < ApplicationController
 
   def show
     @collection = Collection.find(params[:id])
+    # authorize! :read, @collection
   end
 
   def new

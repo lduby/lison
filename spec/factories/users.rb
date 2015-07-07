@@ -9,6 +9,7 @@ FactoryGirl.define do
     trait :donald do
       # name 'donald'
       email 'donald@example.com'
+      roles Role.where(name: "Team")
     end
   end
 
