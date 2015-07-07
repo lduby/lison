@@ -39,6 +39,15 @@ RSpec.describe User, type: :model do
     #   expect(@user).to have(1).error_on(:password)
     # end
 
+
+  end
+
+  it 'tells if the user has a specific role' do
+    role = FactoryGirl.create(:role)
+    role2 = FactoryGirl.create(:role)
+    user = FactoryGirl.create(:user, roles: Role.where(name: role.name))
+    expect(user.role?(role.name)).to be true
+    expect(user.role?(role2.name)).to be false
   end
 
 end
