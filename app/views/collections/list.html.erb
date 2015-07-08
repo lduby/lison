@@ -12,10 +12,24 @@
     <tr name="collection_<%= collection.id %>">
       <td><%= collection.name %></td>
       <td></td>
-      <td><%= link_to 'Show', collection_path(collection), id: "show_collection_#{collection.id}" %></td>
-      <td><%= link_to 'Edit', edit_collection_path(collection), id: "edit_collection_#{collection.id}" %></td>
-      <td><%= link_to 'Destroy', collection_path(collection), id: "del_collection_#{collection.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td>
+        <% if can? :read, Collection %>
+          <%= link_to 'Show', collection_path(collection), id: "show_collection_#{collection.id}" %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :update, Collection %>
+          <%= link_to 'Edit', edit_collection_path(collection), id: "edit_collection_#{collection.id}" %>
+    <% end %>
+  </td>
+      <td>
+        <% if can? :destroy, Collection %>
+          <%= link_to 'Destroy', collection_path(collection), id: "del_collection_#{collection.id}", method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+  </td>
     </tr>
   <% end %>
 </table>
-<p><%= link_to 'New collection', new_collection_path %></p>
+<p><% if can? :create, Collection %>
+  <%= link_to 'New collection', new_collection_path %>
+<% end %></p>

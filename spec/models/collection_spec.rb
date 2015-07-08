@@ -12,6 +12,10 @@ RSpec.describe Collection, type: :model do
       expect(FactoryGirl.build(:collection, name: nil)).not_to be_valid
     end
 
+    it "is invalid with a description larger than 255 characters" do
+      expect(FactoryGirl.build(:invalid_about_collection)).not_to be_valid
+    end
+
   end
 
 

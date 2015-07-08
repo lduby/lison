@@ -438,13 +438,6 @@ describe "Items" do
 
       it "Deletes an item with js dialog", js: true do
         DatabaseCleaner.clean
-
-        @role = FactoryGirl.create(:role, name: 'Team')
-        @user = FactoryGirl.create(:user, :donald, roles: Role.where(name: 'Team'))
-        sign_in_with_donald
-        expect(page).to have_link 'Log out'
-        expect(page).to have_content 'Team'
-
         item = FactoryGirl.create(:item, title: "To be deleted item")
         visit items_path
         sleep 1
