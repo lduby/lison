@@ -1,4 +1,15 @@
-<h1><%= @collection.name %></h1>
+<h1><%= @collection.name %>
+  <tiny>
+  <% if can? :update, @collection %>
+    <%= link_to 'Edit', edit_collection_path(@collection), id: "edit_collection_#{@collection.id}" %> |
+  <% end %>
+  <% if can? :destroy, @collection %>
+      <%= link_to 'Destroy', collection_path(@collection), id: "del_collection_#{@collection.id}", method: :delete, data: { confirm: 'Are you sure?' } %> |
+    <% end %>
+
+    <%= link_to 'Back', publishers_path %>
+  </tiny>
+</h1>
 <h2>Publisher:
   <% if @collection.publisher %>
    <%= link_to @collection.publisher.name, publisher_path(@collection.publisher), id: "show_publisher_#{@collection.publisher.id}" %>
@@ -8,4 +19,3 @@
 <p><%= @collection.about %></p>
 <h2>List of associated items</h2>
 <p><%= @collection.items.map {|i| i.title}.join(', ') %></p>
-<%= link_to 'Back', collections_path %> | <%= link_to 'Edit', edit_collection_path(@collection) %>

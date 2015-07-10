@@ -155,6 +155,23 @@ describe "Collections" do
         end
       end
 
+      it "Updates a collection from its details page and displays the results" do
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
+        collection = FactoryGirl.create(:collection, name: "Iello")
+        visit collections_url
+        click_link "show_collection_#{collection.id}"
+        expect{
+          click_link "edit_collection_#{collection.id}"
+          fill_in 'Name', with: "Days of Wonder"
+          click_button "Save Collection"
+        }.to_not change(Collection,:count)
+        within 'h1' do
+          expect(page).to have_content "Days of Wonder"
+        end
+      end
+
       it "Updates a collection from a publisher details and displays the results" do
         sign_in_with_donald
         expect(page).to have_link 'Log out'
@@ -177,12 +194,12 @@ describe "Collections" do
       end
 
       it "Changes the publisher of a collection" do
-        sign_in_with_donald
-        expect(page).to have_link 'Log out'
-        expect(page).to have_content 'Team'
         publisher = FactoryGirl.create(:publisher, name: "Iello")
         collection = FactoryGirl.create(:collection, name: "Great Collection", publisher_id: publisher.id)
         secpublisher = FactoryGirl.create(:publisher, name: "Days of Wonder")
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit publishers_url
         click_link "show_collections_of_publisher_#{publisher.id}"
         expect{
@@ -235,6 +252,44 @@ describe "Collections" do
         expect(page).to have_content "All collections"
         expect(page).to_not have_content "Iello"
       end
+
+      it "Deletes a collection from its details page" do
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
+        collection = FactoryGirl.create(:collection, name: "Iello")
+        visit collections_path
+        click_link "show_collection_#{collection.id}"
+        expect{
+          click_link "del_collection_#{collection.id}"
+        }.to change(Collection,:count).by(-1)
+        expect(page).to have_content "All collections"
+        expect(page).to_not have_content "Iello"
+      end
+
+      it "Deletes an collection from its details page with js dialog", js: true do
+        DatabaseCleaner.clean
+        @role = FactoryGirl.create(:role, name: 'Team')
+        @user = FactoryGirl.create(:user, :donald, roles: Role.where(name: 'Team'))
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
+        collection = FactoryGirl.create(:collection, name: "Iello")
+        visit collections_path
+        click_link "show_collection_#{collection.id}"
+        sleep 1
+        expect{
+          click_link "del_collection_#{collection.id}"
+          sleep 1
+          alert = page.driver.browser.switch_to.alert
+          alert.accept
+          sleep 1
+        }.to change(Collection,:count).by(-1)
+        expect(page).to have_content "All collections"
+        expect(page).to_not have_content "Iello"
+      end
+
+
     end
 
     context 'with basic rights' do
@@ -337,6 +392,18 @@ describe "Collections" do
         expect(page).to_not have_link "edit_collection_#{collection.id}"
       end
 
+      it 'Prevents from updating a collection from its details page' do
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Member'
+        collection = FactoryGirl.create(:collection, name: "Iello")
+        visit collections_url
+        click_link "show_collection_#{collection.id}"
+        expect(page).to_not have_link "edit_collection_#{collection.id}"
+      end
+
+
+
 
       it "Prevents from updating a collection from a publisher details" do
         sign_in_with_donald
@@ -358,6 +425,16 @@ describe "Collections" do
         expect(page).to have_content 'Member'
         collection = FactoryGirl.create(:collection, name: "Iello")
         visit collections_url
+        expect(page).to_not have_link "del_collection_#{collection.id}"
+      end
+
+      it 'Prevents from deleting a collection from its details page' do
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Member'
+        collection = FactoryGirl.create(:collection, name: "Iello")
+        visit collections_url
+        click_link "show_collection_#{collection.id}"
         expect(page).to_not have_link "del_collection_#{collection.id}"
       end
 
