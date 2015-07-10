@@ -1,4 +1,15 @@
-<h1><%= @publisher.name %></h1>
+<h1><%= @publisher.name %>
+  <tiny>
+  <% if can? :update, Publisher %>
+    <%= link_to 'Edit', edit_publisher_path(@publisher), id: "edit_publisher_#{@publisher.id}" %> |
+  <% end %>
+  <% if can? :destroy, Publisher %>
+      <%= link_to 'Destroy', publisher_path(@publisher), id: "del_publisher_#{@publisher.id}", method: :delete, data: { confirm: 'Are you sure?' } %> | 
+    <% end %>
+
+    <%= link_to 'Back', publishers_path %>
+  </tiny>
+</h1>
 <h2>About</h2>
 <p><%= @publisher.about %></p>
 <h2>List of associated collections (<%= link_to 'New', new_publisher_collection_path(@publisher) %>)</h2>
@@ -9,4 +20,3 @@
 </ul>
 <h2>List of associated items</h2>
 <p><%= @publisher.items.map {|i| i.title}.join(', ') %></p>
-<%= link_to 'Back', publishers_path %> | <%= link_to 'Edit', edit_publisher_path(@publisher) %>

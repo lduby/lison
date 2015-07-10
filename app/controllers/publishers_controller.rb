@@ -1,5 +1,7 @@
 class PublishersController < ApplicationController
 
+  load_and_authorize_resource :class => Publisher, :instance_name => "publisher", :except => :index
+
   def index
     @publishers = Publisher.all
   end

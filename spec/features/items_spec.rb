@@ -61,6 +61,9 @@ describe "Items" do
 
       it "Adds a new item with a publisher and displays the results" do
         publisher = FactoryGirl.create(:publisher)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         expect{
           click_link 'New item'
@@ -140,6 +143,9 @@ describe "Items" do
         publisher = FactoryGirl.create(:publisher, name: "Iello")
         item = FactoryGirl.create(:item, title: "Wazabi", publisher_id: publisher.id)
         item2 = FactoryGirl.create(:item, title: "Hanabi", publisher_id: publisher.id)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit publishers_url
         click_link "show_items_of_publisher_#{publisher.id}"
         click_link "show_item_#{item.id}"
@@ -310,6 +316,9 @@ describe "Items" do
         publisher = FactoryGirl.create(:publisher, name: "Iello")
         item = FactoryGirl.create(:item, title: "Great Game", publisher_id: publisher.id)
         secpublisher = FactoryGirl.create(:publisher, name: "Days of Wonder")
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit publishers_url
         click_link "show_items_of_publisher_#{publisher.id}"
         expect{
@@ -403,6 +412,9 @@ describe "Items" do
         publisher = FactoryGirl.create(:publisher, name: "Iello")
         item = FactoryGirl.create(:item, title: "Wazabi", publisher_id: publisher.id)
         item2 = FactoryGirl.create(:item, title: "Hanabi", publisher_id: publisher.id)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit publishers_url
         click_link "show_items_of_publisher_#{publisher.id}"
         expect{

@@ -8,14 +8,30 @@
   </tr>
 
   <% @publishers.each do |publisher| %>
-    <tr name="publisher<%= publisher.id %>">
-      <td><%= publisher.name %></td>
-      <td><%= link_to "#{publisher.items.count}", list_publisher_items_path(publisher), id: "show_items_of_publisher_#{publisher.id}" %></td>
-      <td><%= link_to "#{publisher.collections.count}", list_publisher_collections_path(publisher), id: "show_collections_of_publisher_#{publisher.id}" %></td>
-      <td><%= link_to 'Show', publisher_path(publisher), id: "show_publisher_#{publisher.id}" %></td>
-      <td><%= link_to 'Edit', edit_publisher_path(publisher), id: "edit_publisher_#{publisher.id}" %></td>
-      <td><%= link_to 'Destroy', publisher_path(publisher), id: "del_publisher_#{publisher.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
+  <tr name="publisher<%= publisher.id %>">
+    <td><%= publisher.name %></td>
+    <td><%= link_to "#{publisher.items.count}", list_publisher_items_path(publisher), id: "show_items_of_publisher_#{publisher.id}" %></td>
+    <td><%= link_to "#{publisher.collections.count}", list_publisher_collections_path(publisher), id: "show_collections_of_publisher_#{publisher.id}" %></td>
+    <td>
+      <% if can? :read, Publisher %>
+        <%= link_to 'Show', publisher_path(publisher), id: "show_publisher_#{publisher.id}" %>
+      <% end %>
+    </td>
+    <td>
+      <% if can? :update, Publisher %>
+        <%= link_to 'Edit', edit_publisher_path(publisher), id: "edit_publisher_#{publisher.id}" %>
+      <% end %>
+    </td>
+    <td>
+      <% if can? :destroy, Publisher %>
+        <%= link_to 'Destroy', publisher_path(publisher), id: "del_publisher_#{publisher.id}", method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </td>
+  </tr>
   <% end %>
 </table>
-<p><%= link_to 'New publisher', new_publisher_path %></p>
+<p>
+  <% if can? :create, Publisher %>
+    <%= link_to 'New publisher', new_publisher_path %>
+  <% end %>
+</p>
