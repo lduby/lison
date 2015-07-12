@@ -1,4 +1,5 @@
 class IllustratorsController < ApplicationController
+  load_and_authorize_resource :class => Illustrator, :instance_name => "illustrator", :except => :index
 
   def index
     @illustrators = Illustrator.all
