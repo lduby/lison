@@ -10,10 +10,26 @@
     <tr name="illustrator_<%= illustrator.id %>">
       <td><%= illustrator.name %></td>
       <td><%= link_to "#{illustrator.items.count}", list_illustrator_items_path(illustrator), id: "show_items_of_illustrator_#{illustrator.id}" %></td>
-      <td><%= link_to 'Show', illustrator_path(illustrator), id: "show_illustrator_#{illustrator.id}" %></td>
-      <td><%= link_to 'Edit', edit_illustrator_path(illustrator), id: "edit_illustrator_#{illustrator.id}" %></td>
-      <td><%= link_to 'Destroy', illustrator_path(illustrator), id: "del_illustrator_#{illustrator.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td>
+        <% if can? :read, illustrator %>
+          <%= link_to 'Show', illustrator_path(illustrator), id: "show_illustrator_#{illustrator.id}" %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :update, illustrator %>
+          <%= link_to 'Edit', edit_illustrator_path(illustrator), id: "edit_illustrator_#{illustrator.id}" %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :destroy, illustrator %>
+          <%= link_to 'Destroy', illustrator_path(illustrator), id: "del_illustrator_#{illustrator.id}", method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+      </td>
     </tr>
   <% end %>
 </table>
-<p><%= link_to 'New illustrator', new_illustrator_path %></p>
+<p>
+  <% if can? :create, Illustrator %>
+    <%= link_to 'New illustrator', new_illustrator_path %>
+  <% end %>
+</p>
