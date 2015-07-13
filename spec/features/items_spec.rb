@@ -42,6 +42,9 @@ describe "Items" do
 
       it "Adds a new item with an illustrator and displays the results" do
         illustrator = FactoryGirl.create(:illustrator)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         expect{
           click_link 'New item'
@@ -396,6 +399,9 @@ describe "Items" do
         illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
         item = FactoryGirl.create(:item, title: "Wazabi", illustrator_ids: [illustrator.id])
         item2 = FactoryGirl.create(:item, title: "Hanabi", illustrator_ids: [illustrator.id])
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit illustrators_url
         click_link "show_items_of_illustrator_#{illustrator.id}"
         expect{
