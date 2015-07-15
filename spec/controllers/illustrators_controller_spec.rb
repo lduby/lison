@@ -104,14 +104,14 @@ RSpec.describe IllustratorsController, type: :controller do
     context "with valid attributes" do
       it "locates the requested @illustrator" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Illustrator
+        @ability.can :update, @illustrator
         put :update, id: @illustrator, illustrator: FactoryGirl.attributes_for(:illustrator)
         expect(assigns(:illustrator)).to eq(@illustrator)
       end
 
       it "changes @illustrator's attributes" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Illustrator
+        @ability.can :update, @illustrator
         put :update, id: @illustrator,
           illustrator: FactoryGirl.attributes_for(:illustrator, firstname: "Peter", lastname: "Smith")
         @illustrator.reload
@@ -122,7 +122,7 @@ RSpec.describe IllustratorsController, type: :controller do
 
       it "redirects to the updated illustrator" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Illustrator
+        @ability.can :update, @illustrator
         put :update, id: @illustrator, illustrator: FactoryGirl.attributes_for(:illustrator)
         expect(response).to redirect_to @illustrator
       end
@@ -131,14 +131,14 @@ RSpec.describe IllustratorsController, type: :controller do
     context "with invalid attributes" do
       it "locates the requested @illustrator" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Illustrator
+        @ability.can :update, @illustrator
         put :update, id: @illustrator, illustrator: FactoryGirl.attributes_for(:invalid_illustrator)
         expect(assigns(:illustrator)).to eq(@illustrator)
       end
 
       it "does not change @illustrator's attributes" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Illustrator
+        @ability.can :update, @illustrator
         put :update, id: @illustrator,
           illustrator: FactoryGirl.attributes_for(:illustrator, firstname: "Larry", lastname: nil)
         @illustrator.reload
@@ -149,7 +149,7 @@ RSpec.describe IllustratorsController, type: :controller do
 
       it "re-renders the edit method" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Illustrator
+        @ability.can :update, @illustrator
         put :update, id: @illustrator, illustrator: FactoryGirl.attributes_for(:invalid_illustrator)
         expect(response).to render_template :edit
       end
@@ -164,7 +164,7 @@ RSpec.describe IllustratorsController, type: :controller do
 
     it "deletes the illustrator" do
       @controller.stub(:current_ability).and_return(@ability)
-      @ability.can :destroy, Illustrator
+      @ability.can :destroy, @illustrator
       expect{
         delete :destroy, id: @illustrator
       }.to change(Illustrator,:count).by(-1)
@@ -172,7 +172,7 @@ RSpec.describe IllustratorsController, type: :controller do
 
     it "redirects to illustrators#index" do
       @controller.stub(:current_ability).and_return(@ability)
-      @ability.can :destroy, Illustrator
+      @ability.can :destroy, @illustrator
       delete :destroy, id: @illustrator
       expect(response).to redirect_to illustrators_url
     end

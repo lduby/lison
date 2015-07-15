@@ -23,6 +23,9 @@ describe "Items" do
 
       it "Adds a new item with an author and displays the results" do
         author = FactoryGirl.create(:author)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         expect{
           click_link 'New item'
@@ -122,6 +125,9 @@ describe "Items" do
         author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
         item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
         item2 = FactoryGirl.create(:item, title: "Hanabi", author_ids: [author.id])
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit authors_url
         click_link "show_items_of_author_#{author.id}"
         click_link "show_item_#{item.id}"
@@ -172,6 +178,9 @@ describe "Items" do
       it "Updates an item from an author items list and displays the results" do
         author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
         item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit authors_url
         click_link "show_items_of_author_#{author.id}"
         expect{
@@ -247,6 +256,9 @@ describe "Items" do
         author1 = FactoryGirl.create(:author)
         author2 = FactoryGirl.create(:author)
         item = FactoryGirl.create(:item, author_ids: [author1.id] )
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         click_link "edit_item_#{item.id}"
         check "item_author_ids_#{author2.id}"
@@ -265,6 +277,9 @@ describe "Items" do
         author1 = FactoryGirl.create(:author)
         author2 = FactoryGirl.create(:author)
         item = FactoryGirl.create(:item, author_ids: [author1.id, author2.id] )
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         click_link "edit_item_#{item.id}"
         uncheck "item_author_ids_#{author2.id}"
@@ -383,6 +398,9 @@ describe "Items" do
         author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
         item = FactoryGirl.create(:item, title: "Wazabi", author_ids: [author.id])
         item2 = FactoryGirl.create(:item, title: "Hanabi", author_ids: [author.id])
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit authors_url
         click_link "show_items_of_author_#{author.id}"
         expect{

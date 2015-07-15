@@ -1,4 +1,5 @@
 class AuthorsController < ApplicationController
+  load_and_authorize_resource :class => Author, :instance_name => "author", :except => :index
 
   def index
     @authors = Author.all
