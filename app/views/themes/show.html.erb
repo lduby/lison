@@ -1,0 +1,16 @@
+<h1><%= @theme.name %>
+  <tiny>
+  <% if can? :update, @theme %>
+    <%= link_to 'Edit', edit_theme_path(@theme), id: "edit_theme_#{@theme.id}" %> |
+  <% end %>
+  <% if can? :destroy, @theme %>
+      <%= link_to 'Destroy', theme_path(@theme), id: "del_theme_#{@theme.id}", method: :delete, data: { confirm: 'Are you sure?' } %> |
+    <% end %>
+
+    <%= link_to 'Back', publishers_path %>
+  </tiny>
+</h1>
+<h2>About</h2>
+<p><%= @theme.about %></p>
+<h2>List of associated items</h2>
+<p><%= @theme.items.map {|i| i.title}.join(', ') %></p>

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CollectionsController, type: :controller do
 
   before :each do
-    
+
     @ability = Object.new
     @ability.extend(CanCan::Ability)
 
@@ -128,14 +128,14 @@ RSpec.describe CollectionsController, type: :controller do
     context "with valid attributes" do
       it "locates the requested @collection" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Collection
+        @ability.can :update, @collection
         put :update, id: @collection, collection: FactoryGirl.attributes_for(:collection)
         expect(assigns(:collection)).to eq(@collection)
       end
 
       it "changes collection's attributes" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Collection
+        @ability.can :update, @collection
         put :update, id: @collection,
           collection: FactoryGirl.attributes_for(:collection, name: "Iello")
         @collection.reload
@@ -144,7 +144,7 @@ RSpec.describe CollectionsController, type: :controller do
 
       it "changes the associated publisher" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Collection
+        @ability.can :update, @collection
         publisher2 = FactoryGirl.create(:publisher)
         put :update, id: @collection, collection: FactoryGirl.attributes_for(:collection, publisher_id: publisher2.id)
         @collection.reload
@@ -153,7 +153,7 @@ RSpec.describe CollectionsController, type: :controller do
 
       it "redirects to the updated collection" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Collection
+        @ability.can :update, @collection
         put :update, id: @collection, collection: FactoryGirl.attributes_for(:collection)
         expect(response).to redirect_to @collection
       end
@@ -162,14 +162,14 @@ RSpec.describe CollectionsController, type: :controller do
     context "with invalid attributes" do
       it "locates the requested @collection" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Collection
+        @ability.can :update, @collection
         put :update, id: @collection, collection: FactoryGirl.attributes_for(:invalid_collection)
         expect(assigns(:collection)).to eq(@collection)
       end
 
       it "does not change @collection's attributes" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Collection
+        @ability.can :update, @collection
         put :update, id: @collection,
           collection: FactoryGirl.attributes_for(:collection, name: nil)
         @collection.reload
@@ -178,7 +178,7 @@ RSpec.describe CollectionsController, type: :controller do
 
       it "re-renders the edit method" do
         @controller.stub(:current_ability).and_return(@ability)
-        @ability.can :update, Collection
+        @ability.can :update, @collection
         put :update, id: @collection, collection: FactoryGirl.attributes_for(:invalid_collection)
         expect(response).to render_template :edit
       end
@@ -193,7 +193,7 @@ RSpec.describe CollectionsController, type: :controller do
 
     it "deletes the collection" do
       @controller.stub(:current_ability).and_return(@ability)
-      @ability.can :destroy, Collection
+      @ability.can :destroy, @collection
       expect{
         delete :destroy, id: @collection
       }.to change(Collection,:count).by(-1)
@@ -201,7 +201,7 @@ RSpec.describe CollectionsController, type: :controller do
 
     it "redirects to collections#index" do
       @controller.stub(:current_ability).and_return(@ability)
-      @ability.can :destroy, Collection
+      @ability.can :destroy, @collection
       delete :destroy, id: @collection
       expect(response).to redirect_to collections_url
     end

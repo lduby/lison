@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   #     resources :comments, :sales
   #     resource :seller
   #   end
+
   resources :authors do
     resources :items do
       get :list, :on => :collection, :as => :list
@@ -57,6 +58,12 @@ Rails.application.routes.draw do
   end
 
   resources :collections do
+    resources :items do
+      get :list, :on => :collection, :as => :list
+    end
+  end
+
+  resources :themes do
     resources :items do
       get :list, :on => :collection, :as => :list
     end

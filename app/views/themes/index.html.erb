@@ -1,0 +1,33 @@
+<h1>All themes</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>#Items</th>
+    <th colspan="3"></th>
+  </tr>
+
+  <% @themes.each do |theme| %>
+    <tr name="theme<%= theme.id %>">
+      <td><%= theme.name %></td>
+      <td><%= link_to "#{theme.items.count}", list_theme_items_path(theme), id: "show_items_of_theme_#{theme.id}" %></td>
+      <td>
+        <% if can? :read, theme %>
+          <%= link_to 'Show', theme_path(theme), id: "show_theme_#{theme.id}" %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :update, theme %>
+          <%= link_to 'Edit', edit_theme_path(theme), id: "edit_theme_#{theme.id}" %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :destroy, theme %>
+          <%= link_to 'Destroy', theme_path(theme), id: "del_theme_#{theme.id}", method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p><% if can? :create, Theme %>
+  <%= link_to 'New theme', new_theme_path %>
+<% end %></p>

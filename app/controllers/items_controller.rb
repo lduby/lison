@@ -21,6 +21,10 @@ class ItemsController < ApplicationController
       @collection = Collection.find(params[:collection_id])
       @items = @collection.items
     end
+      if params[:theme_id]
+        @theme = Theme.find(params[:theme_id])
+        @items = @theme.items
+      end
   end
 
   def show
@@ -29,10 +33,12 @@ class ItemsController < ApplicationController
 
   def new
     @item = Item.new
+    #@item.publisher.build
     @authors = Author.all
     @illustrators = Illustrator.all
     @publishers = Publisher.all
     @collections = Collection.all
+    @themes = Theme.all
   end
 
   def create
@@ -47,10 +53,12 @@ class ItemsController < ApplicationController
 
   def edit
     @item = Item.find(params[:id])
+    #@item.publisher.build
     @authors = Author.all
     @illustrators = Illustrator.all
     @publishers = Publisher.all
     @collections = Collection.all
+    @themes = Theme.all
   end
 
   def update
@@ -77,8 +85,11 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [])
+    params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], :theme_ids => [])
+  #  params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], publisher_attributes: [:id, :name, :about])
+
   end
+
 
 
 

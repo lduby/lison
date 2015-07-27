@@ -25,6 +25,8 @@ describe "Collections" do
         end
       end
 
+      it "Adds a new collection from an item form and displays it in the form"
+
       it "Adds a new collection with a publisher and displays the results" do
         publisher = FactoryGirl.create(:publisher)
         sign_in_with_donald

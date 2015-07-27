@@ -28,6 +28,8 @@ describe "Illustrators" do
         end
       end
 
+      it "Adds an illustrator from an item form and displays it in the form"
+
       it "Shows an illustrator details" do
         illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
         sign_in_with_donald

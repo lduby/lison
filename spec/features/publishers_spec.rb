@@ -24,6 +24,8 @@ describe "Publishers" do
         end
       end
 
+      it "Adds a publisher from an item form and displays it in the form"
+
       it "Shows a publisher details" do
         publisher = FactoryGirl.create(:publisher, name: "Iello")
         sign_in_with_donald

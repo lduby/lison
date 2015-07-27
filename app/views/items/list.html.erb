@@ -6,6 +6,8 @@
   <h1><%= @publisher.name %> items</h1>
 <% elsif !@collection.nil? %>
   <h1><%= @collection.name %> items</h1>
+<% elsif !@theme.nil? %>
+  <h1><%= @theme.name %>''s items</h1>
 <% end %>
 <table>
   <tr>

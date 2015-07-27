@@ -2,14 +2,14 @@
 <table>
   <tr>
     <th>Title</th>
-    <th>Text</th>
+    <th>Themes</th>
     <th colspan="3"></th>
   </tr>
 
   <% @items.each do |item| %>
     <tr name="item_<%= item.id %>">
       <td><%= item.title %></td>
-      <td></td>
+      <td><%= item.themes.map(&:name).join(",") %></td>
       <td><%= link_to 'Show', item_path(item), id: "show_item_#{item.id}" %></td>
       <td><%= link_to 'Edit', edit_item_path(item), id: "edit_item_#{item.id}" %></td>
       <td><%= link_to 'Destroy', item_path(item), id: "del_item_#{item.id}", method: :delete, data: { confirm: 'Are you sure?' } %></td>

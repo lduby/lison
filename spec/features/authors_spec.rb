@@ -27,6 +27,8 @@ describe "Authors" do
         end
       end
 
+      it "Adds an author from an item form and displays it in the form"
+
       it "Shows an author details" do
         author = FactoryGirl.create(:author, firstname: "Larry", lastname: "Smith")
         sign_in_with_donald

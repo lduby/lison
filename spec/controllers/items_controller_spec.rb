@@ -75,6 +75,21 @@ describe ItemsController do
       get :list, collection_id: collection.id
       expect(response).to render_template :list
     end
+      it "populates an array of items associated to a theme" do
+        theme = FactoryGirl.create(:theme)
+        item = FactoryGirl.create(:item, theme_ids: [theme.id])
+        item2 = FactoryGirl.create(:item, theme_ids: [])
+        get :index
+        expect(theme.items).to eq([item])
+        expect(theme.items).to_not include(item2)
+      end
+      it "renders the items :list view when a theme is specified" do
+        theme = FactoryGirl.create(:theme)
+        item = FactoryGirl.create(:item, theme_ids: [theme.id])
+        item2 = FactoryGirl.create(:item, theme_ids: [])
+        get :list, theme_id: theme.id
+        expect(response).to render_template :list
+      end
   end
 
   describe "GET #show" do
@@ -115,6 +130,11 @@ describe ItemsController do
       get :new
       expect(assigns(:collections)).to eq([collection])
     end
+    it "populates an array of themes" do
+      theme = FactoryGirl.create(:theme)
+      get :new
+      expect(assigns(:themes)).to eq([theme])
+    end
     it "renders the item :new template" do
       get :new
       expect(response).to render_template :new
@@ -154,6 +174,11 @@ describe ItemsController do
         expect(assigns(:item).collection).to eq(collection)
         expect(collection.items).to include(assigns(:item))
       end
+      it "associates themes to the item" do
+        theme = FactoryGirl.create(:theme)
+        post :create, item: FactoryGirl.attributes_for(:item, theme_ids: [theme.id])
+        expect(assigns(:item).themes).to eq([theme])
+      end
     end
 
     context "with invalid attributes" do
@@ -175,7 +200,8 @@ describe ItemsController do
       @illust = FactoryGirl.create(:illustrator)
       @pub = FactoryGirl.create(:publisher)
       @coll = FactoryGirl.create(:collection, publisher_id: @pub.id)
-      @item = FactoryGirl.create(:item, title: "Test Item", author_ids: [@auth.id], illustrator_ids: [@illust.id], publisher_id: @pub.id, collection_id: @coll.id)
+      @th = FactoryGirl.create(:theme)
+      @item = FactoryGirl.create(:item, title: "Test Item", author_ids: [@auth.id], illustrator_ids: [@illust.id], publisher_id: @pub.id, collection_id: @coll.id, theme_ids: [@th.id])
     end
 
     context "with valid attributes" do
@@ -248,6 +274,28 @@ describe ItemsController do
         put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: coll2.id)
         @item.reload
         expect(@item.collection).to eq(coll2)
+      end
+
+      it "adds a theme" do
+        theme = FactoryGirl.create(:theme)
+        themes = @item.theme_ids
+        themes_nb = themes.size
+        themes << theme.id
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, theme_ids: themes)
+        @item.reload
+        expect(@item.themes.count).to eq(themes_nb+1)
+        expect(@item.themes).to include(theme)
+      end
+
+      it "deletes a theme"  do
+        theme = @item.themes.last
+        themes = @item.theme_ids
+        themes_nb=themes.size
+        themes.delete(theme.id)
+        put :update, id: @item, item: FactoryGirl.attributes_for(:item, theme_ids: themes)
+        @item.reload
+        expect(@item.themes.count).to eq(themes_nb-1)
+        expect(@item.themes).to_not include(theme)
       end
 
       it "redirects to the updated item" do

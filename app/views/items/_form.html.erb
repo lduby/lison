@@ -15,30 +15,51 @@
 </p>
 
 <p>
-  <b>Authors</b> (<%= link_to 'New', new_author_path %>)<br />
+  <b>Authors</b> (<%= link_to 'New', new_author_path if can? :create, Author %>)<br />
   <div class="field">
     <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
   </div>
 </p>
 
 <p>
-  <b>Illustrators</b> (<%= link_to 'New', new_illustrator_path %>)<br />
+  <b>Illustrators</b> (<%= link_to 'New', new_illustrator_path if can? :create, Illustrator %>)<br />
   <div class="field">
     <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
   </div>
 </p>
 
 <p>
-  <b>Publisher</b> (<%= link_to 'New', new_publisher_path %>)<br />
+  <b>Publisher</b> (<%= link_to 'New', new_publisher_path if can? :create, Publisher %>)<br />
   <div class="field">
     <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
   </div>
 </p>
 
+<!-- <h2>New Publisher</h2>
+ <%= f.fields_for :publisher do |pub| %>
+   <div class="publisher_fields">
+     <div class="field">
+       <%= pub.label :name %><br>
+       <%= pub.text_field :name %>
+     </div>
+     <div class="field">
+       <%= pub.label :about %><br>
+       <%= pub.text_area :about %>
+     </div>
+   </div>
+ <% end %> -->
+
 <p>
-  <b>Collection</b> (<%= link_to 'New', new_collection_path %>)<br />
+  <b>Collection</b> (<%= link_to 'New', new_collection_path if can? :create, Collection %>)<br />
   <div class="field">
     <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
+  </div>
+</p>
+
+<p>
+  <b>Themes</b> (<%= link_to 'New', new_theme_path if can? :create, Theme %>)<br />
+  <div class="field">
+    <%= collection_check_boxes(:item, :theme_ids, @themes, :id, :name) %>
   </div>
 </p>
 
