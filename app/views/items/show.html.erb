@@ -23,10 +23,27 @@
     <%=link_to @item.collection.name, collection_path(@item.collection), id: "show_collection_#{@item.collection.id}" %>
   <% end %>
 </p>
-<p id=item_themes><strong>Themes: </strong><%= link_to 'New', new_theme_path(), id: "new_theme" if can? :create, Theme %>
+<p id=item_themes><strong>Themes: </strong>
+   <% if can? :create, Theme %>
+      <% if can? :update, @item %>
+         <%= link_to 'New', new_theme_path(), id: "new_theme" %>
+      <% end %>
+   <% end %>
   <ul>
   <% @item.themes.each do |theme| %>
   <li><%= link_to theme.name, theme_path(theme), id: "show_theme_#{theme.id}" %></li>
+  <% end %>
+  </ul>
+</p>
+<p id=item_categories><strong>Categories: </strong>
+   <% if can? :create, Category %>
+      <% if can? :update, @item %>
+         <%= link_to 'New', new_category_path(), id: "new_category" %>
+      <% end %>
+   <% end %>
+  <ul>
+  <% @item.categories.each do |cat| %>
+  <li><%= link_to cat.name, category_path(cat), id: "show_category_#{cat.id}" %></li>
   <% end %>
   </ul>
 </p>

@@ -1,0 +1,33 @@
+<h1>All categories</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>#Items</th>
+    <th colspan="3"></th>
+  </tr>
+
+  <% @categories.each do |category| %>
+    <tr name="category<%= category.id %>">
+      <td><%= category.name %></td>
+      <td><%= link_to "#{category.items.count}", list_category_items_path(category), id: "show_items_of_category_#{category.id}" %></td>
+      <td>
+        <% if can? :read, category %>
+          <%= link_to 'Show', category_path(category), id: "show_category_#{category.id}" %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :update, category %>
+          <%= link_to 'Edit', edit_category_path(category), id: "edit_category_#{category.id}" %>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :destroy, category %>
+          <%= link_to 'Destroy', category_path(category), id: "del_category_#{category.id}", method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<p><% if can? :create, Category %>
+  <%= link_to 'New category', new_category_path %>
+<% end %></p>

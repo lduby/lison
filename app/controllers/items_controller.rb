@@ -5,6 +5,10 @@ class ItemsController < ApplicationController
   end
 
   def list
+    if params[:category_id]
+      @category = Category.find(params[:category_id])
+      @items = @category.items
+    end
     if params[:author_id]
       @author = Author.find(params[:author_id])
       @items = @author.items
@@ -39,6 +43,7 @@ class ItemsController < ApplicationController
     @publishers = Publisher.all
     @collections = Collection.all
     @themes = Theme.all
+    @categories = Category.all
   end
 
   def create
@@ -59,6 +64,7 @@ class ItemsController < ApplicationController
     @publishers = Publisher.all
     @collections = Collection.all
     @themes = Theme.all
+    @categories = Category.all
   end
 
   def update
@@ -85,7 +91,7 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-    params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], :theme_ids => [])
+    params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], :theme_ids => [], :category_ids => [])
   #  params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], publisher_attributes: [:id, :name, :about])
 
   end

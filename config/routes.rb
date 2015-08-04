@@ -35,6 +35,11 @@ Rails.application.routes.draw do
   #     resources :comments, :sales
   #     resource :seller
   #   end
+  resources :categories do
+    resources :items do
+      get :list, :on => :collection, :as => :list
+    end
+  end
 
   resources :authors do
     resources :items do

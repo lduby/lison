@@ -7,7 +7,7 @@ class Ability
 
     if user.role?('Member')
       # can :read, [ Item, ItemCopy, Event ]
-      can :read, [ Item,  Author, Illustrator, Publisher, Collection, Theme ]
+      can :read, [ Item,  Author, Illustrator, Publisher, Collection, Theme, Category ]
       can :list, [ Item, Collection ]
       # can :read, Membership do | membership |
       #   membership.try( :member ) == user
@@ -24,7 +24,7 @@ class Ability
       # can :crud, Collection
       # can :read, Collection
       # can :create, Collection
-      can :crud, [ Item, Author, Illustrator, Publisher, Collection, Theme ]
+      can :crud, [ Item, Author, Illustrator, Publisher, Collection, Theme, Category ]
       can :list, [ Item,  Collection ]
 
       # can :manage, [ Item, Author, Illustrator, Publisher, Collection ]

@@ -1,0 +1,16 @@
+<h1><%= @category.name %>
+  <tiny>
+  <% if can? :update, @category %>
+    <%= link_to 'Edit', edit_category_path(@category), id: "edit_category_#{@category.id}" %> |
+  <% end %>
+  <% if can? :destroy, @category %>
+      <%= link_to 'Destroy', category_path(@category), id: "del_category_#{@category.id}", method: :delete, data: { confirm: 'Are you sure?' } %> |
+    <% end %>
+
+    <%= link_to 'Back', publishers_path %>
+  </tiny>
+</h1>
+<h2>About</h2>
+<p><%= @category.about %></p>
+<h2>List of associated items</h2>
+<p><%= @category.items.map {|i| i.title}.join(', ') %></p>
