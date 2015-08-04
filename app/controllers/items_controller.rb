@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  load_and_authorize_resource :class => Item, :instance_name => "item", :except => [:index, :list]
 
   def index
     @items = Item.all
@@ -28,7 +29,11 @@ class ItemsController < ApplicationController
       if params[:theme_id]
         @theme = Theme.find(params[:theme_id])
         @items = @theme.items
-      end
+     end
+    if params[:category_id]
+      @category = Category.find(params[:category_id])
+      @items = @category.items
+    end
   end
 
   def show

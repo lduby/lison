@@ -31,7 +31,9 @@ class Ability
 
     elsif user.role?('Admin')
       can :manage, :all
-    # else
+    else
+      can :read, [Item, Author, Illustrator, Publisher, Collection, Theme, Category]
+      can :list, [ Item, Collection ]
     end
   end
 end

@@ -5,11 +5,13 @@ describe "Items" do
   describe "Manage items" do
     context 'with according rights' do
       before :each do
-
         @role = FactoryGirl.create(:role, name: 'Team')
         @user = FactoryGirl.create(:user, :donald, roles: Role.where(name: 'Team'))
       end
       it "Adds a new item and displays the results" do
+      sign_in_with_donald
+      expect(page).to have_link 'Log out'
+      expect(page).to have_content 'Team'
         visit items_url
         expect{
           click_link 'New item'
@@ -112,6 +114,9 @@ describe "Items" do
 
       it "Shows an item details" do
         item = FactoryGirl.create(:item, title: "To be viewed item")
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         expect{
           click_link "show_item_#{item.id}"
@@ -140,6 +145,9 @@ describe "Items" do
         illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
         item = FactoryGirl.create(:item, title: "Wazabi", illustrator_ids: [illustrator.id])
         item2 = FactoryGirl.create(:item, title: "Hanabi", illustrator_ids: [illustrator.id])
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit illustrators_url
         click_link "show_items_of_illustrator_#{illustrator.id}"
         click_link "show_item_#{item.id}"
@@ -167,6 +175,9 @@ describe "Items" do
         collection = FactoryGirl.create(:collection, name: "Iello")
         item = FactoryGirl.create(:item, title: "Wazabi", collection_id: collection.id)
         item2 = FactoryGirl.create(:item, title: "Hanabi", collection_id: collection.id)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit collections_url
         click_link "show_items_of_collection_#{collection.id}"
         click_link "show_item_#{item.id}"
@@ -196,6 +207,9 @@ describe "Items" do
       it "Updates an item from an illustrator items list and displays the results" do
         illustrator = FactoryGirl.create(:illustrator, firstname: "Larry", lastname: "Smith")
         item = FactoryGirl.create(:item, title: "Wazabi", illustrator_ids: [illustrator.id])
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit illustrators_url
         click_link "show_items_of_illustrator_#{illustrator.id}"
         expect{
@@ -211,6 +225,9 @@ describe "Items" do
       it "Updates an item from a publisher items list and displays the results" do
         publisher = FactoryGirl.create(:publisher, name: "Iello")
         item = FactoryGirl.create(:item, title: "Wazabi", publisher_id: publisher.id)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit publishers_url
         click_link "show_items_of_publisher_#{publisher.id}"
         expect{
@@ -226,6 +243,9 @@ describe "Items" do
       it "Updates an item from a collection items list and displays the results" do
         collection = FactoryGirl.create(:collection, name: "Iello")
         item = FactoryGirl.create(:item, title: "Wazabi", collection_id: collection.id)
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit collections_url
         click_link "show_items_of_collection_#{collection.id}"
         expect{
@@ -240,6 +260,9 @@ describe "Items" do
 
       it "Updates an item and displays the results" do
         item = FactoryGirl.create(:item, title: "To be updated item")
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         expect{
           click_link "edit_item_#{item.id}"
@@ -298,6 +321,9 @@ describe "Items" do
         illu1 = FactoryGirl.create(:illustrator)
         illu2 = FactoryGirl.create(:illustrator)
         item = FactoryGirl.create(:item, illustrator_ids: [illu1.id] )
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         click_link "edit_item_#{item.id}"
         check "item_illustrator_ids_#{illu2.id}"
@@ -316,6 +342,9 @@ describe "Items" do
         illu1 = FactoryGirl.create(:illustrator)
         illu2 = FactoryGirl.create(:illustrator)
         item = FactoryGirl.create(:item, illustrator_ids: [illu1.id, illu2.id] )
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_url
         click_link "edit_item_#{item.id}"
         uncheck "item_illustrator_ids_#{illu2.id}"
@@ -386,6 +415,9 @@ describe "Items" do
 
       it "Deletes an item" do
         item = FactoryGirl.create(:item, title: "To be deleted item")
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_path
         expect{
           click_link "del_item_#{item.id}"
@@ -475,6 +507,11 @@ describe "Items" do
       it "Deletes an item with js dialog", js: true do
         DatabaseCleaner.clean
         item = FactoryGirl.create(:item, title: "To be deleted item")
+        @role = FactoryGirl.create(:role, name: 'Team')
+        @user = FactoryGirl.create(:user, :donald, roles: Role.where(name: 'Team'))
+        sign_in_with_donald
+        expect(page).to have_link 'Log out'
+        expect(page).to have_content 'Team'
         visit items_path
         sleep 1
         expect{

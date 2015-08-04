@@ -64,5 +64,12 @@
 </p>
 
 <p>
+  <b>Categories</b> (<%= link_to 'New', new_category_path if can? :create, Category %>)<br />
+  <div class="field">
+    <%= collection_check_boxes(:item, :category_ids, @categories, :id, :name) %>
+  </div>
+</p>
+
+<p>
   <%= f.submit %>
 </p>
