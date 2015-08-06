@@ -12,6 +12,7 @@ class PublishersController < ApplicationController
 
   def new
     @publisher = Publisher.new
+    @publisher.collections.build
   end
 
   def create
@@ -26,6 +27,7 @@ class PublishersController < ApplicationController
 
   def edit
     @publisher = Publisher.find(params[:id])
+    @publisher.collections.build
   end
 
   def update
@@ -47,7 +49,7 @@ class PublishersController < ApplicationController
 
   private
   def publisher_params
-    params.require(:publisher).permit(:name, :about, :item_ids => [], :collection_ids => [])
+    params.require(:publisher).permit(:name, :about, :item_ids => [], :collection_ids => [], collections_attributes: [:id, :name, :about, :_destroy])
   end
 
 

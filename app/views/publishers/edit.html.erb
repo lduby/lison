@@ -1,6 +1,6 @@
 <h1>Editing publisher</h1>
 
-<%= form_for :publisher, url: publisher_path(@publisher), method: :patch do |f| %>
+<%= form_for @publisher, url: publisher_path(@publisher), method: :patch do |f| %>
   <%= render "form", f: f %>
 <% end %>
 

@@ -4,7 +4,7 @@
     <%= link_to 'Edit', edit_publisher_path(@publisher), id: "edit_publisher_#{@publisher.id}" %> |
   <% end %>
   <% if can? :destroy, Publisher %>
-      <%= link_to 'Destroy', publisher_path(@publisher), id: "del_publisher_#{@publisher.id}", method: :delete, data: { confirm: 'Are you sure?' } %> | 
+      <%= link_to 'Destroy', publisher_path(@publisher), id: "del_publisher_#{@publisher.id}", method: :delete, data: { confirm: 'Are you sure?' } %> |
     <% end %>
 
     <%= link_to 'Back', publishers_path %>
@@ -13,10 +13,14 @@
 <h2>About</h2>
 <p><%= @publisher.about %></p>
 <h2>List of associated collections (<%= link_to 'New', new_publisher_collection_path(@publisher) %>)</h2>
-<ul>
-  <% @publisher.collections.each do |coll| %>
-    <li><%= link_to "#{coll.name}", collection_path(coll), id: "show_collection_#{coll.id}" %></li>
-  <% end %>
-</ul>
+<% if @publisher.collections.any? %>
+   <ul id="publisher_collections_list">
+     <% @publisher.collections.each do |coll| %>
+       <li><%= link_to coll, coll, id: "show_collection_#{coll.id}" %></li>
+     <% end %>
+   </ul>
+<% else %>
+   <p>None available</p>
+<% end %>
 <h2>List of associated items</h2>
 <p><%= @publisher.items.map {|i| i.title}.join(', ') %></p>

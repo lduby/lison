@@ -1,23 +1,41 @@
-  <% if @publisher.errors.any? %>
-    <div id="error_explanation">
-    <h2><%= pluralize(@publisher.errors.count, "error") %> prohibited
-      this publisher from being saved:</h2>
-    <ul>
-    <% @publisher.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-    </ul>
-    </div>
-  <% end %>
-  <p>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :about %><br>
-    <%= f.text_area :about %>
-  </p>
+<% if @publisher.errors.any? %>
+   <div id="error_explanation">
+      <h2><%= pluralize(@publisher.errors.count, "error") %> prohibited this publisher from being saved:</h2>
+      <ul>
+         <% @publisher.errors.full_messages.each do |msg| %>
+         <li><%= msg %></li>
+         <% end %>
+      </ul>
+   </div>
+<% end %>
+<div class="field">
+   <%= f.label :name %><br>
+   <%= f.text_field :name %>
+</div>
+<div class="field">
+   <%= f.label :about %><br>
+   <%= f.text_area :about %>
+</div>
+<% if can? :create, Collection %>
+   <h2>Collections</h2>
+   <%= f.fields_for :collections do |collection| %>
+      <div class="collection_fields">
+         <div class="field">
+            <%= collection.label :name %>
+            <%= collection.text_field :name %>
+            <% if can? :destroy, Collection %>
+               <%= collection.check_box :_destroy %>
+               <%= collection.label :_destroy, 'Delete' %>
+            <% end %>
+         </div>
+         <div class="field">
+            <%= collection.label :about %><br />
+            <%= collection.text_area :about %>
+         </div>
+      </div>
+   <% end %>
+<% end %>
 
-  <p>
-    <%= f.submit %>
-  </p>
+<p>
+   <%= f.submit %>
+</p>
