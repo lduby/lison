@@ -1,6 +1,6 @@
 <h1>Editing theme</h1>
 
-<%= form_for :theme, url: theme_path(@theme), method: :patch do |f| %>
+<%= form_for @theme, url: theme_path(@theme), method: :patch do |f| %>
   <%= render "form", f: f %>
 <% end %>
 
