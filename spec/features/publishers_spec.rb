@@ -16,8 +16,8 @@ describe "Publishers" do
         visit publishers_url
         expect{
           click_link 'New publisher'
-          fill_in 'Name', with: "Iello"
-          click_button "Save Publisher"
+          within('.publisher_fields') { fill_in 'publisher_name', with: "Iello" }
+          click_button "Create Publisher"
         }.to change(Publisher,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Iello"
@@ -121,15 +121,15 @@ describe "Publishers" do
         visit publishers_url
         expect{
           click_link "edit_publisher_#{publisher.id}"
-          fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Publisher"
+          within('.publisher_fields') { fill_in 'publisher_name', with: "Days of Wonder" }
+          click_button "Update Publisher"
         }.to_not change(Publisher,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"
         end
       end
 
-      it "Updates a publisher and displays the results" do
+      it "Updates a publisher from its details page and displays the results" do
         publisher = FactoryGirl.create(:publisher, name: "Iello")
         sign_in_with_donald
         expect(page).to have_link 'Log out'
@@ -138,13 +138,79 @@ describe "Publishers" do
         click_link "show_publisher_#{publisher.id}"
         expect{
           click_link "edit_publisher_#{publisher.id}"
-          fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Publisher"
+          within('.publisher_fields') { fill_in 'publisher_name', with: "Days of Wonder" }
+          click_button "Update Publisher"
         }.to_not change(Publisher,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"
         end
       end
+
+      it "Adds a collection to a publisher which has none" do
+         publisher = FactoryGirl.create(:publisher, name: "Iello")
+         sign_in_with_donald
+         expect(page).to have_link 'Log out'
+         expect(page).to have_content 'Team'
+         visit publishers_url
+         expect{
+           click_link "edit_publisher_#{publisher.id}"
+           within('.collections_fields') { fill_in 'publisher_collections_attributes_0_name', with: "Collection1" }
+           click_button "Update Publisher"
+         }.to_not change(Publisher,:count)
+         within 'h1' do
+           expect(page).to have_content "Iello"
+         end
+         within ('#publisher_collections_list') { expect(page).to have_content "Collection1" }
+         click_link "Collection1"
+         expect(page).to have_content "Iello"
+      end
+
+      it "Adds a collection to a publisher which already has some" do
+         publisher = FactoryGirl.create(:publisher, name: "Iello")
+         coll1 = FactoryGirl.create(:collection, name: "Collection1", publisher_id: publisher.id)
+         coll2 = FactoryGirl.create(:collection, name: "Collection2", publisher_id: publisher.id)
+         sign_in_with_donald
+         expect(page).to have_link 'Log out'
+         expect(page).to have_content 'Team'
+         visit publishers_url
+         expect{
+           click_link "edit_publisher_#{publisher.id}"
+           within('.collections_fields') { fill_in 'publisher_collections_attributes_2_name', with: "Collection3" }
+           click_button "Update Publisher"
+         }.to_not change(Publisher,:count)
+         within 'h1' do
+           expect(page).to have_content "Iello"
+         end
+         within ('#publisher_collections_list') { expect(page).to have_content "Collection3" }
+         click_link "Collection3"
+         expect(page).to have_content "Iello"
+      end
+
+      it 'Deletes a collection to a publisher' do
+         publisher = FactoryGirl.create(:publisher, name: "Iello")
+         coll1 = FactoryGirl.create(:collection, name: "Collection1", publisher_id: publisher.id)
+         coll2 = FactoryGirl.create(:collection, name: "Collection2", publisher_id: publisher.id)
+         sign_in_with_donald
+         expect(page).to have_link 'Log out'
+         expect(page).to have_content 'Team'
+         visit publishers_url
+         expect{
+           click_link "edit_publisher_#{publisher.id}"
+           within('.collections_fields') { check 'publisher_collections_attributes_1__destroy' }
+           click_button "Update Publisher"
+         }.to_not change(Publisher,:count)
+         within 'h1' do
+           expect(page).to have_content "Iello"
+         end
+         within '#publisher_collections_list' do
+            expect(page).to have_content "Collection1"
+            expect(page).to_not have_content "Collection2"
+         end
+         click_link "Collection1"
+         expect(page).to have_content "Iello"
+
+      end
+
 
       it "Deletes a publisher" do
         publisher = FactoryGirl.create(:publisher, name: "Iello")

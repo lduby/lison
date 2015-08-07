@@ -8,18 +8,20 @@
       </ul>
    </div>
 <% end %>
-<div class="field">
-   <%= f.label :name %><br>
-   <%= f.text_field :name %>
-</div>
-<div class="field">
-   <%= f.label :about %><br>
-   <%= f.text_area :about %>
+<div class="publisher_fields">
+   <div class="field">
+      <%= f.label :name %><br>
+      <%= f.text_field :name, id: "publisher_name" %>
+    </div>
+   <div class="field">
+      <%= f.label :about %><br>
+      <%= f.text_area :about, id: "about_publisher" %>
+   </div>
 </div>
 <% if can? :create, Collection %>
    <h2>Collections</h2>
-   <%= f.fields_for :collections do |collection| %>
-      <div class="collection_fields">
+   <div class="collections_fields">
+      <%= f.fields_for :collections do |collection| %>
          <div class="field">
             <%= collection.label :name %>
             <%= collection.text_field :name %>
@@ -32,8 +34,8 @@
             <%= collection.label :about %><br />
             <%= collection.text_area :about %>
          </div>
-      </div>
-   <% end %>
+      <% end %>
+   </div>
 <% end %>
 
 <p>
