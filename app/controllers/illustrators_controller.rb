@@ -46,7 +46,7 @@ class IllustratorsController < ApplicationController
 
   private
   def illustrator_params
-    params.require(:illustrator).permit(:firstname, :lastname, :about, :item_ids => [])
+    params.require(:illustrator).permit(:id, :firstname, :lastname, :about, :item_ids => [])
   end
 
 end
