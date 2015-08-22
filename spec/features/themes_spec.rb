@@ -18,7 +18,7 @@ describe "Themes" do
         expect{
           click_link 'New theme'
           fill_in 'Name', with: "Networks"
-          click_button "Save Theme"
+          click_button "Create Theme"
         }.to change(Theme,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Networks"
@@ -42,12 +42,12 @@ describe "Themes" do
           click_link "new_theme"
           fill_in 'Name', with: "Rails"
           fill_in 'About', with: "A theme to classify items about rails transportation"
-          click_button "Save Theme"
+          click_button "Create Theme"
         }.to change(Theme,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Rails"
         end
-        ### The item is not associated to the newly created theme => requires a new controller method 
+        ### The item is not associated to the newly created theme => requires a new controller method
         expect(page).to have_content("#{item.title}")
         visit items_url
         click_link "show_item_#{item.id}"
@@ -111,7 +111,7 @@ describe "Themes" do
         expect{
           click_link "edit_theme_#{theme.id}"
           fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Theme"
+          click_button "Update Theme"
         }.to_not change(Theme,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"
@@ -128,7 +128,7 @@ describe "Themes" do
         expect{
           click_link "edit_theme_#{theme.id}"
           fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Theme"
+          click_button "Update Theme"
         }.to_not change(Theme,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"

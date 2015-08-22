@@ -3,9 +3,10 @@ require 'rails_helper'
 describe "Publishers to items relationship" do
 
   before(:all) do
-    @avrail = FactoryGirl.create(:item, :title => 'Les Aventuriers du rail')
-    @wonders = FactoryGirl.create(:item, :title => '7 Wonders')
-    @dow = FactoryGirl.create(:publisher, :name => 'Days of Wonder')
+    DatabaseCleaner.clean
+    @avrail = FactoryGirl.create(:item)
+    @wonders = FactoryGirl.create(:item)
+    @dow = FactoryGirl.create(:publisher)
   end
 
   it "should recognise when a publisher has no items" do
@@ -19,7 +20,7 @@ describe "Publishers to items relationship" do
 
   it "should automatically know an item's publisher" do
     @dow.items << @avrail
-    expect(@avrail.publisher.name).to eq "Days of Wonder"
+    expect(@avrail.publisher.name).to eq @dow.name
   end
 
 end

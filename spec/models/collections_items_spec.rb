@@ -3,9 +3,10 @@ require 'rails_helper'
 describe "Collections to items relationship" do
 
   before(:all) do
-    @avrail = FactoryGirl.create(:item, :title => 'Les Aventuriers du rail')
-    @wonders = FactoryGirl.create(:item, :title => '7 Wonders')
-    @dow = FactoryGirl.create(:collection, :name => 'Days of Wonder')
+    DatabaseCleaner.clean
+    @avrail = FactoryGirl.create(:item)
+    @wonders = FactoryGirl.create(:item)
+    @dow = FactoryGirl.create(:collection)
   end
 
   it "should recognise when a publisher has no items" do
@@ -19,7 +20,7 @@ describe "Collections to items relationship" do
 
   it "should automatically know an item's collection" do
     @dow.items << @avrail
-    expect(@avrail.collection.name).to eq "Days of Wonder"
+    expect(@avrail.collection.name).to eq @dow.name
   end
 
 end

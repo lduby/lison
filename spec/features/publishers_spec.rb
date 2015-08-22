@@ -196,7 +196,7 @@ describe "Publishers" do
          visit publishers_url
          expect{
            click_link "edit_publisher_#{publisher.id}"
-           within('.collections_fields') { check 'publisher_collections_attributes_1__destroy' }
+           within('.collections_fields') { check 'publisher_collections_attributes_0__destroy' }
            click_button "Update Publisher"
          }.to_not change(Publisher,:count)
          within 'h1' do

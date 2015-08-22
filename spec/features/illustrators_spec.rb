@@ -21,7 +21,7 @@ describe "Illustrators" do
           click_link 'New illustrator'
           fill_in 'Firstname', with: "John"
           fill_in 'Lastname', with: "Smith"
-          click_button "Save Illustrator"
+          click_button "Create Illustrator"
         }.to change(Illustrator,:count).by(1)
         within 'h1' do
           expect(page).to have_content "John Smith"
@@ -87,7 +87,7 @@ describe "Illustrators" do
         expect{
           click_link "edit_illustrator_#{illustrator.id}"
           fill_in 'Firstname', with: "Lawrence"
-          click_button "Save Illustrator"
+          click_button "Update Illustrator"
         }.to_not change(Illustrator,:count)
         within 'h1' do
           expect(page).to have_content "Lawrence Smith"
@@ -104,7 +104,7 @@ describe "Illustrators" do
         expect{
           click_link "edit_illustrator_#{illustrator.id}"
           fill_in 'Firstname', with: "Lawrence"
-          click_button "Save Illustrator"
+          click_button "Update Illustrator"
         }.to_not change(Illustrator,:count)
         within 'h1' do
           expect(page).to have_content "Lawrence Smith"

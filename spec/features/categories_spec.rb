@@ -18,7 +18,7 @@ describe "Categories" do
         expect{
           click_link 'New category'
           fill_in 'Name', with: "Networks"
-          click_button "Save Category"
+          click_button "Create Category"
         }.to change(Category,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Networks"
@@ -42,12 +42,12 @@ describe "Categories" do
           click_link "new_category"
           fill_in 'Name', with: "Rails"
           fill_in 'About', with: "A category to classify items about rails transportation"
-          click_button "Save Category"
+          click_button "Create Category"
         }.to change(Category,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Rails"
         end
-        ### The item is not associated to the newly created category => requires a new controller method 
+        ### The item is not associated to the newly created category => requires a new controller method
         expect(page).to have_content("#{item.title}")
         visit items_url
         click_link "show_item_#{item.id}"
@@ -111,7 +111,7 @@ describe "Categories" do
         expect{
           click_link "edit_category_#{category.id}"
           fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Category"
+          click_button "Update Category"
         }.to_not change(Category,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"
@@ -128,7 +128,7 @@ describe "Categories" do
         expect{
           click_link "edit_category_#{category.id}"
           fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Category"
+          click_button "Update Category"
         }.to_not change(Category,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"

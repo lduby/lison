@@ -16,7 +16,7 @@ describe "Items" do
             expect{
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
-               click_button "Save Item"
+               click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
                expect(page).to have_content "Example Item"
@@ -33,7 +33,7 @@ describe "Items" do
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
                check "item_author_ids_#{author.id}"
-               click_button "Save Item"
+               click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
                expect(page).to have_content "Example Item"
@@ -55,7 +55,7 @@ describe "Items" do
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
                check "item_illustrator_ids_#{illustrator.id}"
-               click_button "Save Item"
+               click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
                expect(page).to have_content "Example Item"
@@ -77,7 +77,7 @@ describe "Items" do
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
                select "#{publisher.name}", :from => 'item_publisher_id'
-               click_button "Save Item"
+               click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
                expect(page).to have_content "Example Item"
@@ -99,7 +99,7 @@ describe "Items" do
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
                select "#{collection.name}", :from => 'item_collection_id'
-               click_button "Save Item"
+               click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
                expect(page).to have_content "Example Item"
@@ -121,7 +121,7 @@ describe "Items" do
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
                check "item_theme_ids_#{theme.id}"
-               click_button "Save Item"
+               click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
                expect(page).to have_content "Example Item"
@@ -146,7 +146,7 @@ describe "Items" do
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
                check "item_category_ids_#{category.id}"
-               click_button "Save Item"
+               click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
                expect(page).to have_content "Example Item"
@@ -277,7 +277,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                fill_in 'Title', with: "Hanabi"
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Hanabi"
@@ -295,7 +295,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                fill_in 'Title', with: "Hanabi"
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Hanabi"
@@ -313,7 +313,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                fill_in 'Title', with: "Hanabi"
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Hanabi"
@@ -331,7 +331,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                fill_in 'Title', with: "Hanabi"
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Hanabi"
@@ -349,7 +349,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                fill_in 'Title', with: "Hanabi"
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Hanabi"
@@ -367,7 +367,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                fill_in 'Title', with: "Hanabi"
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Hanabi"
@@ -383,7 +383,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                fill_in 'Title', with: "Updated Item"
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Updated Item"
@@ -401,7 +401,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             check "item_author_ids_#{author2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Authors: #{author1.name} #{author2.name}"
             visit authors_url
@@ -422,7 +422,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             uncheck "item_author_ids_#{author2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Authors: #{author1.name}"
             visit authors_url
@@ -443,7 +443,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             check "item_illustrator_ids_#{illu2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Illustrators: #{illu1.name}"
             visit illustrators_url
@@ -464,7 +464,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             uncheck "item_illustrator_ids_#{illu2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Illustrators: #{illu1.name}"
             visit illustrators_url
@@ -487,7 +487,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                select  "#{secpublisher.name}", :from => 'item_publisher_id'
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Great Game"
@@ -515,7 +515,7 @@ describe "Items" do
             expect{
                click_link "edit_item_#{item.id}"
                select  "#{seccollec.name}", :from => 'item_collection_id'
-               click_button "Save Item"
+               click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do
                expect(page).to have_content "Great Game"
@@ -531,7 +531,7 @@ describe "Items" do
 
          it "Adds a theme and displays the resuts" do
             th1 = FactoryGirl.create(:theme)
-            th2 = FactoryGirl.create(:theme)
+            th2 = FactoryGirl.create(:theme, name: "Theme2")
             item = FactoryGirl.create(:item, theme_ids: [th1.id] )
             sign_in_with_donald
             expect(page).to have_link 'Log out'
@@ -539,7 +539,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             check "item_theme_ids_#{th2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_themes_list li', count: 2)
             within 'ul#item_themes_list' do
@@ -564,7 +564,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             uncheck "item_theme_ids_#{th2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_themes_list li', count: 1)
             within 'ul#item_themes_list' do
@@ -589,7 +589,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             check "item_category_ids_#{cat2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_categories_list li', count: 2)
             within 'ul#item_categories_list' do
@@ -614,7 +614,7 @@ describe "Items" do
             visit items_url
             click_link "edit_item_#{item.id}"
             uncheck "item_category_ids_#{cat2.id}"
-            click_button "Save Item"
+            click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_categories_list li', count: 1)
             within 'ul#item_categories_list' do

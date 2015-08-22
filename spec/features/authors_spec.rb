@@ -20,7 +20,7 @@ describe "Authors" do
           click_link 'New author'
           fill_in 'Firstname', with: "John"
           fill_in 'Lastname', with: "Smith"
-          click_button "Save Author"
+          click_button "Create Author"
         }.to change(Author,:count).by(1)
         within 'h1' do
           expect(page).to have_content "John Smith"
@@ -86,7 +86,7 @@ describe "Authors" do
         expect{
           click_link "edit_author_#{author.id}"
           fill_in 'Firstname', with: "Lawrence"
-          click_button "Save Author"
+          click_button "Update Author"
         }.to_not change(Author,:count)
         within 'h1' do
           expect(page).to have_content "Lawrence Smith"

@@ -1,5 +1,6 @@
 class Publisher < ActiveRecord::Base
   validates_presence_of :name
+  validates :name, uniqueness: { case_sensitive: false }
   validates :about, length: { maximum: 255 }
   has_many :items, inverse_of: :publisher
   has_many :collections, inverse_of: :publisher

@@ -18,7 +18,7 @@ describe "Collections" do
         expect{
           click_link 'New collection'
           fill_in 'Name', with: "Iello"
-          click_button "Save Collection"
+          click_button "Create Collection"
         }.to change(Collection,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Iello"
@@ -37,7 +37,7 @@ describe "Collections" do
           click_link 'New collection'
           fill_in 'Name', with: "Example Collection"
           select "#{publisher.name}", :from => 'collection_publisher_id'
-          click_button "Save Collection"
+          click_button "Create Collection"
         }.to change(Collection,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Example Collection"
@@ -64,7 +64,7 @@ describe "Collections" do
           click_link 'New collection'
           fill_in 'Name', with: "Example Collection"
           select "#{publisher.name}", :from => 'collection_publisher_id'
-          click_button "Save Collection"
+          click_button "Create Collection"
         }.to change(Collection,:count).by(1)
         within 'h1' do
           expect(page).to have_content "Example Collection"
@@ -150,7 +150,7 @@ describe "Collections" do
         expect{
           click_link "edit_collection_#{collection.id}"
           fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Collection"
+          click_button "Update Collection"
         }.to_not change(Collection,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"
@@ -167,7 +167,7 @@ describe "Collections" do
         expect{
           click_link "edit_collection_#{collection.id}"
           fill_in 'Name', with: "Days of Wonder"
-          click_button "Save Collection"
+          click_button "Update Collection"
         }.to_not change(Collection,:count)
         within 'h1' do
           expect(page).to have_content "Days of Wonder"
@@ -188,7 +188,7 @@ describe "Collections" do
         expect{
           click_link "edit_collection_#{collection.id}"
           fill_in 'Name', with: "Great Collection"
-          click_button "Save Collection"
+          click_button "Update Collection"
         }.to_not change(Collection,:count)
         within 'h1' do
           expect(page).to have_content "Great Collection"
@@ -207,7 +207,7 @@ describe "Collections" do
         expect{
           click_link "edit_collection_#{collection.id}"
           select  "#{secpublisher.name}", :from => 'collection_publisher_id'
-          click_button "Save Collection"
+          click_button "Update Collection"
         }.to_not change(Collection,:count)
         within 'h1' do
           expect(page).to have_content "Great Collection"
