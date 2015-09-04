@@ -10,18 +10,26 @@
    <%= link_to 'Back', items_path %>
 </tiny>
 <p id="item_authors"><strong>Authors: </strong>
-   <ul>
+   <% if @item.authors.any? %>
+   <ul id="item_authors_list">
       <% @item.authors.each do |author| %>
          <li><%= link_to_if (can? :read, author), author.name, author_path(author), id: "show_author_#{author.id}" %></li>
       <% end %>
    </ul>
+   <% else %>
+      None available
+   <% end %>
 </p>
 <p id="item_illustrators"><strong>Illustrators: </strong>
-   <ul>
+   <% if @item.illustrators.any? %>
+   <ul id="item_illustrators_list">
       <% @item.illustrators.each do |illustrator| %>
          <li><%= link_to_if (can? :read, illustrator), illustrator.name, illustrator_path(illustrator), id: "show_illustrator_#{illustrator.id}" %></li>
       <% end %>
    </ul>
+   <% else %>
+      None available
+   <% end %>
 </p>
 <p id="item_publisher"><strong>Publisher: </strong>
    <% if @item.publisher %>
@@ -39,11 +47,15 @@
          <%= link_to 'New', new_theme_path(), id: "new_theme" %>
       <% end %>
    <% end %>
+   <% if @item.themes.any? %>
    <ul id="item_themes_list">
       <% @item.themes.each do |theme| %>
          <li><%= link_to theme.name, theme_path(theme), id: "show_theme_#{theme.id}" %></li>
       <% end %>
    </ul>
+   <% else %>
+      None available
+   <% end %>
 </p>
 <p id="item_categories"><strong>Categories: </strong>
    <% if can? :create, Category %>
@@ -51,9 +63,13 @@
          <%= link_to 'New', new_category_path(), id: "new_category" %>
       <% end %>
    <% end %>
+   <% if @item.categories.any? %>
    <ul id="item_categories_list">
       <% @item.categories.each do |cat| %>
          <li><%= link_to cat.name, category_path(cat), id: "show_category_#{cat.id}" %></li>
       <% end %>
    </ul>
+   <% else %>
+      None available
+   <% end %>
 </p>

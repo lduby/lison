@@ -1,75 +1,163 @@
 <% if @item.errors.any? %>
-  <div id="error_explanation">
-  <h2><%= pluralize(@item.errors.count, "error") %> prohibited
-    this item from being saved:</h2>
-  <ul>
-  <% @item.errors.full_messages.each do |msg| %>
-    <li><%= msg %></li>
-  <% end %>
-  </ul>
-  </div>
-<% end %>
-<p>
-  <%= f.label :title %><br>
-  <%= f.text_field :title %>
-</p>
-
-<p>
-  <b>Authors</b> (<%= link_to 'New', new_author_path if can? :create, Author %>)<br />
-  <div class="field">
-    <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
-  </div>
-</p>
-
-<p>
-  <b>Illustrators</b> (<%= link_to 'New', new_illustrator_path if can? :create, Illustrator %>)<br />
-  <div class="field">
-    <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
-  </div>
-</p>
-
-<p>
-  <b>Publisher</b> (<%= link_to 'New', new_publisher_path if can? :create, Publisher %>)<br />
-  <div class="field">
-    <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
-  </div>
-</p>
-
-<!-- <h2>New Publisher</h2>
- <%= f.fields_for :publisher do |pub| %>
-   <div class="publisher_fields">
-     <div class="field">
-       <%= pub.label :name %><br>
-       <%= pub.text_field :name %>
-     </div>
-     <div class="field">
-       <%= pub.label :about %><br>
-       <%= pub.text_area :about %>
-     </div>
+<div id="error_explanation">
+   <h2><%= pluralize(@item.errors.count, "error") %> prohibited
+      this item from being saved:</h2>
+      <ul>
+         <% @item.errors.full_messages.each do |msg| %>
+         <li><%= msg %></li>
+         <% end %>
+      </ul>
    </div>
- <% end %> -->
+   <% end %>
+   <p>
+      <%= f.label :title %><br>
+      <%= f.text_field :title %>
+   </p>
+
+   <p>
+      <h2>Authors</h2><br />
+      <div class="field">
+         Select an author: <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
+      </div>
+      <% if can? :create, Author %>
+         <h3>New author:</h3>
+         <% if controller.action_name == "edit" %>
+            <% if can? :update, Author %>
+               You can edit the authors already associated to the item <br/><br/>   
+            <% end %>
+         <% end %>
+         <div class="authors_fields">
+            <%= f.fields_for :authors do |author| %>
+               <div class="field">
+                  <%= author.label :firstname %>
+                  <%= author.text_field :firstname %>
+                  <%= author.label :lastname %>
+                  <%= author.text_field :lastname %>
+                  <% if can? :destroy, Author %>
+                     <%= author.check_box :_destroy %>
+                     <%= author.label :_destroy, 'Delete' %>
+                  <% end %>
+               </div>
+               <div class="field">
+                  <%= author.label :about %><br />
+                  <%= author.text_area :about %>
+               </div>
+            </div>
+         <% end %>
+      <% end %>
+   </p>
+
+   <p>
+      <b>Illustrators</b><br />
+      <% if controller.action_name == "new" %>
+      <div class="field">
+         <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
+      </div>
+      <% end %>
+      <% if can? :create, Illustrator %>
+         <div class="illustrators_fields">
+            <%= f.fields_for :illustrators do |illustrator| %>
+               <div class="field">
+                  <%= illustrator.label :firstname %>
+                  <%= illustrator.text_field :firstname %>
+                  <%= illustrator.label :lastname %>
+                  <%= illustrator.text_field :lastname %>
+                  <% if can? :destroy, Illustrator %>
+                     <%= illustrator.check_box :_destroy %>
+                     <%= illustrator.label :_destroy, 'Delete' %>
+                  <% end %>
+               </div>
+               <div class="field">
+                  <%= illustrator.label :about %><br />
+                  <%= illustrator.text_area :about %>
+               </div>
+            </div>
+         <% end %>
+     <% end %>
+   </p>
+
+   <p>
+      <b>Publisher</b> (<%= link_to 'New', new_publisher_path if can? :create, Publisher %>)<br />
+      <div class="field">
+         <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
+      </div>
+   </p>
+
+   <!-- <h2>New Publisher</h2>
+   <%= f.fields_for :publisher do |pub| %>
+   <div class="publisher_fields">
+   <div class="field">
+   <%= pub.label :name %><br>
+   <%= pub.text_field :name %>
+</div>
+<div class="field">
+<%= pub.label :about %><br>
+<%= pub.text_area :about %>
+</div>
+</div>
+<% end %> -->
 
 <p>
-  <b>Collection</b> (<%= link_to 'New', new_collection_path if can? :create, Collection %>)<br />
-  <div class="field">
-    <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
-  </div>
+   <b>Collection</b> (<%= link_to 'New', new_collection_path if can? :create, Collection %>)<br />
+   <div class="field">
+      <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
+   </div>
 </p>
 
 <p>
-  <b>Themes</b> (<%= link_to 'New', new_theme_path if can? :create, Theme %>)<br />
-  <div class="field">
-    <%= collection_check_boxes(:item, :theme_ids, @themes, :id, :name) %>
-  </div>
+   <b>Themes</b><br />
+   <% if controller.action_name == "new" %>
+   <div class="field">
+      <%= collection_check_boxes(:item, :theme_ids, @themes, :id, :name) %>
+   </div>
+   <% end %>
+   <% if can? :create, Theme %>
+      <div class="themes_fields">
+         <%= f.fields_for :themes do |theme| %>
+            <div class="field">
+               <%= theme.label :name %>
+               <%= theme.text_field :name %>
+               <% if can? :destroy, Theme %>
+                  <%= theme.check_box :_destroy %>
+                  <%= theme.label :_destroy, 'Delete' %>
+               <% end %>
+            </div>
+            <div class="field">
+               <%= theme.label :about %><br />
+               <%= theme.text_area :about %>
+            </div>
+         </div>
+      <% end %>
+   <% end %>
 </p>
 
 <p>
-  <b>Categories</b> (<%= link_to 'New', new_category_path if can? :create, Category %>)<br />
-  <div class="field">
-    <%= collection_check_boxes(:item, :category_ids, @categories, :id, :name) %>
-  </div>
+   <b>Categories</b><br />
+   <% if controller.action_name == "new" %>
+   <div class="field">
+      <%= collection_check_boxes(:item, :category_ids, @categories, :id, :name) %>
+   </div>
+   <% end %>
+   <% if can? :create, Category %>
+      <div class="categories_fields">
+         <%= f.fields_for :categories do |category| %>
+            <div class="field">
+               <%= category.label :name %>
+               <%= category.text_field :name %>
+               <% if can? :destroy, Category %>
+                  <%= category.check_box :_destroy %>
+                  <%= category.label :_destroy, 'Delete' %>
+               <% end %>
+            </div>
+            <div class="field">
+               <%= category.label :about %><br />
+               <%= category.text_area :about %>
+            </div>
+         </div>
+      <% end %>
+   <% end %>
 </p>
 
 <p>
-  <%= f.submit %>
+   <%= f.submit %>
 </p>

@@ -25,7 +25,25 @@ describe "Themes" do
         end
       end
 
-      it "Adds a theme from an item form and displays it in the form"
+      it "Adds a theme from an item form and associates it to the item" do
+         sign_in_with_donald
+         expect(page).to have_link 'Log out'
+         expect(page).to have_content 'Team'
+         visit items_url
+         expect{
+            click_link 'New item'
+            fill_in 'Title', with: "Tickets To Ride Again"
+            fill_in "item_themes_attributes_0_name", with: "Networking"
+            click_button "Create Item"
+         }.to change(Theme,:count).by(1)
+         within 'ul#item_themes_list' do
+           expect(page).to have_content "Networking"
+         end
+         visit themes_url
+         expect(page).to have_content "Networking"
+         click_link "show_theme_#{Theme.all.last.id}"
+         expect(page).to have_content "Tickets To Ride Again"
+      end
 
       it "Adds a theme from an item details and displays the results" do
         sign_in_with_donald
