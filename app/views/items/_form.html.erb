@@ -16,14 +16,14 @@
 
    <p>
       <h2>Authors</h2><br />
-      <div class="field">
+      <!-- <div class="field">
          Select an author: <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
-      </div>
+      </div> -->
       <% if can? :create, Author %>
          <h3>New author:</h3>
          <% if controller.action_name == "edit" %>
             <% if can? :update, Author %>
-               You can edit the authors already associated to the item <br/><br/>   
+               You can edit the authors already associated to the item <br/><br/>
             <% end %>
          <% end %>
          <div class="authors_fields">
@@ -44,16 +44,20 @@
                </div>
             </div>
          <% end %>
+      <% else %>
+         <div class="field">
+            Select an author: <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
+         </div>
       <% end %>
    </p>
 
    <p>
       <b>Illustrators</b><br />
-      <% if controller.action_name == "new" %>
+      <!-- <% if controller.action_name == "new" %>
       <div class="field">
          <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
       </div>
-      <% end %>
+      <% end %> -->
       <% if can? :create, Illustrator %>
          <div class="illustrators_fields">
             <%= f.fields_for :illustrators do |illustrator| %>
@@ -73,6 +77,10 @@
                </div>
             </div>
          <% end %>
+      <% else %>
+         <div class="field">
+            <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
+         </div>
      <% end %>
    </p>
 
@@ -106,11 +114,11 @@
 
 <p>
    <b>Themes</b><br />
-   <% if controller.action_name == "new" %>
+   <!-- <% if controller.action_name == "new" %>
    <div class="field">
       <%= collection_check_boxes(:item, :theme_ids, @themes, :id, :name) %>
    </div>
-   <% end %>
+   <% end %> -->
    <% if can? :create, Theme %>
       <div class="themes_fields">
          <%= f.fields_for :themes do |theme| %>
@@ -128,16 +136,20 @@
             </div>
          </div>
       <% end %>
+   <% else %>
+      <div class="field">
+         <%= collection_check_boxes(:item, :theme_ids, @themes, :id, :name) %>
+      </div>
    <% end %>
 </p>
 
 <p>
    <b>Categories</b><br />
-   <% if controller.action_name == "new" %>
+   <!-- <% if controller.action_name == "new" %>
    <div class="field">
       <%= collection_check_boxes(:item, :category_ids, @categories, :id, :name) %>
    </div>
-   <% end %>
+   <% end %> -->
    <% if can? :create, Category %>
       <div class="categories_fields">
          <%= f.fields_for :categories do |category| %>
@@ -155,6 +167,10 @@
             </div>
          </div>
       <% end %>
+   <% else %>
+      <div class="field">
+         <%= collection_check_boxes(:item, :category_ids, @categories, :id, :name) %>
+      </div>
    <% end %>
 </p>
 

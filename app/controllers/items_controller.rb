@@ -60,11 +60,13 @@ class ItemsController < ApplicationController
       if !params[:item][:authors_attributes].nil?
          if params[:item][:authors_attributes].any?
             authors_count = 0
-            @authors = []
-            params[:item][:authors_attributes].each do |author|
+            @authors_attributes = params[:item][:authors_attributes]
+            @authors_attributes.each do |author|
                @author = Author.find_by_firstname_and_lastname(author[1]["firstname"], author[1]["lastname"])
                if @author
-                  puts "Author already exists"
+                  if params[:item][:author_ids].nil?
+                     params[:item][:author_ids] = [""]
+                  end
                   params[:item][:author_ids] << @author.id.to_s
                   params[:item][:authors_attributes].delete("#{authors_count}")
                end
@@ -77,11 +79,13 @@ class ItemsController < ApplicationController
       if !params[:item][:illustrators_attributes].nil?
          if params[:item][:illustrators_attributes].any?
             illustrators_count = 0
-            @illustrators = []
-            params[:item][:illustrators_attributes].each do |illustrator|
+            @illustrators_attributes = params[:item][:illustrators_attributes]
+            @illustrators_attributes.each do |illustrator|
                @illustrator = Illustrator.find_by_firstname_and_lastname(illustrator[1]["firstname"], illustrator[1]["lastname"])
                if @illustrator
-                  puts "Illustrator already exists"
+                  if params[:item][:illustrator_ids].nil?
+                     params[:item][:illustrator_ids] = [""]
+                  end
                   params[:item][:illustrator_ids] << @illustrator.id.to_s
                   params[:item][:illustrators_attributes].delete("#{illustrators_count}")
                end
@@ -94,11 +98,13 @@ class ItemsController < ApplicationController
       if !params[:item][:themes_attributes].nil?
          if params[:item][:themes_attributes].any?
             themes_count = 0
-            @themes = []
-            params[:item][:themes_attributes].each do |theme|
+            @themes_attributes = params[:item][:themes_attributes]
+            @themes_attributes.each do |theme|
                @theme = Theme.find_by_name(theme[1]["name"])
                if @theme
-                  puts "Theme already exists"
+                  if params[:item][:theme_ids].nil?
+                     params[:item][:theme_ids] = [""]
+                  end
                   params[:item][:theme_ids] << @theme.id.to_s
                   params[:item][:themes_attributes].delete("#{themes_count}")
                end
@@ -111,11 +117,13 @@ class ItemsController < ApplicationController
       if !params[:item][:categories_attributes].nil?
          if params[:item][:categories_attributes].any?
             categories_count = 0
-            @categories = []
-            params[:item][:categories_attributes].each do |category|
+            @categories_attributes = params[:item][:categories_attributes]
+            @categories_attributes.each do |category|
                @category = Category.find_by_name(category[1]["name"])
                if @category
-                  puts "Category already exists"
+                  if params[:item][:category_ids].nil?
+                     params[:item][:category_ids] = [""]
+                  end
                   params[:item][:category_ids] << @category.id.to_s
                   params[:item][:categories_attributes].delete("#{categories_count}")
                end
@@ -153,6 +161,124 @@ class ItemsController < ApplicationController
 
    def update
       @item = Item.find(params[:id])
+      # Checks if the previously associated authors has been updated
+      if !params[:item][:authors_attributes].nil?
+         if params[:item][:authors_attributes].any?
+            authors_count = 0
+            @authors_attributes = params[:item][:authors_attributes]
+            @authors_attributes.each do |author|
+               if !author[1]["id"].nil?
+                  # One of the associated authors is updated
+                  @author = Author.find(author[1]["id"])
+                  @author.update(:firstname => author[1]["firstname"], :lastname => author[1]["lastname"], :about => author[1]["about"])
+                  params[:item][:authors_attributes].delete("#{authors_count}")
+                  if author[1]["_destroy"] == "0"
+                     if params[:item][:author_ids].nil?
+                        params[:item][:author_ids] = [""]
+                     end
+                     params[:item][:author_ids] << @author.id.to_s
+                  end
+               else
+                  #  New association with an author
+                  @author = Author.find_by_firstname_and_lastname(author[1]["firstname"], author[1]["lastname"])
+                  if @author
+                     params[:item][:author_ids] << @author.id.to_s
+                     params[:item][:authors_attributes].delete("#{authors_count}")
+                  end
+               end
+               authors_count += 1
+            end
+         end
+      end
+      # Checks if the previously associated illustrators has been updated
+      if !params[:item][:illustrators_attributes].nil?
+         if params[:item][:illustrators_attributes].any?
+            illustrators_count = 0
+            @illustrators_attributes = params[:item][:illustrators_attributes]
+            @illustrators_attributes.each do |illustrator|
+               if !illustrator[1]["id"].nil?
+                  # One of the associated illustrators is updated
+                  @illustrator = Illustrator.find(illustrator[1]["id"])
+                  @illustrator.update(:firstname => illustrator[1]["firstname"], :lastname => illustrator[1]["lastname"], :about => illustrator[1]["about"])
+                  params[:item][:illustrators_attributes].delete("#{illustrators_count}")
+                  if illustrator[1]["_destroy"] == "0"
+                     if params[:item][:illustrator_ids].nil?
+                        params[:item][:illustrator_ids] = [""]
+                     end
+                     params[:item][:illustrator_ids] << @illustrator.id.to_s
+                  end
+               else
+                  #  New association with an illustrator
+                  @illustrator = Illustrator.find_by_firstname_and_lastname(illustrator[1]["firstname"], illustrator[1]["lastname"])
+                  if @illustrator
+                     params[:item][:illustrator_ids] << @illustrator.id.to_s
+                     params[:item][:illustrators_attributes].delete("#{illustrators_count}")
+                  end
+               end
+               illustrators_count += 1
+            end
+         end
+      end
+      # Checks if the previously associated themes has been updated
+      if !params[:item][:themes_attributes].nil?
+         if params[:item][:themes_attributes].any?
+            themes_count = 0
+            @themes_attributes = params[:item][:themes_attributes]
+            @themes_attributes.each do |theme|
+               if !theme[1]["id"].nil?
+                  # One of the associated themes is updated
+                  @theme = Theme.find(theme[1]["id"])
+                  @theme.update(:name => theme[1]["name"], :about => theme[1]["about"])
+                  params[:item][:themes_attributes].delete("#{themes_count}")
+                  if theme[1]["_destroy"] == "0"
+                     if params[:item][:theme_ids].nil?
+                        params[:item][:theme_ids] = [""]
+                     end
+                     params[:item][:theme_ids] << @theme.id.to_s
+                  end
+               else
+                  #  New association with an theme
+                  @theme = Theme.find_by_name(theme[1]["name"])
+                  if @theme
+                     params[:item][:theme_ids] << @theme.id.to_s
+                     params[:item][:themes_attributes].delete("#{themes_count}")
+                  end
+               end
+               themes_count += 1
+            end
+         end
+      end
+      # Checks if the previously associated categories has been updated
+      if !params[:item][:categories_attributes].nil?
+         if params[:item][:categories_attributes].any?
+            categories_count = 0
+            @categories_attributes = params[:item][:categories_attributes]
+            @categories_attributes.each do |category|
+               if !category[1]["id"].nil?
+                  # One of the associated categories is updated
+                  @category = Category.find(category[1]["id"])
+                  @category.update(:name => category[1]["name"], :about => category[1]["about"])
+                  params[:item][:categories_attributes].delete("#{categories_count}")
+                  if category[1]["_destroy"] == "0"
+                     if params[:item][:category_ids].nil?
+                        params[:item][:category_ids] = [""]
+                     end
+                     params[:item][:category_ids] << @category.id.to_s
+                  end
+               else
+                  #  New association with an category
+                  @category = Category.find_by_name(category[1]["name"])
+                  if @category
+                     params[:item][:category_ids] << @category.id.to_s
+                     params[:item][:categories_attributes].delete("#{categories_count}")
+                  end
+               end
+               categories_count += 1
+            end
+         end
+      end
+
+
       if @item.update(item_params)
          # Removing the collection if the publisher changes
          if !item_params[:publisher_id].nil? && item_params[:publisher_id]!=@item.publisher_id

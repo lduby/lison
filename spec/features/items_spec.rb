@@ -32,7 +32,8 @@ describe "Items" do
             expect{
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
-               check "item_author_ids_#{author.id}"
+               fill_in 'item_authors_attributes_0_firstname', with: author.firstname
+               fill_in 'item_authors_attributes_0_lastname', with: author.lastname
                click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
@@ -54,7 +55,8 @@ describe "Items" do
             expect{
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
-               check "item_illustrator_ids_#{illustrator.id}"
+               fill_in 'item_illustrators_attributes_0_firstname', with: illustrator.firstname
+               fill_in 'item_illustrators_attributes_0_lastname', with: illustrator.lastname
                click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
@@ -120,7 +122,7 @@ describe "Items" do
             expect{
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
-               check "item_theme_ids_#{theme.id}"
+               fill_in 'item_themes_attributes_0_name', with: theme.name
                click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
@@ -145,7 +147,7 @@ describe "Items" do
             expect{
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
-               check "item_category_ids_#{category.id}"
+               fill_in 'item_categories_attributes_0_name', with: category.name
                click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
@@ -400,7 +402,8 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            check "item_author_ids_#{author2.id}"
+            fill_in 'item_authors_attributes_1_firstname', with: author2.firstname
+            fill_in 'item_authors_attributes_1_lastname', with: author2.lastname
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Authors: #{author1.name} #{author2.name}"
@@ -421,7 +424,7 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            uncheck "item_author_ids_#{author2.id}"
+            check "item_authors_attributes_1__destroy"
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Authors: #{author1.name}"
@@ -442,7 +445,8 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            check "item_illustrator_ids_#{illu2.id}"
+            fill_in 'item_illustrators_attributes_1_firstname', with: illu2.firstname
+            fill_in 'item_illustrators_attributes_1_lastname', with: illu2.lastname
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Illustrators: #{illu1.name}"
@@ -463,7 +467,7 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            uncheck "item_illustrator_ids_#{illu2.id}"
+            check "item_illustrators_attributes_1__destroy"
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_content "Illustrators: #{illu1.name}"
@@ -538,7 +542,7 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            check "item_theme_ids_#{th2.id}"
+            fill_in 'item_themes_attributes_1_name', with: th2.name
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_themes_list li', count: 2)
@@ -563,7 +567,7 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            uncheck "item_theme_ids_#{th2.id}"
+            check "item_themes_attributes_1__destroy"
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_themes_list li', count: 1)
@@ -588,7 +592,7 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            check "item_category_ids_#{cat2.id}"
+            fill_in 'item_categories_attributes_1_name', with: cat2.name
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_categories_list li', count: 2)
@@ -613,7 +617,7 @@ describe "Items" do
             expect(page).to have_content 'Team'
             visit items_url
             click_link "edit_item_#{item.id}"
-            uncheck "item_category_ids_#{cat2.id}"
+            check "item_categories_attributes_1__destroy"
             click_button "Update Item"
             expect(page).to have_content "#{item.title}"
             expect(page).to have_selector('ul#item_categories_list li', count: 1)
