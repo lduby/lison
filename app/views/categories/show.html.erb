@@ -13,4 +13,14 @@
 <h2>About</h2>
 <p><%= @category.about %></p>
 <h2>List of associated items</h2>
-<p><%= @category.items.map {|i| i.title}.join(', ') %></p>
+<p>
+   <% if @category.items.any? %>
+      <ul id="category_items">
+         <% @category.items.each do |item| %>
+            <li><%= link_to item.title, item %></li>
+         <% end %>
+      </ul>
+   <% else %>
+      None available
+   <% end %>
+</p>

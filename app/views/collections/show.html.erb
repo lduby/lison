@@ -18,4 +18,14 @@
 <h2>About</h2>
 <p><%= @collection.about %></p>
 <h2>List of associated items</h2>
-<p><%= @collection.items.map {|i| i.title}.join(', ') %></p>
+<p>
+   <% if @collection.items.any? %>
+      <ul id="collection_items">
+         <% @collection.items.each do |item| %>
+            <li><%= link_to item.title, item %></li>
+         <% end %>
+      </ul>
+   <% else %>
+      None available
+   <% end %>
+</p>

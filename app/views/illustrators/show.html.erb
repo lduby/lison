@@ -13,4 +13,14 @@
 <h2>About</h2>
 <p><%= @illustrator.about %></p>
 <h2>List of associated items</h2>
-<p><%= @illustrator.items.map {|i| i.title}.join(', ') %></p>
+<p>
+   <% if @illustrator.items.any? %>
+      <ul id="illustrator_items">
+         <% @illustrator.items.each do |item| %>
+            <li><%= link_to item.title, item %></li>
+         <% end %>
+      </ul>
+   <% else %>
+      None available
+   <% end %>
+</p>

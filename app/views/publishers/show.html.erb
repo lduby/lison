@@ -23,4 +23,14 @@
    <p>None available</p>
 <% end %>
 <h2>List of associated items</h2>
-<p><%= @publisher.items.map {|i| i.title}.join(', ') %></p>
+<p>
+   <% if @publisher.items.any? %>
+      <ul id="publisher_items">
+         <% @publisher.items.each do |item| %>
+            <li><%= link_to item.title, item %></li>
+         <% end %>
+      </ul>
+   <% else %>
+      None available
+   <% end %>
+</p>
