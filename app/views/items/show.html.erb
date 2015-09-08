@@ -41,6 +41,8 @@
 <p id="item_collection"><strong>Collection: </strong>
    <% if @item.collection %>
       <%=link_to_if (can? :read, @item.collection), @item.collection.name, collection_path(@item.collection), id: "show_collection_#{@item.collection.id}" %>
+   <% else %>
+      None available
    <% end %>
 </p>
 <p id="item_themes"><strong>Themes: </strong>

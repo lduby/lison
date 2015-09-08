@@ -47,6 +47,7 @@ class ItemsController < ApplicationController
       @item.themes.build
       @item.categories.build
       @item.publisher = Publisher.new
+      @item.collection = Collection.new
       @authors = Author.all
       @illustrators = Illustrator.all
       @publishers = Publisher.all
@@ -133,16 +134,97 @@ class ItemsController < ApplicationController
          end
       end
 
-      ## Allows to create a new item even if the publisher already exists
+      ## Allows to create a new item even if the publisher and the collection already exists
+      @associating_pub_to_coll = false
       if !params[:item][:publisher_attributes].nil?
-         if params[:item][:publisher_attributes].any?
+         # the publisher attributes are not null
+         if params[:item][:publisher_attributes]["name"]!=""
+            # A publisher has been filled in
             @publisher_attributes = params[:item][:publisher_attributes]
             @publisher = Publisher.find_by_name(@publisher_attributes["name"])
-            if @publisher
-               params[:item][:publisher_id] = @publisher.id.to_s
-               params[:item][:publisher_attributes] = {"name"=>"", "about"=>"", "id"=>""}
+            if !params[:item][:collection_attributes].nil?
+               if params[:item][:collection_attributes]["name"]!=""
+                  # A collection has been filled in
+                  @collection_attributes = params[:item][:collection_attributes]
+                  @collection = Collection.find_by_name(@collection_attributes["name"])
+                  if @publisher
+                     # The publisher already exists
+                     if @collection
+                        # The collection already exists
+                        if @collection.publisher.id == @publisher.id
+                           # The publisher and the collection are associated
+                           params[:item][:collection_id] = @collection.id.to_s
+                           params[:item][:collection_attributes] = {"name"=>"", "about"=>"", "id"=>""}
+                        else
+                           # The publisher and the collection are not associated
+                           flash[:error] = "The collection is associated to another publisher"
+                           redirect_to :back
+                           return
+                        end
+                     else
+                        # The collection does not exist
+                        params[:item][:collection_attributes] = {"name"=>@collection_attributes["name"], "about"=>@collection_attributes["about"], "publisher_id" => @publisher.id.to_s}
+                     end
+                     params[:item][:publisher_id] = @publisher.id.to_s
+                     params[:item][:publisher_attributes] = {"name"=>"", "about"=>"", "id"=>""}
+                  else
+                     # The publisher does not exist
+                     if @collection
+                        # The collection already exists
+                        if !@collection.publisher.nil?
+                           # The collection is associated to an existing publisher
+                           flash[:error] = "The collection is already associated to an existing publisher"
+                           redirect_to :back
+                           return
+                        else
+                           # The collection has no publisher => NOT NORMAL ! THIS SITUATION IS NOT SUPPOSED TO OCCUR
+                           params[:item][:publisher_attributes] = {"name"=>@publisher_attributes["name"], "about"=>@publisher_attributes["about"], "collection_ids"=>[@collection.id.to_s]}
+                           params[:item][:collection_id] = @collection.id.to_s
+                           params[:item][:collection_attributes] = {"name"=>"", "about"=>""}
+                        end
+                     else
+                        # The collection does not exist
+                        # The collection and the publisher must be associated
+                        puts "new publisher and new collection for the new item"
+                        @associating_pub_to_coll = true
+                     end
+                  end
+               else
+                  # No collection has been filled_in
+                  if @publisher
+                     # The publisher already exists
+                     params[:item][:publisher_id] = @publisher.id.to_s
+                     params[:item][:publisher_attributes] = {"name"=>"", "about"=>""}
+                  end
+               end
             end
-
+         else
+            # No publisher has been filled_in
+            if !params[:item][:collection_attributes].nil?
+               if params[:item][:collection_attributes]["name"]!=""
+                  # A collection has been filled_in
+                  @collection_attributes = params[:item][:collection_attributes]
+                  @collection = Collection.find_by_name(@collection_attributes["name"])
+                  if @collection
+                     # The collection already exists
+                     if !@collection.publisher.nil?
+                        # The collection is associated to a publisher
+                        params[:item][:publisher_id] = @collection.publisher.id.to_s
+                        params[:item][:collection_id] = @collection.id.to_s
+                        params[:item][:collection_attributes] = {"name"=>"", "about"=>""}
+                     else
+                        # The collection has no publisher to be linked to
+                        flash[:error] = "The collection exists but has no publisher. A publisher has to be filled in."
+                        redirect_to :back
+                        return
+                     end
+                  else
+                     flash[:error] = "A new collection needs a publisher to be created."
+                     redirect_to :back
+                     return
+                  end
+               end
+            end
          end
       end
 
@@ -153,6 +235,14 @@ class ItemsController < ApplicationController
 
       # Redirection
       if @item.save
+         if @associating_pub_to_coll
+            # Associating a new collection to a new publisher
+            if !@item.publisher.nil?
+               @item.publisher.collections << @item.collection
+            else
+               puts "No publisher for newly created item whereas an association between publisher and collection has been asked"
+            end
+         end
          redirect_to @item
       else
          render 'new'
@@ -167,6 +257,9 @@ class ItemsController < ApplicationController
       @item.categories.build
       if @item.publisher.nil?
          @item.publisher = Publisher.new
+      end
+      if @item.collection.nil?
+         @item.collection = Collection.new
       end
       @authors = Author.all - @item.authors
       #  @illustrators = Illustrator.all
@@ -325,8 +418,8 @@ class ItemsController < ApplicationController
                puts "the publisher already exists"
                params[:item][:publisher_id] = @publisher.id.to_s
                params[:item][:publisher_attributes] = {"name"=>"", "about"=>"", "id"=>""}
-            # else
-            #    puts "the publisher has to be created"
+               # else
+               #    puts "the publisher has to be created"
             end
          end
       end
@@ -354,7 +447,7 @@ class ItemsController < ApplicationController
 
    private
    def item_params
-      params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], :theme_ids => [], :category_ids => [], authors_attributes: [:id, :firstname, :lastname, :about, :_destroy], illustrators_attributes: [:id, :firstname, :lastname, :about, :_destroy], themes_attributes: [:id, :name, :about, :_destroy], categories_attributes: [:id, :name, :about, :_destroy], publisher_attributes: [:id, :name, :about])
+      params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], :theme_ids => [], :category_ids => [], authors_attributes: [:id, :firstname, :lastname, :about, :_destroy], illustrators_attributes: [:id, :firstname, :lastname, :about, :_destroy], themes_attributes: [:id, :name, :about, :_destroy], categories_attributes: [:id, :name, :about, :_destroy], publisher_attributes: [:id, :name, :about], collection_attributes: [:id, :name, :about])
       #  params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], publisher_attributes: [:id, :name, :about])
 
    end

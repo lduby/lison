@@ -91,8 +91,9 @@ describe "Items" do
 
          end
 
-         it "Adds a new item with a collection and displays the results" do
-            collection = FactoryGirl.create(:collection)
+         it "Adds a new item with a publisher and a collection and displays the results" do
+            publisher = FactoryGirl.create(:publisher)
+            collection = FactoryGirl.create(:collection, publisher_id: publisher.id)
             sign_in_with_donald
             expect(page).to have_link 'Log out'
             expect(page).to have_content 'Team'
@@ -100,7 +101,8 @@ describe "Items" do
             expect{
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
-               select "#{collection.name}", :from => 'item_collection_id'
+               fill_in 'item_publisher_attributes_name', with: publisher.name
+               fill_in 'item_collection_attributes_name', with: collection.name
                click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
@@ -110,6 +112,48 @@ describe "Items" do
             visit collections_url
             click_link "show_collection_#{collection.id}"
             expect(page).to have_content "#{Item.last.title}"
+
+         end
+
+         it "Adds a new item with an existing collection and displays the results" do
+            publisher = FactoryGirl.create(:publisher)
+            collection = FactoryGirl.create(:collection, publisher_id: publisher.id)
+            sign_in_with_donald
+            expect(page).to have_link 'Log out'
+            expect(page).to have_content 'Team'
+            visit items_url
+            expect{
+               click_link 'New item'
+               fill_in 'Title', with: "Example Item"
+               fill_in 'item_collection_attributes_name', with: collection.name
+               click_button "Create Item"
+            }.to change(Item,:count).by(1)
+            within 'h1' do
+               expect(page).to have_content "Example Item"
+            end
+            expect(page).to have_content("Collection: #{collection.name}")
+            visit collections_url
+            click_link "show_collection_#{collection.id}"
+            expect(page).to have_content "#{Item.last.title}"
+
+         end
+
+         it "Prevents to add a new item with a new collection but without a publisher" do
+            collection = FactoryGirl.create(:collection)
+            sign_in_with_donald
+            expect(page).to have_link 'Log out'
+            expect(page).to have_content 'Team'
+            visit items_url
+            expect{
+               click_link 'New item'
+               fill_in 'Title', with: "Example Item"
+               fill_in 'item_collection_attributes_name', with: collection.name
+               click_button "Create Item"
+            }.to_not change(Item,:count)
+            expect(page).to have_content("The collection exists but has no publisher. A publisher has to be filled in.")
+            visit collections_url
+            click_link "show_collection_#{collection.id}"
+            expect(page).to_not have_content "Example Item"
 
          end
 
@@ -518,7 +562,7 @@ describe "Items" do
             click_link "show_items_of_collection_#{collec.id}"
             expect{
                click_link "edit_item_#{item.id}"
-               select  "#{seccollec.name}", :from => 'item_collection_id'
+               fill_in 'item_collection_attributes_name', with: seccollec.name
                click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do

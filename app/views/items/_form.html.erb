@@ -52,7 +52,7 @@
    </p>
 
    <p>
-      <b>Illustrators</b><br />
+      <h2>Illustrators</h2><br />
       <!-- <% if controller.action_name == "new" %>
       <div class="field">
          <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
@@ -85,7 +85,7 @@
    </p>
 
    <p>
-      <b>Publisher</b><br />
+      <h2>Publisher</h2><br />
       <!-- <div class="field">
          <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
       </div> -->
@@ -109,13 +109,31 @@
       <% end %>
    </p>
 
-<p>
-   <b>Collection</b> (<%= link_to 'New', new_collection_path if can? :create, Collection %>)<br />
-   <div class="field">
-      <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
-   </div>
-</p>
-
+   <p>
+      <h2>Collection</h2><br />
+      <!-- <div class="field">
+         <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
+      </div> -->
+      <% if can? :create, Collection %>
+         <div class="collection_fields">
+            <%= f.fields_for :collection do |pub| %>
+               <div class="field">
+                  <%= pub.label :name %><br>
+                  <%= pub.text_field :name %>
+               </div>
+               <div class="field">
+                  <%= pub.label :about %><br>
+                  <%= pub.text_area :about %>
+               </div>
+            <% end %>
+         </div>
+      <% else %>
+         <div class="field">
+            <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
+         </div>
+      <% end %>
+   </p>
+   
 <p>
    <b>Themes</b><br />
    <!-- <% if controller.action_name == "new" %>
