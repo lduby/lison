@@ -85,25 +85,29 @@
    </p>
 
    <p>
-      <b>Publisher</b> (<%= link_to 'New', new_publisher_path if can? :create, Publisher %>)<br />
-      <div class="field">
+      <b>Publisher</b><br />
+      <!-- <div class="field">
          <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
-      </div>
+      </div> -->
+      <% if can? :create, Publisher %>
+         <div class="publisher_fields">
+            <%= f.fields_for :publisher do |pub| %>
+               <div class="field">
+                  <%= pub.label :name %><br>
+                  <%= pub.text_field :name %>
+               </div>
+               <div class="field">
+                  <%= pub.label :about %><br>
+                  <%= pub.text_area :about %>
+               </div>
+            <% end %>
+         </div>
+      <% else %>
+         <div class="field">
+            <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
+         </div>
+      <% end %>
    </p>
-
-   <!-- <h2>New Publisher</h2>
-   <%= f.fields_for :publisher do |pub| %>
-   <div class="publisher_fields">
-   <div class="field">
-   <%= pub.label :name %><br>
-   <%= pub.text_field :name %>
-</div>
-<div class="field">
-<%= pub.label :about %><br>
-<%= pub.text_area :about %>
-</div>
-</div>
-<% end %> -->
 
 <p>
    <b>Collection</b> (<%= link_to 'New', new_collection_path if can? :create, Collection %>)<br />

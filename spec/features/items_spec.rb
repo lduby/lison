@@ -78,7 +78,7 @@ describe "Items" do
             expect{
                click_link 'New item'
                fill_in 'Title', with: "Example Item"
-               select "#{publisher.name}", :from => 'item_publisher_id'
+               fill_in 'item_publisher_attributes_name', with: publisher.name
                click_button "Create Item"
             }.to change(Item,:count).by(1)
             within 'h1' do
@@ -490,7 +490,7 @@ describe "Items" do
             click_link "show_items_of_publisher_#{publisher.id}"
             expect{
                click_link "edit_item_#{item.id}"
-               select  "#{secpublisher.name}", :from => 'item_publisher_id'
+               fill_in 'item_publisher_attributes_name', with: secpublisher.name
                click_button "Update Item"
             }.to_not change(Item,:count)
             within 'h1' do

@@ -34,6 +34,8 @@
 <p id="item_publisher"><strong>Publisher: </strong>
    <% if @item.publisher %>
       <%=link_to_if (can? :read, @item.publisher), @item.publisher.name, publisher_path(@item.publisher), id: "show_publisher_#{@item.publisher.id}" %>
+   <% else %>
+      None available
    <% end %>
 </p>
 <p id="item_collection"><strong>Collection: </strong>

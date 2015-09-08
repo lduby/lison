@@ -46,6 +46,7 @@ class ItemsController < ApplicationController
       @item.illustrators.build
       @item.themes.build
       @item.categories.build
+      @item.publisher = Publisher.new
       @authors = Author.all
       @illustrators = Illustrator.all
       @publishers = Publisher.all
@@ -132,6 +133,19 @@ class ItemsController < ApplicationController
          end
       end
 
+      ## Allows to create a new item even if the publisher already exists
+      if !params[:item][:publisher_attributes].nil?
+         if params[:item][:publisher_attributes].any?
+            @publisher_attributes = params[:item][:publisher_attributes]
+            @publisher = Publisher.find_by_name(@publisher_attributes["name"])
+            if @publisher
+               params[:item][:publisher_id] = @publisher.id.to_s
+               params[:item][:publisher_attributes] = {"name"=>"", "about"=>"", "id"=>""}
+            end
+
+         end
+      end
+
       ## Creates the new item
       @item = Item.new(item_params)
 
@@ -151,6 +165,9 @@ class ItemsController < ApplicationController
       @item.illustrators.build
       @item.themes.build
       @item.categories.build
+      if @item.publisher.nil?
+         @item.publisher = Publisher.new
+      end
       @authors = Author.all - @item.authors
       #  @illustrators = Illustrator.all
       @publishers = Publisher.all
@@ -278,6 +295,42 @@ class ItemsController < ApplicationController
          end
       end
 
+      ## Checks if the publisher has been updated
+      if !params[:item][:publisher_attributes].nil?
+         # puts "a publisher has been filled in"
+         @publisher_attributes = params[:item][:publisher_attributes]
+         if !params[:item][:publisher_attributes]["id"].nil?
+            # puts "the publisher has an id"
+            @publisher = Publisher.find_by_id(@publisher_attributes["id"])
+            if @publisher
+               if @publisher.name != @publisher_attributes["name"]
+                  # puts "the name of the publisher has been changed"
+                  @newpublisher = Publisher.find_by_name(@publisher_attributes["name"])
+                  if @newpublisher
+                     # puts "the new publisher already exists"
+                     # puts "changing publisher id #{params[:item][:publisher_id]} by #{@newpublisher.id.to_s}"
+                     params[:item][:publisher_id] = @newpublisher.id.to_s
+                     params[:item][:publisher_attributes] = {"name" => "", "about" => ""}
+                  else
+                     # puts "the new publisher does not exist"
+                     params[:item][:publisher_id] = ""
+                     params[:item][:publisher_attributes] = {"name" => @publisher_attributes["name"], "about" => @publisher_attributes["about"]}
+                  end
+               end
+            end
+         else
+            # puts "the publisher has no id"
+            @publisher = Publisher.find_by_name(@publisher_attributes["name"])
+            if @publisher
+               puts "the publisher already exists"
+               params[:item][:publisher_id] = @publisher.id.to_s
+               params[:item][:publisher_attributes] = {"name"=>"", "about"=>"", "id"=>""}
+            # else
+            #    puts "the publisher has to be created"
+            end
+         end
+      end
+
 
       if @item.update(item_params)
          # Removing the collection if the publisher changes
@@ -301,7 +354,7 @@ class ItemsController < ApplicationController
 
    private
    def item_params
-      params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], :theme_ids => [], :category_ids => [], authors_attributes: [:id, :firstname, :lastname, :about, :_destroy], illustrators_attributes: [:id, :firstname, :lastname, :about, :_destroy], themes_attributes: [:id, :name, :about, :_destroy], categories_attributes: [:id, :name, :about, :_destroy])
+      params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], :theme_ids => [], :category_ids => [], authors_attributes: [:id, :firstname, :lastname, :about, :_destroy], illustrators_attributes: [:id, :firstname, :lastname, :about, :_destroy], themes_attributes: [:id, :name, :about, :_destroy], categories_attributes: [:id, :name, :about, :_destroy], publisher_attributes: [:id, :name, :about])
       #  params.require(:item).permit(:title, :publisher_id, :collection_id, :author_ids => [], :illustrator_ids => [], publisher_attributes: [:id, :name, :about])
 
    end
