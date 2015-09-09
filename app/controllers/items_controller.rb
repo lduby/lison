@@ -157,9 +157,7 @@ class ItemsController < ApplicationController
                            params[:item][:collection_attributes] = {"name"=>"", "about"=>"", "id"=>""}
                         else
                            # The publisher and the collection are not associated
-                           flash[:error] = "The collection is associated to another publisher"
-                           redirect_to :back
-                           return
+                           redirect_to :back, alert: "The collection is associated to another publisher" and return
                         end
                      else
                         # The collection does not exist
@@ -173,9 +171,7 @@ class ItemsController < ApplicationController
                         # The collection already exists
                         if !@collection.publisher.nil?
                            # The collection is associated to an existing publisher
-                           flash[:error] = "The collection is already associated to an existing publisher"
-                           redirect_to :back
-                           return
+                           redirect_to :back, alert: "The collection is already associated to an existing publisher" and return
                         else
                            # The collection has no publisher => NOT NORMAL ! THIS SITUATION IS NOT SUPPOSED TO OCCUR
                            params[:item][:publisher_attributes] = {"name"=>@publisher_attributes["name"], "about"=>@publisher_attributes["about"], "collection_ids"=>[@collection.id.to_s]}
@@ -214,14 +210,10 @@ class ItemsController < ApplicationController
                         params[:item][:collection_attributes] = {"name"=>"", "about"=>""}
                      else
                         # The collection has no publisher to be linked to
-                        flash[:error] = "The collection exists but has no publisher. A publisher has to be filled in."
-                        redirect_to :back
-                        return
+                        redirect_to :back, alert: "The collection exists but has no publisher. A publisher has to be filled in." and return
                      end
                   else
-                     flash[:error] = "A new collection needs a publisher to be created."
-                     redirect_to :back
-                     return
+                     redirect_to :back, alert: "A new collection needs a publisher to be created." and return
                   end
                end
             end
