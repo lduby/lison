@@ -31,6 +31,7 @@ GEM
     arel (5.0.1.20140414130214)
     bcrypt (3.1.10)
     builder (3.2.2)
+    byebug (6.0.2)
     cancancan (1.10.1)
     capybara (2.4.4)
       mime-types (>= 1.16)
@@ -225,6 +226,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  byebug
   cancancan (~> 1.10)
   capybara
   coffee-rails (~> 4.0.0)

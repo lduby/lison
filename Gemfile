@@ -43,10 +43,11 @@ gem 'spring',        group: :development
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'byebug'
 end
 
 group :test do
-  gem 'faker'
   gem 'rspec-mocks'
   gem 'capybara'
   gem 'database_cleaner'
