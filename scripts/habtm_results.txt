@@ -1,0 +1,61 @@
+ileas@ileas-thinkpad:~/Projets/lison$ ruby duplicate_hatbm.rb
+New model name ?
+Illustrator
+Related model ?
+Item
+Which model to duplicate ?
+Author
+Generating model Illustrator with attributes firstname:string lastname:string about:text
+      invoke  active_record
+      create    db/migrate/20150516132641_create_illustrators.rb
+      create    app/models/illustrator.rb
+      invoke    rspec
+      create      spec/models/illustrator_spec.rb
+      invoke      factory_girl
+      create        spec/factories/illustrators.rb
+Is firstname:string mandatory ? [y/n]
+y
+Is lastname:string mandatory ? [y/n]
+y
+Is about:text mandatory ? [y/n]
+n
+Validation added to app/models/illustrator.rb
+association added to app/models/illustrator.rb
+association added to app/models/item.rb
+Updated db/migrate/20150516132641_create_illustrators.rb with habtm table
+Running the migration
+== 20150516132641 CreateIllustrators: migrating ===============================
+-- create_table(:illustrators_items, {:id=>false})
+   -> 0.0015s
+== 20150516132641 CreateIllustrators: migrated (0.0286s) ======================
+
+Modified config/routes.rb
+Created spec/models/illustrator_spec.rb
+Created spec/models/illustrators_items_spec.rb
+Created spec/factories/illustrators.rb
+DO NOT FORGET to add required methods in app/model/illustrator.rb, they are not duplicated
+Generating controller
+      create  app/controllers/illustrators_controller.rb
+      invoke  erb
+      create    app/views/illustrators
+      invoke  rspec
+      create    spec/controllers/illustrators_controller_spec.rb
+      invoke  helper
+      create    app/helpers/illustrators_helper.rb
+      invoke    rspec
+      create      spec/helpers/illustrators_helper_spec.rb
+      invoke  assets
+      invoke    coffee
+      create      app/assets/javascripts/illustrators.js.coffee
+      invoke    scss
+      create      app/assets/stylesheets/illustrators.css.scss
+Created app/controllers/illustrators_controller.rb
+Created spec/controllers/illustrators_controller_spec.rb
+Modified app/controllers/items_controller.rb
+Created app/views/illustrators/index.html.erb
+Created app/views/illustrators/show.html.erb
+Created app/views/illustrators/_form.html.erb
+Created app/views/illustrators/new.html.erb
+Created app/views/illustrators/edit.html.erb
+Created spec/features/illustrators_spec.rb
+DO NOT FORGET to edit app/views/items/list.html.erb

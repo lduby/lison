@@ -1,0 +1,69 @@
+new Item with an existing publisher and an existing collection of the publisher : OK
+new Item with an existing publisher and an existing collection associated to another publisher : ERROR
+new Item with an existing publisher and a new collection : OK
+new Item with an existing publisher and no collection : OK
+new Item with a new publisher and an existing collection of the publisher : OK
+new Item with a new publisher and an existing collection associated to another publisher : ERROR
+new Item with a new publisher and a new collection : OK
+new Item with a new publisher and no collection : OK
+new Item with no publisher and an existing collection linked to a publisher : OK (this situation is not likely to happen)
+new Item with no publisher and an existing collection not linked to a publisher : ERROR
+new Item with no publisher and a new collection : ERROR
+new Item with no publisher and no collection  : OK
+
+new Collection with no publisher : ERROR
+
+edit Item having a publisher and a collection by changing the publisher by an existing one and changing the collection to one of the new publisher : OK - 569 - 1/2/3/4/11/12/13/14/21 - FAILED (RecordNotFound Pub1 for item1)
+edit Item having a publisher and a collection by changing the publisher by an existing one and changing the collection to one which does not belong to the new publisher : ERROR - 582 - 1/2/3/4/11/12/13/14/22 - PASSED
+edit Item having a publisher and a collection by changing the publisher by an existing one and changing the collection to a new one : OK - 595 - 1/2/3/4/11/12/13/15 - FAILED (RecordNotFound Pub1 for item1)
+edit Item having a publisher and a collection by changing the publisher by an existing one and keeping the collection unchanged : ERROR - 606 - 1/2/3/4/11/12/16 - PASSED
+edit Item having a publisher and a collection by changing the publisher by a new one and changing the collection to one which belongs to an existing publisher : ERROR - 617 - 1/2/3/5/11/12/13/14/23
+edit Item having a publisher and a collection by changing the publisher by a new one and changing the collection to one which does not belong to any publisher : OK but not normal - 629 - 1/2/3/5/11/12/13/14/24
+edit Item having a publisher and a collection by changing the publisher by a new one and changing the collection to a new one : OK - 640 - 1/2/3/5/11/12/13/15
+edit Item having a publisher and a collection by changing the publisher by a new one and keeping the collection unchanged : ERROR - 650 - 1/2/3/5/11/12/16/23
+1/2/3/5/11/12/16/24
+edit Item having a publisher and a collection by keeping the publisher unchanged and changing the collection to another one of the publisher : OK - 660 - 1/2/6/11/12/13/14/21
+edit Item having a publisher and a collection by keeping the publisher unchanged and changing the collection to one which does not belong to the publisher : ERROR- 671 - 1/2/6/11/12/13/14/22
+edit Item having a publisher and a collection by keeping the publisher unchanged and changing the collection to a new one : OK - 683 - 1/2/6/11/12/13/15
+edit Item having a publisher and a collection by keeping the publisher unchanged and keeping the collection unchanged : OK - 693 - 1/2/6/11/12/16
+
+edit Item having a publisher and no collection by changing the publisher by an existing one and adding one of the publisher collections : OK - 703 - 1/2/3/4/11/17/18/21 - FAILED (RecordNotFound Pub1 for item1)
+edit Item having a publisher and no collection by changing the publisher by an existing one and adding an existing collection which does not belong to the new publisher : ERROR - 718 - 1/2/3/4/11/17/18/22 - PASSED
+edit Item having a publisher and no collection by changing the publisher by an existing one and changing the collection to a new one : OK - 734 - 1/2/3/4/11/17/19 - FAILED (RecordNotFound Pub1 for item1)
+edit Item having a publisher and no collection by changing the publisher by an existing one and keeping the item without collection : ERROR - 748 - 1/2/3/4/20 - FAILED (RecordNotFound Pub1 for item1)
+edit Item having a publisher and no collection by changing the publisher by a new one and adding a collection which belongs to an existing publisher : ERROR - 761 -  1/2/3/5/11/17/18/23
+edit Item having a publisher and no collection by changing the publisher by a new one and adding a collection which does not belong to any publisher : OK but not normal - 776 -  1/2/3/5/11/17/18/24
+edit Item having a publisher and no collection by changing the publisher by a new one and adding a new collection : OK - 790 -  1/2/3/5/11/17/19
+edit Item having a publisher and no collection by changing the publisher by a new one and keeping the item without collection : OK - 803 -  1/2/3/5/11/17/20
+edit Item having a publisher and no collection by keeping the publisher unchanged and adding one of the publisher collections : OK - 816 - 1/2/6/11/17/18/21
+edit Item having a publisher and no collection by keeping the publisher unchanged and adding a collection which does not belong to the publisher : ERROR - 830 - 1/2/6/11/17/18/22
+edit Item having a publisher and no collection by keeping the publisher unchanged and adding a new collection : OK - 845 - 1/2/6/11/17/19
+edit Item having a publisher and no collection by keeping the publisher unchanged and keeping the item without collection : OK - 858 - 1/2/6/20
+
+edit Item having no publisher and a collection by adding an existing publisher and changing the collection to one of the new publisher : OK - 870 - 1/7/8/11/12/13/14/21
+edit Item having no publisher and a collection by adding an existing publisher and changing the collection to one which does not belong to the new publisher : ERROR - 885 - 1/7/8/11/12/13/14/22
+edit Item having no publisher and a collection by adding an existing publisher and changing the collection to a new one : OK - 901 - 1/7/8/11/12/13/15
+edit Item having no publisher and a collection by adding an existing publisher different from the collection publisher and keeping the collection unchanged : ERROR - 915
+edit Item having no publisher and a collection by adding the collection publisher and keeping the collection unchanged : OK - 929
+edit Item having no publisher and a collection by adding a new publisher and changing the collection to one which belongs to an existing publisher : ERROR - 942 - 1/7/9/11/12/13/14/23
+edit Item having no publisher and a collection by adding a new publisher and changing the collection to one which does not belong to any publisher : OK but not normal - 957 - 1/7/9/11/12/13/14/24
+edit Item having no publisher and a collection by adding a new publisher and changing the collection to a new one : OK - 971 - 1/7/9/11/12/13/15
+edit Item having no publisher and a collection by adding a new publisher and keeping the collection unchanged : ERROR - 984 - 1/7/9/11/12/16/23
+1/7/9/11/12/16/24
+edit Item having no publisher and a collection by keeping no publisher and changing the collection to another existing one : OK - 997 - 10/11/12/13/14/23
+edit Item having no publisher and a collection by keeping no publisher and changing the collection to one which does not belong to any publisher : ERROR - 1011 - 10/11/12/13/14/24
+edit Item having no publisher and a collection by keeping no publisher and changing the collection to a new one : ERROR - 1025 - 10/11/12/13/15
+edit Item having no publisher and a collection by keeping no publisher and keeping the collection unchanged : OK - 1038 - 10/11/12/16
+
+edit Item having no publisher and no collection by adding an existing publisher and adding one of the publisher collections : OK - 1050 - 1/7/8/11/17/18/21
+edit Item having no publisher and no collection by adding an existing publisher and adding a collection which does not belong to the publisher : ERROR - 1066 - 1/7/8/11/17/18/22
+edit Item having no publisher and no collection by adding an existing publisher and adding a new collection : OK - 1084 - 1/7/8/11/17/19
+edit Item having no publisher and no collection by adding an existing publisher and keeping the item without collection : OK - 1100 - 1/7/8/20
+edit Item having no publisher and no collection by adding a new publisher and adding a collection which belongs to an existing publisher : ERROR - 1115 - 1/7/9/11/17/18/23
+edit Item having no publisher and no collection by adding a new publisher and adding a collection which does not belong to any publisher : OK but not normal - 1132 - 1/7/9/11/17/18/24
+edit Item having no publisher and no collection by adding a new publisher and adding a new collection : OK - 1148 - 1/7/9/11/17/19
+edit Item having no publisher and no collection by adding a new publisher and keeping the item without collection : OK - 1163 - 1/7/9/20
+edit Item having no publisher and no collection by keeping the item without publisher and adding a collection linked to an existing publisher : OK - 1177 - 10/11/17/18/23
+edit Item having no publisher and no collection by keeping the item without publisher and adding a collection which does not belong to any publisher : ERROR - 1194 - 10/11/17/18/24
+edit Item having no publisher and no collection by keeping the item without publisher and adding a new collection : ERROR - 1210 - 10/11/17/19
+edit Item having no publisher and no collection by keeping the item without publisher and without collection : OK - 1225 - 10/20
