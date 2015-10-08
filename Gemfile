@@ -61,3 +61,5 @@ end
 # Use devise and cancancan for uthentication and role management
 gem 'devise'
 gem 'cancancan', '~> 1.10'
+gem 'foundation-rails'
+gem "font-awesome-rails"

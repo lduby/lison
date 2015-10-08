@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="small-6 small-centered columns">
+     <% if alert %>
+         <div data-alert class="alert-box alert">
+            <i class="fa fa-exclamation-triangle" style="color:red"></i>
+            <%= alert %>
+            <a href="#" class="close">&times;</a>
+         </div>
+      <% end %>
+      <% if notice %>
+      <div data-alert class="alert-box info">
+         <i class="fa fa-info" style="color:orange"></i>
+         <%= notice %>
+         <a href="#" class="close">&times;</a>
+    </div>
+    <% end %>
+    <% if flash[:success] %>
+      <div data-alert class="alert-box success">
+         <i class="fa fa-check" style="color:green"></i>
+         <%= flash[:success] %>
+         <a href="#" class="close">&times;</a>
+      </div>
+   <% end %>
+  </div>
+</div>

@@ -1,2 +1,46 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<br>
+<br>
+
+ <div class="row">
+   <div class="panel">
+      <h5>Last Items</h5>
+      <%= render "home/panels/lastitems" %>
+   </div>
+ </div>
+
+ <div class="row">
+    <div class="large-6 columns">
+      <div class="row">
+         <div class="panel">
+           <h5>Last Reviews</h5>
+           <ul><li>Review 345</li><li>Review 344</li><li>Review 343</li></ul>
+         </div>
+      </div>
+      <div class="row">
+         <div class="panel">
+           <h5>Popular Lists</h5>
+           <ul><li>List 22</li><li>List 68</li><li>List 167</li></ul>
+         </div>
+      </div>
+      <div class="row">
+         <div class="large-6 columns">
+           <div class="panel">
+             <h5>Tags</h5>
+             <p>Panel to display a tags cloud</p>
+           </div>
+        </div>
+         <div class="large-6  columns">
+           <div class="panel">
+             <h5>Themes</h5>
+             <p>Panel listing the item themes and count.</p>
+           </div>
+         </div>
+      </div>
+    </div>
+    <div class="large-6 columns">
+      <div class="panel callout">
+        <h5>Calendar</h5>
+        <%= render "home/panels/events" %>
+      </div>
+    </div>
+ </div>

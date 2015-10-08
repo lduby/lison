@@ -1,0 +1,55 @@
+<nav class="top-bar" data-topbar role="navigation">
+   <ul class="title-area">
+      <li class="name">
+         <h1><a href="/">Lison</a></h1>
+      </li>
+      <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+   </ul>
+
+   <section class="top-bar-section">
+
+      <!-- Right Nav Section -->
+      <ul class="right">
+         <li class="active">
+
+               <% if current_user %>
+                  <%= link_to "#{current_user.email} (#{current_user.roles.map {|r| r.name}.join(', ')})", edit_user_registration_path %>
+               <% else %>
+                  <%= link_to "Log in", new_user_session_path %>
+               <% end %>
+
+         </li>
+         <!-- <li class="has-dropdown"> -->
+         <li>
+            <% if current_user %>
+               <%= link_to "Log out", destroy_user_session_path, :method => :delete %>
+            <% else %>
+               <%= link_to "Sign up", new_user_registration_path %>
+            <% end %>
+
+            <!-- <ul class="dropdown">
+               <li><a href="#">First link in dropdown</a></li>
+               <li class="active"><a href="#">Active link in dropdown</a></li>
+            </ul> -->
+         </li>
+      </ul>
+      <!-- Left Nav Section -->
+      <ul class="left">
+         <!-- <li><a href="#">Left Nav Button</a></li> -->
+         <%= render "layouts/menu" %>
+         <li>
+            <form>
+               <div class="row collapse postfix-round">
+            <div class="small-9 columns">
+          <input type="text" placeholder="Search for items, authors, illustrators, ....">
+        </div>
+        <div class="small-3 columns">
+          <a href="#" class="button postfix">Search</a>
+        </div>
+     </div>
+     </form>
+     </li>
+      </ul>
+   </section>
+</nav>
