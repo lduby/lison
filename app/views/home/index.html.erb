@@ -1,46 +1,154 @@
-<br>
-<br>
-
- <div class="row">
-   <div class="panel">
-      <h5>Last Items</h5>
-      <%= render "home/panels/lastitems" %>
-   </div>
- </div>
-
- <div class="row">
-    <div class="large-6 columns">
-      <div class="row">
-         <div class="panel">
-           <h5>Last Reviews</h5>
-           <ul><li>Review 345</li><li>Review 344</li><li>Review 343</li></ul>
-         </div>
-      </div>
-      <div class="row">
-         <div class="panel">
-           <h5>Popular Lists</h5>
-           <ul><li>List 22</li><li>List 68</li><li>List 167</li></ul>
-         </div>
-      </div>
-      <div class="row">
-         <div class="large-6 columns">
-           <div class="panel">
-             <h5>Tags</h5>
-             <p>Panel to display a tags cloud</p>
-           </div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- Desktop Slider -->
+        <div class="jumbotron hidden-xs">
+            <div class="container">
+                <h1>Hello, world!</h1>
+                <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+            </div>
         </div>
-         <div class="large-6  columns">
-           <div class="panel">
-             <h5>Themes</h5>
-             <p>Panel listing the item themes and count.</p>
-           </div>
-         </div>
-      </div>
+        <!-- End Desktop Slider -->
+        <!-- Mobile Header -->
+        <div class="row">
+            <div class="col-xs-12 visible-xs-inline">
+                <br>
+                <img src="http://placehold.it/400x200&text=XS Jumbo" />
+            </div>
+        </div>
+        <!-- End Mobile Header -->
     </div>
-    <div class="large-6 columns">
-      <div class="panel callout">
-        <h5>Calendar</h5>
-        <%= render "home/panels/events" %>
-      </div>
+</div>
+<br>
+<div class="row highlights">
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+        <div class="highlighted-item thumbnail">
+            <!--            <a href="#">-->
+            <img src="http://placehold.it/300x200" alt="" class="img-responsive thumb">
+            <!--            </a>-->
+            <div class="caption block-title">
+                <h3>Le petit prince</h3>
+                <p class="by-author"><small>By Antoine de Saint Exupéry</small></p>
+                <p><span class="label label-warning"><tiny>LAST REVIEW</tiny></span></p>
+            </div>
+        </div>
     </div>
- </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+        <div class="highlighted-item thumbnail">
+            <!--            <a href="#">-->
+            <img src="http://placehold.it/300x200" alt="" class="img-responsive thumb">
+            <!--            </a>-->
+            <div class="caption block-title">
+                <h3>Cornebidouille</h3>
+                <p class="by-author"><small>By Jhon Doe</small></p>
+                <p><span class="label label-warning"><tiny>LAST FAVE</tiny></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+        <div class="highlighted-item thumbnail">
+            <!--            <a href="#">-->
+            <img src="http://placehold.it/300x200" alt="" class="img-responsive thumb">
+            <!--            </a>-->
+            <div class="caption block-title">
+                <h3>L'Afrique de Zigomar</h3>
+                <p class="by-author"><small>By Jhon Doe</small></p>
+                <p><span class="label label-warning"><tiny>LAST ENTRY</tiny></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+        <div class="highlighted-item thumbnail">
+            <!--            <a href="#">-->
+            <img src="http://placehold.it/300x200" alt="" class="thumb img-responsive" >
+            <!--            </a>-->
+            <div class="caption block-title">
+                <h3>Les fées</h3>
+                <p class="by-author"><small>By Charlotte Gastaut</small></p>
+                <p><span class="label label-warning"><tiny>DISCOVER</tiny></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="row communications">
+    <div class="col-lg-12">
+        <div class="row">
+            <!-- Content -->
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Android Application</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Risus ligula, aliquam nec fermentum vitae, sollicitudin eget urna. Donec dignissim nibh fermentum odio ornare sagittis.</p>
+                        <p>Suspendisse ultrices ornare tempor. Aenean eget ultricies libero. Phasellus non ipsum eros. Vivamus at dignissim massa. Aenean dolor libero, blandit quis interdum et, malesuada nec ligula. Nullam erat erat, eleifend sed pulvinar ac. Suspendisse ultrices ornare tempor. Aenean eget ultricies libero.</p>
+                    </div>
+                    <div class="row" align="center">
+                        <div class="col-lg-2 pull-right"><a class="btn btn-large btn-primary" href="#" role="button">Get the app !</a><br><br></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-2 hidden-sm">
+                <h4>Get In Touch!</h4>
+                <hr>
+                <a class="btn btn-large btn-block btn-primary" href="#" role="button">Join us !</a><br>
+                <div class="">
+                    <input type="text" class="full text-center" placeholder="Email ">
+                    <a class="btn btn-large btn-block btn-primary" href="#" role="button">Get our newsletter !<i class="fa fa-long-arrow-right"> </i></a>
+                </div>
+            </div>
+            <!-- End Content -->
+        </div>
+    </div>
+</div>
+
+<!-- <br>
+<br>
+
+<div class="row">
+<div class="panel">
+<h5>Last Items</h5>
+<%= render "home/panels/lastitems" %>
+</div>
+</div>
+
+<div class="row">
+<div class="large-6 columns">
+<div class="row">
+<div class="panel">
+<h5>Last Reviews</h5>
+<ul><li>Review 345</li><li>Review 344</li><li>Review 343</li></ul>
+</div>
+</div>
+<div class="row">
+<div class="panel">
+<h5>Popular Lists</h5>
+<ul><li>List 22</li><li>List 68</li><li>List 167</li></ul>
+</div>
+</div>
+<div class="row">
+<div class="large-6 columns">
+<div class="panel">
+<h5>Tags</h5>
+<p>Panel to display a tags cloud</p>
+</div>
+</div>
+<div class="large-6  columns">
+<div class="panel">
+<h5>Themes</h5>
+<p>Panel listing the item themes and count.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="large-6 columns">
+<div class="panel callout">
+<h5>Calendar</h5>
+<%= render "home/panels/events" %>
+</div>
+</div>
+</div> -->

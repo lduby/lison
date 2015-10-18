@@ -1,55 +1,51 @@
-<nav class="top-bar" data-topbar role="navigation">
-   <ul class="title-area">
-      <li class="name">
-         <h1><a href="/">Lison</a></h1>
-      </li>
-      <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-   </ul>
+<!-- <div class="row">
+   <div class="large-12 columns"> -->
+   <nav class="navbar navbar-default navbar-fixed-top  navbar-inverse" role="navigation">
+      <div class="container-fluid">
 
-   <section class="top-bar-section">
+         <!-- Brand and toggle get grouped for better mobile display -->
+         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#lison-navbar-collapse" aria-expanded="false">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Lison</a>
+         </div>
 
-      <!-- Right Nav Section -->
-      <ul class="right">
-         <li class="active">
+         <!-- Collect the nav links, forms, and other content for toggling -->
+         <div class="collapse navbar-collapse" id="lison-navbar-collapse">
+            <ul class="nav navbar-nav">
+               <%= render "layouts/menu" %>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+               <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search for items, authors, ..." id="main-search">
+               </div>
+               <button type="submit" class="btn btn-default" id="go-search">Search</button>
+            </form>
 
-               <% if current_user %>
+            <!-- Right Nav Section -->
+            <ul class="nav navbar-nav navbar-right">
+               <li>
+                  <% if current_user %>
                   <%= link_to "#{current_user.email} (#{current_user.roles.map {|r| r.name}.join(', ')})", edit_user_registration_path %>
-               <% else %>
+                  <% else %>
                   <%= link_to "Log in", new_user_session_path %>
-               <% end %>
+                  <% end %>
+               </li>
+               <li class="dropdown">
+                  <% if current_user %>
+                  <%= link_to "Log out", destroy_user_session_path, :method => :delete %>
+                  <% else %>
+                  <%= link_to "Sign up", new_user_registration_path %>
+                  <% end %>
+               </li>
+            </ul>
 
-         </li>
-         <!-- <li class="has-dropdown"> -->
-         <li>
-            <% if current_user %>
-               <%= link_to "Log out", destroy_user_session_path, :method => :delete %>
-            <% else %>
-               <%= link_to "Sign up", new_user_registration_path %>
-            <% end %>
-
-            <!-- <ul class="dropdown">
-               <li><a href="#">First link in dropdown</a></li>
-               <li class="active"><a href="#">Active link in dropdown</a></li>
-            </ul> -->
-         </li>
-      </ul>
-      <!-- Left Nav Section -->
-      <ul class="left">
-         <!-- <li><a href="#">Left Nav Button</a></li> -->
-         <%= render "layouts/menu" %>
-         <li>
-            <form>
-               <div class="row collapse postfix-round">
-            <div class="small-9 columns">
-          <input type="text" placeholder="Search for items, authors, illustrators, ....">
-        </div>
-        <div class="small-3 columns">
-          <a href="#" class="button postfix">Search</a>
-        </div>
-     </div>
-     </form>
-     </li>
-      </ul>
-   </section>
-</nav>
+         </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+   </nav>
+<!-- </div>
+</div> -->

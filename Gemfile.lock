@@ -30,6 +30,8 @@ GEM
     addressable (2.3.7)
     arel (5.0.1.20140414130214)
     bcrypt (3.1.10)
+    bootstrap-sass (3.2.0.2)
+      sass (~> 3.2)
     builder (3.2.2)
     byebug (6.0.2)
     cancancan (1.10.1)
@@ -77,9 +79,6 @@ GEM
     font-awesome-rails (4.4.0.0)
       railties (>= 3.2, < 5.0)
     formatador (0.2.5)
-    foundation-rails (5.5.3.1)
-      railties (>= 3.1.0)
-      sass (>= 3.3.0, < 3.5)
     guard (2.12.5)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -231,6 +230,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap-sass (~> 3.2.0)
   byebug
   cancancan (~> 1.10)
   capybara
@@ -241,7 +241,6 @@ DEPENDENCIES
   factory_girl_rails
   faker
   font-awesome-rails
-  foundation-rails
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails

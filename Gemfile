@@ -61,5 +61,6 @@ end
 # Use devise and cancancan for uthentication and role management
 gem 'devise'
 gem 'cancancan', '~> 1.10'
-gem 'foundation-rails'
+#gem 'foundation-rails', '= 5.5.2.1'
+gem 'bootstrap-sass', '~> 3.2.0'
 gem "font-awesome-rails"

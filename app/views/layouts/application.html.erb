@@ -3,32 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title><%= content_for?(:title) ? yield(:title) : "Lison" %></title>
-
-    <%= stylesheet_link_tag    "application" %>
-    <%= javascript_include_tag "vendor/modernizr" %>
-    <%= javascript_include_tag "js/vendor/jquery" %>
-    <%= javascript_include_tag "js/foundation/foundation" %>
-    <%= javascript_include_tag "js/foundation/foundation.clearing" %>
-    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : 'Item Management' %>">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
   </head>
 
   <body>
-     <!-- PAGE HEADER -->
-   <%= render "layouts/header" %>
-   <!-- NOTIFICATIONS -->
-   <% if notice %>
-   <p class="notice"><%= notice %></p>
-   <% end %>
-   <% if alert %>
-   <p class="alert"><%= alert %></p>
-   <% end %>
-   <%= render "layouts/notice" %>
-   <!-- MAIN CONTENT -->
-    <%= yield %>
-    <!-- PAGE FOOTER -->
-    <%= render "layouts/footer" %>
+      <!-- PAGE HEADER -->
+      <%= render "layouts/header" %>
+      <!-- NOTIFICATIONS -->
+      <% if notice %>
+      <p class="notice"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+      <p class="alert"><%= alert %></p>
+      <% end %>
+      <%= render "layouts/notice" %>
+      <!-- MAIN CONTENT -->
+       <%= yield %>
+       <!-- PAGE FOOTER -->
+       <%= render "layouts/footer" %>
   </body>
 </html>
