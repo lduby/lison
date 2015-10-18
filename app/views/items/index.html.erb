@@ -1,35 +1,27 @@
-<h1>All items</h1>
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Themes</th>
-    <th colspan="3"></th>
-  </tr>
+<div class="container-fluid">
 
-  <% @items.each do |item| %>
-    <tr name="item_<%= item.id %>">
-      <td><%= item.title %></td>
-      <td><%= item.themes.map(&:name).join(",") %></td>
-      <td>
-        <% if can? :read, item %>
-          <%= link_to 'Show', item_path(item), id: "show_item_#{item.id}" %>
+    <div class="row">
+        <h1>All items</h1>
+        <% if can? :create, Item %>
+        <a class="btn btn-default" href="<%= url_for(new_item_path) %>" role="button">New Item</a>
         <% end %>
-      </td>
-      <td>
-        <% if can? :update, item %>
-          <%= link_to 'Edit', edit_item_path(item), id: "edit_item_#{item.id}" %>
+    </div>
+    <div id="item-list-thumbnails" class="row">
+        <% @items.each do |item| %>
+            <div class=" col-sx-6 col-sm-6 col-md-4 col-lg-4">
+                <div id="item-box-<%= item.id %>" class="item-box">
+                    <a href="/items/<%= item.id %>">
+                        <img id="image-3" src="<%= image_url('3.jpg') %>" />
+                        <span class="caption fade-caption">
+                            <h3><%= item.title %></h3>
+                            <h5><%= item.authors_list %></h5>
+                            <h5><%= item.themes.map(&:name).join(",") %></h5>
+                            <p>Item description</p>
+                        </span>
+                    </a>
+                </div>
+            </div>
         <% end %>
-      </td>
-      <td>
-        <% if can? :destroy, item %>
-          <%= link_to 'Destroy', item_path(item), id: "del_item_#{item.id}", method: :delete, data: { confirm: 'Are you sure?' } %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<p>
-  <% if can? :create, Item %>
-    <%= link_to 'New item', new_item_path %>
-  <% end %>
-</p>
+    </div>
+
+</div>

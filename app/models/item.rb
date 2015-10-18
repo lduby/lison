@@ -22,6 +22,23 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :categories,
                                  reject_if: proc { |attributes| attributes['name'].blank? },
                                  allow_destroy: true
+                                     
+                                     
+  def authors_list
+    self.authors.map{|a| a.name}.join(', ')
+  end
+                                     
+  def illustrators_list
+    self.illustrators.map{|i| i.name}.join(', ')
+  end
+                                     
+  def themes_list
+    self.themes.map{|t| t.name}.join(', ')
+  end
+                                     
+  def categories_list
+    self.categories.map{|c| c.name}.join(', ')
+  end
 
 
 end
