@@ -63,4 +63,5 @@ gem 'devise'
 gem 'cancancan', '~> 1.10'
 #gem 'foundation-rails', '= 5.5.2.1'
 gem 'bootstrap-sass', '~> 3.2.0'
+gem 'masonry-rails'
 gem "font-awesome-rails"

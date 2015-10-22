@@ -1,27 +1,20 @@
-<div class="container-fluid">
-
-    <div class="row">
-        <h1>All items</h1>
-        <% if can? :create, Item %>
-        <a class="btn btn-default" href="<%= url_for(new_item_path) %>" role="button">New Item</a>
-        <% end %>
-    </div>
-    <div id="item-list-thumbnails" class="row">
+<div class="container">
+    <div id="masonry-container" class="transitions-enabled infinite-scroll clearfix">
+        <div class="box-gutter"></div>
+        <div class="box-sizer"></div>
         <% @items.each do |item| %>
-            <div class=" col-sx-6 col-sm-6 col-md-4 col-lg-4">
-                <div id="item-box-<%= item.id %>" class="item-box">
-                    <a href="/items/<%= item.id %>">
-                        <img id="image-3" src="<%= image_url('3.jpg') %>" />
-                        <span class="caption fade-caption">
-                            <h3><%= item.title %></h3>
-                            <h5><%= item.authors_list %></h5>
-                            <h5><%= item.themes.map(&:name).join(",") %></h5>
-                            <p>Item description</p>
-                        </span>
-                    </a>
-                </div>
+        <div class="box col3">
+            <div class="thumbnail">
+                <a href="/items/<%= item.id %>">
+                    <img alt="<%= item.title %>" src="http://placehold.it/200x200" class="thumb">
+                    <div class="caption block-title">
+                        <h3><%= item.title %></h3>
+                        <p class="by-author"><small>By <%= item.authors_list %></small></p>
+                        <p><tiny>Themes: <%= item.themes_list %></tiny></span></p>
+                    </div>
+                </a>
             </div>
+        </div>
         <% end %>
     </div>
-
 </div>
