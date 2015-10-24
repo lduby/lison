@@ -1,0 +1,43 @@
+<div class="container-fluid">
+
+    <div class="row">
+        <h1>All items</h1>
+        <% if can? :create, Item %>
+        <a class="btn btn-default" href="<%= url_for(new_item_path) %>" role="button">New Item</a>
+        <% end %>
+    </div>
+    <div id="item-list-thumbnails" class="row">
+        <% @items.each do |item| %>
+            <div class=" col-sx-6 col-sm-6 col-md-4 col-lg-4">
+                <div id="item-box-<%= item.id %>" class="item-box">
+                    <a href="/items/<%= item.id %>">
+                        <img id="image-3" src="<%= image_url('3.jpg') %>" />
+                        <span class="caption fade-caption">
+                            <h3><%= item.title %></h3>
+                            <h5><%= item.authors_list %></h5>
+                            <h5><%= item.themes.map(&:name).join(",") %></h5>
+                            <p>Item description</p>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        <% end %>
+    </div>
+    
+    <div class="row">
+        <% @items.each do |item| %>
+        <div class="col-lg-2 col-sm-3 col-xs-4 thb">
+            <a href="/items/<%= item.id %>">
+                <img src="http://placehold.it/200x200" class="thumbnail img-responsive">
+                <span class="caption fade-caption">
+                    <h3><%= item.title %></h3>
+                    <h5><%= item.authors_list %></h5>
+                    <h5><%= item.themes.map(&:name).join(",") %></h5>
+                    <p>Item description</p>
+                </span>
+            </a>
+        </div>
+        <% end %>
+    </div>
+
+</div>

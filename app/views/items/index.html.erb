@@ -6,7 +6,11 @@
         <div class="box col3">
             <div class="thumbnail">
                 <a href="/items/<%= item.id %>">
-                    <img alt="<%= item.title %>" src="http://placehold.it/200x200" class="thumb">
+                    <% if item.cover.nil? %>
+                        <img alt="<%= item.title %>" src="http://placehold.it/200x200" class="thumb">
+                    <% else %>
+                        <%= image_tag(item.cover.url(:medium), class: "thumb", alt: item.title) %>
+                    <% end %>
                     <div class="caption block-title">
                         <h3><%= item.title %></h3>
                         <p class="by-author"><small>By <%= item.authors_list %></small></p>

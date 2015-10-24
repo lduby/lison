@@ -1,3 +1,4 @@
+<div class="container">
 <h1><%= @item.title %></h1>
 <tiny>
    <% if can? :update, @item %>
@@ -9,6 +10,17 @@
 
    <%= link_to 'Back', items_path %>
 </tiny>
+    <p>
+    <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+        <div class="thumbnail">
+        <% if @item.cover.nil? %>
+        <img alt="<%= @item.title %>" src="http://placehold.it/200x200" class="thumb">
+        <% else %>
+        <%= image_tag(@item.cover.url(:medium), class: "thumb", alt: @item.title) %>
+        <% end %>
+    </div>
+    </div>
+    </p>
 <p id="item_authors"><strong>Authors: </strong>
    <% if @item.authors.any? %>
    <ul id="item_authors_list">
@@ -77,3 +89,4 @@
       None available
    <% end %>
 </p>
+</div>

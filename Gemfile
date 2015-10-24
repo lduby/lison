@@ -58,10 +58,14 @@ group :test do
   gem 'email_spec'
 end
 
-# Use devise and cancancan for uthentication and role management
+# Use devise and cancancan for authentication and role management
 gem 'devise'
 gem 'cancancan', '~> 1.10'
-#gem 'foundation-rails', '= 5.5.2.1'
+# Use bootstrap for frontend
 gem 'bootstrap-sass', '~> 3.2.0'
+# For pinterest like views
 gem 'masonry-rails'
+# For customizable icons
 gem "font-awesome-rails"
+# For file upload 
+gem 'paperclip', '~> 4.3'

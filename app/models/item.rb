@@ -1,4 +1,6 @@
 class Item < ActiveRecord::Base
+  has_attached_file :cover, styles: { medium: "200x200>", thumb: "100x100>" }, default_url: "http://placehold.it/200x200"
+  validates_attachment_content_type :cover, content_type: /\Aimage\/.*\Z/, size: { in: 0..20.kilobytes }
   validates_presence_of :title
   has_and_belongs_to_many :authors, inverse_of: :items
   has_and_belongs_to_many :illustrators, inverse_of: :items
