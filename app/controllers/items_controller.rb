@@ -41,6 +41,7 @@ class ItemsController < ApplicationController
    end
 
    def new
+       puts params[:item]
       @item = Item.new
       @item.authors.build
       @item.illustrators.build
@@ -59,7 +60,7 @@ class ItemsController < ApplicationController
    end
 
    def create
-
+      # byebug
       ## Allows to create a new item even if the author already exists
       if !params[:item][:authors_attributes].nil?
          if params[:item][:authors_attributes].any?
@@ -137,6 +138,7 @@ class ItemsController < ApplicationController
       end
 
       ## Allows to create a new item even if the publisher and the collection already exists
+       @error_raised = false
       @associating_pub_to_coll = false
       if !params[:item][:publisher_attributes].nil?
          # "the publisher attributes are not null"
@@ -225,10 +227,17 @@ class ItemsController < ApplicationController
                         params[:item][:collection_attributes] = {"name"=>"", "about"=>""}
                      else
                         # "The collection has no publisher to be linked to"
-                        render 'new', alert: "The collection exists but has no publisher. A publisher has to be filled in." and return
+                         flash[:alert] = "The collection exists but has no publisher. A publisher has to be filled in."
+                        render 'new' and return
                      end
                   else
-                     render 'new', alert: "A new collection needs a publisher to be created." and return
+#                      params[:item][:collection_attributes] = {"name"=>"", "about"=>""}
+                      flash[:alert] = "A new collection needs a publisher to be created."
+                      puts params[:item].inspect
+#                      params[:item][:title] = ""
+#                      render 'new' and return
+#                      render 'new'
+                      @error_raised = true
                   end
                end
             end
@@ -258,25 +267,43 @@ class ItemsController < ApplicationController
          end
       end
 
-      ## Creates the new item
-      @item = Item.new(item_params)
+       ## Creates the new item
+       @item = Item.new(item_params)
+       
+       if !@error_raised 
 
-      # no need to add code for habtm associations, Rails do it automatically because of the HATBM relation
+          # no need to add code for habtm associations, Rails do it automatically because of the HATBM relation
 
-      # Redirection
-      if @item.save
-         if @associating_pub_to_coll
-            # Associating a new collection to a new publisher
-            if !@item.publisher.nil?
-               @item.publisher.collections << @item.collection
-            # else
-            #    puts "No publisher for newly created item whereas an association between publisher and collection has been asked"
-            end
-         end
-         redirect_to @item
-      else
-         render 'new'
-      end
+          # Redirection
+          if @item.save
+             if @associating_pub_to_coll
+                # Associating a new collection to a new publisher
+                if !@item.publisher.nil?
+                   @item.publisher.collections << @item.collection
+                # else
+                #    puts "No publisher for newly created item whereas an association between publisher and collection has been asked"
+                end
+             end
+             redirect_to @item
+          else
+              @item.authors.build
+              @item.illustrators.build
+              @item.themes.build
+              @item.categories.build
+              @item.build_publisher
+              @item.build_collection
+#              @authors = Author.all
+             render 'new'
+          end
+       else 
+           @item.authors.build
+           @item.illustrators.build
+           @item.themes.build
+           @item.categories.build
+           @item.build_publisher
+           @item.build_collection
+           render 'new'
+       end
    end
 
    def edit

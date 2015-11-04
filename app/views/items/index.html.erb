@@ -1,11 +1,14 @@
 <div class="container">
+    <div class="page-header">
+        <h1>Browse items<small><a href="<%= url_for(new_item_path) %>" class="pull-right">New item</a></small></h1>
+    </div>
     <div id="masonry-container" class="transitions-enabled infinite-scroll clearfix">
         <div class="box-gutter"></div>
         <div class="box-sizer"></div>
         <% @items.each do |item| %>
         <div class="box col3">
             <div class="thumbnail">
-                <a href="/items/<%= item.id %>">
+                <a href="/items/<%= item.id %>" id="show_item_<%= item.id %>">
                     <% if item.cover.nil? %>
                         <img alt="<%= item.title %>" src="http://placehold.it/200x200" class="thumb">
                     <% else %>
@@ -15,6 +18,9 @@
                         <h3><%= item.title %></h3>
                         <p class="by-author"><small>By <%= item.authors_list %></small></p>
                         <p><tiny>Themes: <%= item.themes_list %></tiny></span></p>
+                <a id="edit_item_<%= item.id %>" class="btn btn-warning small" href="<%= edit_item_path(item) %>" role="button">Edit</a>
+                <a id="del_item_<%= item.id %>" class="btn btn-danger small" href="<%= item_path(item) %>" rel="nofollow" data-method="delete" data-confirm="Are you sure?" role="button">Delete</a>
+
                     </div>
                 </a>
             </div>

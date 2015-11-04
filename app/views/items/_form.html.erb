@@ -12,14 +12,11 @@
    <p>
       <%= f.label :title %><br>
       <%= f.text_field :title %>
-   </p>
+</p>
 <p><%= f.file_field :cover %></p>
 
    <p>
       <h2>Authors</h2><br />
-      <!-- <div class="field">
-         Select an author: <%= collection_check_boxes(:item, :author_ids, @authors, :id, :name) %>
-      </div> -->
       <% if can? :create, Author %>
          <h3>New author:</h3>
          <% if controller.action_name == "edit" %>
@@ -54,11 +51,6 @@
 
    <p>
       <h2>Illustrators</h2><br />
-      <!-- <% if controller.action_name == "new" %>
-      <div class="field">
-         <%= collection_check_boxes(:item, :illustrator_ids, @illustrators, :id, :name) %>
-      </div>
-      <% end %> -->
       <% if can? :create, Illustrator %>
          <div class="illustrators_fields">
             <%= f.fields_for :illustrators do |illustrator| %>
@@ -87,9 +79,6 @@
 
    <p>
       <h2>Publisher</h2><br />
-      <!-- <div class="field">
-         <%= collection_select(:item, :publisher_id, @publishers, :id, :name) %>
-      </div> -->
       <% if can? :create, Publisher %>
          <div class="publisher_fields">
             <%= f.fields_for :publisher do |pub| %>
@@ -112,19 +101,16 @@
 
    <p>
       <h2>Collection</h2><br />
-      <!-- <div class="field">
-         <%= collection_select(:item, :collection_id, @collections, :id, :name) %>
-      </div> -->
       <% if can? :create, Collection %>
          <div class="collection_fields">
-            <%= f.fields_for :collection do |pub| %>
+            <%= f.fields_for :collection do |coll| %>
                <div class="field">
-                  <%= pub.label :name %><br>
-                  <%= pub.text_field :name %>
+                  <%= coll.label :name %><br>
+                  <%= coll.text_field :name %>
                </div>
                <div class="field">
-                  <%= pub.label :about %><br>
-                  <%= pub.text_area :about %>
+                  <%= coll.label :about %><br>
+                  <%= coll.text_area :about %>
                </div>
             <% end %>
          </div>
@@ -137,12 +123,7 @@
    
 <p>
    <b>Themes</b><br />
-   <!-- <% if controller.action_name == "new" %>
-   <div class="field">
-      <%= collection_check_boxes(:item, :theme_ids, @themes, :id, :name) %>
-   </div>
-   <% end %> -->
-   <% if can? :create, Theme %>
+  <% if can? :create, Theme %>
       <div class="themes_fields">
          <%= f.fields_for :themes do |theme| %>
             <div class="field">
@@ -168,11 +149,6 @@
 
 <p>
    <b>Categories</b><br />
-   <!-- <% if controller.action_name == "new" %>
-   <div class="field">
-      <%= collection_check_boxes(:item, :category_ids, @categories, :id, :name) %>
-   </div>
-   <% end %> -->
    <% if can? :create, Category %>
       <div class="categories_fields">
          <%= f.fields_for :categories do |category| %>

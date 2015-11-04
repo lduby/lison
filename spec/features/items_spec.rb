@@ -138,24 +138,41 @@ describe "Items" do
 
          end
 
-         it "Prevents to add a new item with a new collection but without a publisher" do
-            collection = FactoryGirl.create(:collection)
-            sign_in_with_donald
-            expect(page).to have_link 'Log out'
-            expect(page).to have_content 'Team'
-            visit items_url
-            expect{
-               click_link 'New item'
-               fill_in 'Title', with: "Example Item"
-               fill_in 'item_collection_attributes_name', with: collection.name
-               click_button "Create Item"
-            }.to_not change(Item,:count)
-            expect(page).to have_content("The collection exists but has no publisher. A publisher has to be filled in.")
-            visit collections_url
-            click_link "show_collection_#{collection.id}"
-            expect(page).to_not have_content "Example Item"
+          it "Prevents to add a new item with an existing collection but without a publisher" do
+              collection = FactoryGirl.create(:collection)
+              sign_in_with_donald
+              expect(page).to have_link 'Log out'
+              expect(page).to have_content 'Team'
+              visit items_url
+              expect{
+                  click_link 'New item'
+                  fill_in 'Title', with: "Example Item"
+                  fill_in 'item_collection_attributes_name', with: collection.name
+                  click_button "Create Item"
+                  }.to_not change(Item,:count)
+              expect(page).to have_content("The collection exists but has no publisher. A publisher has to be filled in.")
+              visit collections_url
+              click_link "show_collection_#{collection.id}"
+              expect(page).to_not have_content "Example Item"
 
-         end
+          end
+
+          it "Prevents to add a new item with a new collection but without a publisher" do
+              sign_in_with_donald
+              expect(page).to have_link 'Log out'
+              expect(page).to have_content 'Team'
+              visit items_url
+              expect{
+                  click_link 'New item'
+                  fill_in 'Title', with: "Example Item"
+                  fill_in 'item_collection_attributes_name', with: 'Pepix'
+                  click_button "Create Item"
+                  }.to_not change(Item,:count)
+              expect(page).to have_content("A new collection needs a publisher to be created.")
+              visit collections_url
+              expect(page).to_not have_content "Pepix"
+
+          end
 
          it "Adds a new item with a theme and displays the results" do
             theme = FactoryGirl.create(:theme)
@@ -687,7 +704,7 @@ describe "Items" do
             expect{
                click_link "del_item_#{item.id}"
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "To be deleted item"
          end
 
@@ -703,7 +720,7 @@ describe "Items" do
             expect{
                click_link "del_item_#{item2.id}"
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "Hanabi"
             visit authors_url
             click_link "show_author_#{author.id}"
@@ -722,7 +739,7 @@ describe "Items" do
             expect{
                click_link "del_item_#{item2.id}"
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "Hanabi"
             visit illustrators_url
             click_link "show_illustrator_#{illustrator.id}"
@@ -741,7 +758,7 @@ describe "Items" do
             expect{
                click_link "del_item_#{item2.id}"
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "Hanabi"
             visit publishers_url
             click_link "show_publisher_#{publisher.id}"
@@ -762,7 +779,7 @@ describe "Items" do
             expect{
                click_link "del_item_#{item2.id}"
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "Hanabi"
             visit collections_url
             click_link "show_collection_#{collection.id}"
@@ -783,7 +800,7 @@ describe "Items" do
             expect{
                click_link "del_item_#{item2.id}"
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "Hanabi"
             visit themes_url
             click_link "show_theme_#{theme.id}"
@@ -804,7 +821,7 @@ describe "Items" do
             expect{
                click_link "del_item_#{item2.id}"
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "Hanabi"
             visit categories_url
             click_link "show_category_#{category.id}"
@@ -828,7 +845,7 @@ describe "Items" do
                alert.accept
                sleep 1
             }.to change(Item,:count).by(-1)
-            expect(page).to have_content "All items"
+            expect(page).to have_content "Browse items"
             expect(page).to_not have_content "To be deleted item"
          end
       end
