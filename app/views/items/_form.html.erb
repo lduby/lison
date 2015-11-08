@@ -122,7 +122,7 @@
    </p>
    
 <p>
-   <b>Themes</b><br />
+   <h2>Themes</h2><br />
   <% if can? :create, Theme %>
       <div class="themes_fields">
          <%= f.fields_for :themes do |theme| %>
@@ -148,7 +148,7 @@
 </p>
 
 <p>
-   <b>Categories</b><br />
+   <h2>Categories</h2><br />
    <% if can? :create, Category %>
       <div class="categories_fields">
          <%= f.fields_for :categories do |category| %>

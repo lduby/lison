@@ -164,10 +164,13 @@ class ItemsController < ApplicationController
                               params[:item][:collection_attributes] = {"name"=>"", "about"=>"", "id"=>""}
                            else
                               # "The collection is associated to another publisher"
+                                flash[:alert] = "The collection is associated to another publisher"
+                                @error_raised = true
                            end
                         else
                            # "The publisher and the collection are not associated"
-                           render 'new', alert: "The collection is associated to another publisher" and return
+                            flash[:alert] = "The collection is associated to another publisher."
+                            @error_raised = true
                         end
                      else
                         # "The collection does not exist"
@@ -181,7 +184,8 @@ class ItemsController < ApplicationController
                         # "The collection already exists"
                         if !@collection.publisher.nil?
                            # "The collection is associated to an existing publisher"
-                           render 'new', alert: "The collection is already associated to an existing publisher" and return
+                            flash[:alert] = "The collection is already associated to an existing publisher."
+                            @error_raised = true
                         else
                            # "The collection has no publisher => NOT NORMAL ! THIS SITUATION IS NOT SUPPOSED TO OCCUR"
                            params[:item][:collection_id] = @collection.id.to_s
@@ -228,15 +232,13 @@ class ItemsController < ApplicationController
                      else
                         # "The collection has no publisher to be linked to"
                          flash[:alert] = "The collection exists but has no publisher. A publisher has to be filled in."
-                        render 'new' and return
+#                         render 'new' and return
+                         @error_raised = true
                      end
                   else
 #                      params[:item][:collection_attributes] = {"name"=>"", "about"=>""}
                       flash[:alert] = "A new collection needs a publisher to be created."
-                      puts params[:item].inspect
-#                      params[:item][:title] = ""
 #                      render 'new' and return
-#                      render 'new'
                       @error_raised = true
                   end
                end
@@ -258,10 +260,12 @@ class ItemsController < ApplicationController
                      params[:item][:collection_attributes] = {"name"=>"", "about"=>""}
                   else
                      # "The collection has no publisher to be linked to"
-                     render 'new', alert: "The collection exists but has no publisher. A publisher has to be filled in." and return
+                      flash[:alert] = "The collection exists but has no publisher. A publisher has to be filled in."
+                      @error_raised = true
                   end
                else
-                  render 'new', alert: "A new collection needs a publisher to be created." and return
+                   flash[:alert] = "A new collection needs a publisher to be created."
+                   @error_raised = true
                end
             end
          end
@@ -290,8 +294,8 @@ class ItemsController < ApplicationController
               @item.illustrators.build
               @item.themes.build
               @item.categories.build
-              @item.build_publisher
-              @item.build_collection
+              @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
+              @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
 #              @authors = Author.all
              render 'new'
           end
@@ -300,8 +304,11 @@ class ItemsController < ApplicationController
            @item.illustrators.build
            @item.themes.build
            @item.categories.build
-           @item.build_publisher
-           @item.build_collection
+           @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
+           @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
+#           if params[:item][:collection_attributes]["name"] != "" 
+#               @item.collection = Collection.new(:name => params[:item][:collection_attributes]["name"]  )
+#           end
            render 'new'
        end
    end
