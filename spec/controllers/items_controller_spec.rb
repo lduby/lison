@@ -387,7 +387,15 @@ describe ItemsController, type: :controller do
          @coll = FactoryGirl.create(:collection, publisher_id: @pub.id)
          @th = FactoryGirl.create(:theme)
          @cat = FactoryGirl.create(:category)
-         @item = FactoryGirl.create(:item, title: "Test Item", author_ids: [@auth.id], illustrator_ids: [@illust.id], publisher_id: @pub.id, collection_id: @coll.id, theme_ids: [@th.id], category_ids: [@cat.id])
+         @item = FactoryGirl.create(:item, title: "Test Item")
+          @item.authors << @auth
+          @item.illustrators << @illust
+          @pub.collections << @coll
+          @coll.items << @item
+          @pub.items << @item
+          @item.themes << @th
+          @item.categories << @cat
+          puts @item.inspect
       end
 
       context "with valid attributes" do
@@ -596,10 +604,10 @@ describe ItemsController, type: :controller do
             publisher = FactoryGirl.create(:publisher)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Great Collection", "about"=>"", "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Collection1", "about"=>"", "id"=>@coll.id})
             @item.reload
             expect(@item.publisher.id).to eq(publisher.id)
-            expect(@item.collection.name).to eq("Great Collection")
+             expect(@item.collection.name).to eq("Collection1")
             expect(@item.collection.publisher.id).to eq(publisher.id)
          end
 
@@ -619,38 +627,39 @@ describe ItemsController, type: :controller do
             collection = FactoryGirl.create(:collection, publisher_id: otherpublisher.id)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Publisher1", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>@coll.id})
             @item.reload
             expect(@item.publisher.id).to eq(@pub.id)
             expect(@item.collection.id).to eq(@coll.id)
             expect(response).to render_template :edit
          end
 
-         it "** updates an item having a publisher and a collection by changing the publisher by a new one and changing the collection to one which does not belong to any publisher" do
+         it "updates an item having a publisher and a collection by changing the publisher by a new one and changing the collection to one which does not belong to any publisher" do
             collection = FactoryGirl.create(:collection)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Publisher2", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>@coll.id})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
+             puts @item.inspect
+            expect(@item.publisher.name).to eq("Publisher2")
             expect(@item.collection.id).to eq(collection.id)
-            expect(@item.collection.publisher.id).to eq(publisher.id)
+             expect(@item.collection.publisher.name).to eq("Publisher2")
          end
 
-         it "** updates an item having a publisher and a collection by changing the publisher by a new one and changing the collection to a new one" do
+         it "updates an item having a publisher and a collection by changing the publisher by a new one and changing the collection to a new one" do
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>"Great Collection", "about"=>"", "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Publisher3", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>"Collection2", "about"=>"", "id"=>@coll.id})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
-            expect(@item.collection.name).to eq("Great Collection")
-            expect(@item.collection.publisher.name).to eq("Great Publisher")
+            expect(@item.publisher.name).to eq("Publisher3")
+            expect(@item.collection.name).to eq("Collection2")
+            expect(@item.collection.publisher.name).to eq("Publisher3")
          end
 
          it "does not update an item having a publisher and a collection by changing the publisher by a new one and keeping the collection unchanged" do
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>@coll.name, "about"=>@coll.about, "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>"Publisher4", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>@coll.name, "about"=>@coll.about, "id"=>@coll.id})
             @item.reload
             expect(@item.publisher.id).to eq(@pub.id)
             expect(@item.collection.id).to eq(@coll.id)
@@ -683,10 +692,10 @@ describe ItemsController, type: :controller do
          it "updates an item having a publisher and a collection by keeping the publisher unchanged and changing the collection to a new one" do
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>@pub.name, "about"=>@pub.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Great Collection", "about"=>"", "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, collection_id: @coll.id, publisher_attributes: {"name"=>@pub.name, "about"=>@pub.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Collection3", "about"=>"", "id"=>@coll.id})
             @item.reload
             expect(@item.publisher.id).to eq(@pub.id)
-            expect(@item.collection.name).to eq("Great Collection")
+            expect(@item.collection.name).to eq("Collection3")
             expect(@item.collection.publisher.id).to eq(@pub.id)
          end
 
@@ -700,7 +709,7 @@ describe ItemsController, type: :controller do
             expect(@item.collection.publisher.id).to eq(@pub.id)
          end
 
-         it "** updates an item having a publisher and no collection by changing the publisher by an existing one and adding one of the publisher collections" do
+         it "updates an item having a publisher and no collection by changing the publisher by an existing one and adding one of the publisher collections" do
             @coll.items.delete(@item)
             @item.reload
             expect(@item.collection).to be_nil
@@ -731,21 +740,21 @@ describe ItemsController, type: :controller do
             expect(response).to render_template :edit
          end
 
-         it "** updates an item having a publisher and no collection by changing the publisher by an existing one and changing the collection to a new one" do
+         it "updates an item having a publisher and no collection by changing the publisher by an existing one and changing the collection to a new one" do
             @coll.items.delete(@item)
             @item.reload
             expect(@item.collection).to be_nil
             publisher = FactoryGirl.create(:publisher)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Great Collection", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Collection4", "about"=>""})
             @item.reload
             expect(@item.publisher.id).to eq(publisher.id)
-            expect(@item.collection.name).to eq("Great Collection")
+            expect(@item.collection.name).to eq("Collection4")
             expect(@item.collection.publisher.id).to eq(publisher.id)
          end
 
-         it "** updates an item having a publisher and no collection by changing the publisher by an existing one and keeping the item without collection" do
+         it "updates an item having a publisher and no collection by changing the publisher by an existing one and keeping the item without collection" do
             @coll.items.delete(@item)
             @item.reload
             expect(@item.collection).to be_nil
@@ -766,51 +775,51 @@ describe ItemsController, type: :controller do
             collection = FactoryGirl.create(:collection, publisher_id: collpublisher.id)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Publisher5", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about})
             @item.reload
             expect(@item.publisher.id).to eq(@pub.id)
             expect(@item.collection).to be_nil
             expect(response).to render_template :edit
          end
 
-         it "** updates an item having a publisher and no collection by changing the publisher by a new one and adding a collection which does not belong to any publisher" do
+         it "updates an item having a publisher and no collection by changing the publisher by a new one and adding a collection which does not belong to any publisher" do
             @coll.items.delete(@item)
             @item.reload
             expect(@item.collection).to be_nil
             collection = FactoryGirl.create(:collection)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Publisher6", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>collection.name, "about"=>collection.about})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
+            expect(@item.publisher.name).to eq("Publisher6")
             expect(@item.collection.id).to eq(collection.id)
-            expect(@item.collection.publisher.name).to eq("Great Publisher")
+            expect(@item.collection.publisher.name).to eq("Publisher6")
          end
 
-         it "** updates an item having a publisher and no collection by changing the publisher by a new one and adding a new collection" do
+         it "updates an item having a publisher and no collection by changing the publisher by a new one and adding a new collection" do
             @coll.items.delete(@item)
             @item.reload
             expect(@item.collection).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>"Great Collection", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Publisher7", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>"Collection5", "about"=>""})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
-            expect(@item.collection.name).to eq("Great Collection")
-            expect(@item.collection.publisher.name).to eq("Great Publisher")
+            expect(@item.publisher.name).to eq("Publisher7")
+            expect(@item.collection.name).to eq("Collection5")
+            expect(@item.collection.publisher.name).to eq("Publisher7")
          end
 
-         it "** updates an item having a publisher and no collection by changing the publisher by a new one and keeping the item without collection" do
+         it "updates an item having a publisher and no collection by changing the publisher by a new one and keeping the item without collection" do
             @coll.items.delete(@item)
             @item.reload
             expect(@item.collection).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>"", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>"Publisher8", "about"=>"", "id"=>@pub.id}, collection_attributes: {"name"=>"", "about"=>""})
             @item.reload
-            expect(@item.publisher.id).to eq(@pub.id)
-            expect(@item.collection.id).to eq(collection.id)
-            expect(@item.collection.publisher.name).to eq(@pub.id)
+             expect(@item.publisher.name).to eq("Publisher8")
+             expect(@item.collection).to be_nil
+             expect(@item.publisher.collections).to be_empty
          end
 
          it "** updates an item having a publisher and no collection by keeping the publisher unchanged and adding one of the publisher collections" do
@@ -848,10 +857,10 @@ describe ItemsController, type: :controller do
             expect(@item.collection).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>@pub.name, "about"=>@pub.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Great Collection", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_id: @pub.id, publisher_attributes: {"name"=>@pub.name, "about"=>@pub.about, "id"=>@pub.id}, collection_attributes: {"name"=>"Collection6", "about"=>""})
             @item.reload
             expect(@item.publisher.id).to eq(@pub.id)
-            expect(@item.collection.name).to eq("Great Collection")
+            expect(@item.collection.name).to eq("Collection6")
             expect(@item.collection.publisher.id).to eq(@pub.id)
          end
 
@@ -905,10 +914,10 @@ describe ItemsController, type: :controller do
             publisher = FactoryGirl.create(:publisher)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about}, collection_attributes: {"name"=>"Great Collection", "about"=>"", "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about}, collection_attributes: {"name"=>"Collection7", "about"=>"", "id"=>@coll.id})
             @item.reload
             expect(@item.publisher.id).to eq(publisher.id)
-            expect(@item.collection.name).to eq("Great Collection")
+            expect(@item.collection.name).to eq("Collection7")
             expect(@item.collection.publisher.id).to eq(publisher.id)
          end
 
@@ -947,7 +956,7 @@ describe ItemsController, type: :controller do
             collection = FactoryGirl.create(:collection, publisher_id: publisher.id)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>""}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher11", "about"=>""}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>@coll.id})
             @item.reload
             expect(@item.publisher).to be_nil
             expect(@item.collection.id).to eq(@coll.id)
@@ -961,11 +970,11 @@ describe ItemsController, type: :controller do
             collection = FactoryGirl.create(:collection)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>""}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Publisher9", "about"=>""}, collection_attributes: {"name"=>collection.name, "about"=>collection.about, "id"=>@coll.id})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
+            expect(@item.publisher.name).to eq("Publisher9")
             expect(@item.collection.id).to eq(collection.id)
-            expect(@item.collection.publisher.name).to eq("Great Publisher")
+            expect(@item.collection.publisher.name).to eq("Publisher9")
          end
 
          it "** updates an item having no publisher and a collection by adding a new publisher and changing the collection to a new one"  do
@@ -974,11 +983,11 @@ describe ItemsController, type: :controller do
             expect(@item.publisher).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>""}, collection_attributes: {"name"=>"Great Collection", "about"=>"", "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Publisher10", "about"=>""}, collection_attributes: {"name"=>"Collection8", "about"=>"", "id"=>@coll.id})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
-            expect(@item.collection.name).to eq("Great Collection")
-            expect(@item.collection.publisher.name).to eq("Great Publisher")
+            expect(@item.publisher.name).to eq("Publisher10")
+            expect(@item.collection.name).to eq("Collection8")
+            expect(@item.collection.publisher.name).to eq("Publisher10")
          end
 
          it "does not update an item having no publisher and a collection by adding a new publisher and keeping the collection unchanged"  do
@@ -987,7 +996,7 @@ describe ItemsController, type: :controller do
             expect(@item.publisher).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Great Publisher", "about"=>""}, collection_attributes: {"name"=>@coll.name, "about"=>@coll.about, "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"Publisher12", "about"=>""}, collection_attributes: {"name"=>@coll.name, "about"=>@coll.about, "id"=>@coll.id})
             @item.reload
             expect(@item.publisher).to be_nil
             expect(@item.collection.id).to eq(@coll.id)
@@ -1028,7 +1037,7 @@ describe ItemsController, type: :controller do
             expect(@item.publisher).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"", "about"=>""}, collection_attributes: {"name"=>"Great Collection", "about"=>"", "id"=>@coll.id})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, collection_id: @coll.id, publisher_attributes: {"name"=>"", "about"=>""}, collection_attributes: {"name"=>"Collection9", "about"=>"", "id"=>@coll.id})
             @item.reload
             expect(@item.publisher).to be_nil
             expect(@item.collection.id).to eq(@coll.id)
@@ -1090,10 +1099,10 @@ describe ItemsController, type: :controller do
             publisher = FactoryGirl.create(:publisher)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about}, collection_attributes: {"name"=>"Great Collection", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>publisher.name, "about"=>publisher.about}, collection_attributes: {"name"=>"Collection10", "about"=>""})
             @item.reload
             expect(@item.publisher.id).to eq(publisher.id)
-            expect(@item.collection.name).to eq("Great Collection")
+            expect(@item.collection.name).to eq("Collection10")
             expect(@item.collection.publisher.id).to eq(publisher.id)
          end
 
@@ -1122,7 +1131,7 @@ describe ItemsController, type: :controller do
             collection = FactoryGirl.create(:collection, publisher_id: publisher.id)
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"Great Publisher", "about"=>""}, collection_attributes: {"name"=>collection.name, "about"=>collection.about})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"Publisher13", "about"=>""}, collection_attributes: {"name"=>collection.name, "about"=>collection.about})
             @item.reload
             expect(@item.publisher).to be_nil
             expect(@item.collection).to be_nil
@@ -1153,11 +1162,11 @@ describe ItemsController, type: :controller do
             expect(@item.collection).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"Great Publisher", "about"=>""}, collection_attributes: {"name"=>"Great Collection", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"Publisher14", "about"=>""}, collection_attributes: {"name"=>"Collection11", "about"=>""})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
-            expect(@item.collection.name).to eq("Great Collection")
-            expect(@item.collection.publisher.name).to eq("Great Publisher")
+            expect(@item.publisher.name).to eq("Publisher14")
+            expect(@item.collection.name).to eq("Collection11")
+            expect(@item.collection.publisher.name).to eq("Publisher14")
          end
 
          it "updates an item having no publisher and no collection by adding a new publisher and keeping the item without collection" do
@@ -1168,9 +1177,9 @@ describe ItemsController, type: :controller do
             expect(@item.collection).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"Great Publisher", "about"=>""}, collection_attributes: {"name"=>"", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"Publisher15", "about"=>""}, collection_attributes: {"name"=>"", "about"=>""})
             @item.reload
-            expect(@item.publisher.name).to eq("Great Publisher")
+            expect(@item.publisher.name).to eq("Publisher15")
             expect(@item.collection).to be_nil
          end
 
@@ -1186,9 +1195,9 @@ describe ItemsController, type: :controller do
             @ability.can :update, @item
             put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"", "about"=>""}, collection_attributes: {"name"=>collection.name, "about"=>collection.about})
             @item.reload
-            expect(@item.publisher).to be_nil
-            expect(@item.collection).to be_nil
-            expect(response).to render_template :edit
+             expect(@item.publisher.id).to eq(publisher.id)
+             expect(@item.collection.id).to eq(collection.id)
+             expect(@item.collection.publisher.id).to eq(publisher.id)
          end
 
          it "does not update an item having no publisher and no collection by keeping the item without publisher and adding a collection which does not belong to any publisher" do
@@ -1215,7 +1224,7 @@ describe ItemsController, type: :controller do
             expect(@item.collection).to be_nil
             @controller.stub(:current_ability).and_return(@ability)
             @ability.can :update, @item
-            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"", "about"=>""}, collection_attributes: {"name"=>"Great Collection", "about"=>""})
+            put :update, id: @item, item: FactoryGirl.attributes_for(:item, publisher_attributes: {"name"=>"", "about"=>""}, collection_attributes: {"name"=>"Collection12", "about"=>""})
             @item.reload
             expect(@item.publisher).to be_nil
             expect(@item.collection).to be_nil

@@ -60,7 +60,7 @@ class ItemsController < ApplicationController
    end
 
    def create
-      # byebug
+#       byebug
       ## Allows to create a new item even if the author already exists
       if !params[:item][:authors_attributes].nil?
          if params[:item][:authors_attributes].any?
@@ -290,12 +290,21 @@ class ItemsController < ApplicationController
              end
              redirect_to @item
           else
+              puts params[:item].inspect
               @item.authors.build
               @item.illustrators.build
               @item.themes.build
               @item.categories.build
-              @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
-              @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
+              if !params[:item][:publisher_attributes].nil?
+                @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
+              else
+                  @item.build_publisher
+              end
+              if !params[:item][:collection_attributes].nil?
+                @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
+              else
+                  @item.build_collection
+              end
 #              @authors = Author.all
              render 'new'
           end
@@ -304,8 +313,16 @@ class ItemsController < ApplicationController
            @item.illustrators.build
            @item.themes.build
            @item.categories.build
-           @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
-           @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
+           if !params[:item][:publisher_attributes].nil?
+               @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
+           else
+               @item.build_publisher
+           end
+           if !params[:item][:collection_attributes].nil?
+               @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
+           else
+               @item.build_collection
+           end
 #           if params[:item][:collection_attributes]["name"] != "" 
 #               @item.collection = Collection.new(:name => params[:item][:collection_attributes]["name"]  )
 #           end
@@ -336,7 +353,7 @@ class ItemsController < ApplicationController
    end
 
    def update
-      # byebug
+#       byebug
       @item = Item.find(params[:id])
       # Checks if the previously associated authors has been updated
       if !params[:item][:authors_attributes].nil?
@@ -456,6 +473,7 @@ class ItemsController < ApplicationController
       end
 
       ## Checks if the publisher has been updated
+       @error_raised = false
       @associating_coll_to_pub = false
       @no_publisher = false
       # puts "Received params : #{params[:item]}"
@@ -500,7 +518,7 @@ class ItemsController < ApplicationController
                params[:item][:publisher_attributes] = {"name"=>"", "about"=>"", "id"=>""}
             else
                puts "9. The publisher has to be created"
-               # params[:item][:publisher_id] = ""
+                params[:item][:publisher_id] = ""
                params[:item][:publisher_attributes] = {"name" => @publisher_attributes["name"], "about" => @publisher_attributes["about"]}
                @publisher_to_be_created = true
             end
@@ -524,7 +542,8 @@ class ItemsController < ApplicationController
                            if @no_publisher
                               if @newcollection.publisher.nil?
                                  puts "13.3 No publisher and the chosen collection has no publisher"
-                                 render 'edit', alert: "The collection must be associated to a publisher" and return
+                                  flash[:alert] = "The collection must be associated to a publisher"
+                                  @error_raised = true
                               else
                                  puts "13.4 No publisher but the chosen collection has a publisher"
                                  params[:item][:collection_id] = @newcollection.id.to_s
@@ -540,24 +559,29 @@ class ItemsController < ApplicationController
                                  params[:item][:collection_attributes] = {"name" => "", "about" => "", "id"=>""}
                               else
                                  puts "15. The publisher of the collection does not match the filled_in publisher"
-                                 render 'edit', alert: "The collection is associated to another publisher" and return
+                                 flash[:alert] = "The collection is associated to another publisher"
+                                 @error_raised = true
                               end
                            else
                               puts "13.2 The publisher has to be created"
                               if @newcollection.publisher.nil?
                                  puts "13.2.1 The collection has no publisher"
                                  params[:item]["collection_id"] = @newcollection.id
+#                                  params[:item]["collection_id"] = ""
+                                  params[:item][:collection_attributes] = {"name" => "", "about" => "", "id" => ""}
                                  @associating_coll_to_pub = true
                               else
                                  puts "13.2.2 The collection already has a publisher"
-                                 render 'edit', alert: "The collection is already associated to an existing publisher" and return
+                                 flash[:alert] = "The collection is already associated to an existing publisher"
+                                  @error_raised = true
                               end
                            end
                         else
                            puts "16. The new collection has to be created"
                            if @no_publisher
                               puts "16.3 No publisher so the new collection can't be associated to a publisher to be created"
-                              render 'edit', alert: "A new collection needs a publisher to be created" and return
+                              flash[:alert] = "A new collection needs a publisher to be created"
+                               @error_raised = true
                            elsif !@publisher_to_be_created
                               puts "16.1 The new publisher already exists"
                               params[:item][:collection_attributes]["publisher_id"] = params[:item][:publisher_id]
@@ -571,19 +595,47 @@ class ItemsController < ApplicationController
                         end
                      else
                         puts "17. The name of the collection has not been changed"
-                        render 'edit', alert: "The collection is associated to the previous publisher" and return
-                        # params[:item][:collection_attributes] = {"name" => "", "about" => ""}
-                        # if !@collection.publisher.nil?
-                        #    puts "17.1 The collection has a publisher"
-                        #    if @collection.publisher.name != @publisher_attributes["name"]
-                        #       puts "17.1.1 The publisher names do not match"
-                        #       render 'edit', alert: "The collection is associated to the previous publisher" and return
-                        #    else
-                        #       puts "17.1.2 The publisher names do match"
-                        #    end
-                        # else
-                        #    puts "17.2 The collection has no publisher"
-                        # end
+                        if @no_publisher
+                            puts "17.1 No publisher and unchanged collection"
+                            if !@collection.publisher.nil?
+                                puts "17.1.1 The collection has a publisher that can be associated"
+                                @associating_coll_to_pub = true
+                                params[:item][:collection_attributes] = {"name" => "", "about" => ""}
+                            else
+                                puts "17.1.2 the collection has no publisher"
+                                flash[:alert] = "The item needs a publisher if it has a collection"
+                                @error_raised = true
+                            end
+                        elsif @publisher_to_be_created 
+                            puts "17.2 Collection unchanged and publisher to be created" 
+                            if @collection.publisher.nil? 
+                                puts "17.2.1 The collection has no publisher so the new one can be associated"
+                                params[:item][:collection_attributes] = {"name" => "", "about" => ""}
+                                @associating_coll_to_pub = true
+                            else
+                                puts "17.2.2 The collection has a publisher"
+                                flash[:alert] = "The collection is associated to the previous publisher"
+                                @error_raised = true
+                            end
+                        else
+                            puts "17.3 Collection unchanged and an existing publisher has been filled in "
+                            if !@collection.publisher.nil?
+                                puts "17.3.1 The collection has a publisher"
+                                if @collection.publisher.name != @publisher_attributes["name"]
+                                    puts "17.3.1.1 The publisher names do not match"
+                                    flash[:alert] =  "The collection is associated to the previous publisher"
+                                    @error_raised = true
+                                else
+                                    puts "17.3.1.2 The publisher names do match"
+                                    params[:item][:collection_attributes] = {"name" => "", "about" => ""}
+                                end
+                            else
+                                puts "17.3.2 The collection has no publisher"
+                            end
+                        end
+#                        flash[:alert] 
+                        # 
+                         
                      end
                   # else
                   #    puts "Collection not found"
@@ -596,7 +648,8 @@ class ItemsController < ApplicationController
                      if @no_publisher
                         if @newcollection.publisher.nil?
                            puts "19.3 No publisher and the chosen collection has no publisher"
-                           render 'edit', alert: "The collection must be associated to a publisher" and return
+                           flash[:alert] = "The collection must be associated to a publisher"
+                            @error_raised = true
                         else
                            puts "19.4 No publisher but the chosen collection has a publisher"
                            params[:item][:collection_id] = @newcollection.id.to_s
@@ -612,24 +665,28 @@ class ItemsController < ApplicationController
                            params[:item][:collection_attributes] = {"name" => "", "about" => ""}
                         else
                            puts "21. The publisher of the collection does not match the filled_in publisher"
-                           render 'edit', alert: "The collection already exists and is associated to another publisher" and return
+                           flash[:alert] = "The collection already exists and is associated to another publisher"
+                            @error_raised = true
                         end
                      else
                         puts "19.2 The new publisher has to be created"
                         if @newcollection.publisher.nil?
                            puts "19.2.1.The collection has no publisher => this should not have been allowed"
-                           # params[:item][:publisher_attributes]["collection_id"] = @newcollection.id
+                           params[:item][:collection_id] = @newcollection.id.to_s
+                           params[:item][:collection_attributes] = {"name" => "", "about" => ""}
                            @associating_coll_to_pub = true
                         else
                            puts "19.2.2.The collection has another publisher"
-                           render 'edit', alert: "The collection is already associated to an existing publisher" and return
+                           flash[:alert] = "The collection is already associated to an existing publisher"
+                            @error_raised = true
                         end
                      end
                   else
                      puts "22. The new collection has to be created"
                      if @no_publisher
                         puts "22.3 No publisher so the new collection can't be associated to a publisher to be created"
-                        render 'edit', alert: "A new collection needs a publisher to be created" and return
+                        flash[:alert] = "A new collection needs a publisher to be created"
+                         @error_raised = true
                      elsif !@publisher_to_be_created
                         puts "22.1 The new publisher already exists"
                         params[:item][:collection_attributes]["publisher_id"] = params[:item][:publisher_id]
@@ -648,8 +705,8 @@ class ItemsController < ApplicationController
       end
 
 
-
-      # puts "To be sent params : #{params[:item]}"
+    if !@error_raised
+       puts "To be sent params : #{params[:item]}"
       if @item.update(item_params)
          # Removing the collection if the publisher changes
          # if !item_params[:publisher_id].nil? && item_params[:publisher_id]!=@item.publisher_id
@@ -669,8 +726,40 @@ class ItemsController < ApplicationController
          redirect_to @item
       else
          puts @item.errors.messages.inspect
+          @item.authors.build
+          @item.illustrators.build
+          @item.themes.build
+          @item.categories.build
+          if !params[:item][:publisher_attributes].nil?
+              @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
+          else
+              @item.build_publisher
+          end
+          if !params[:item][:collection_attributes].nil?
+              @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
+          else
+              @item.build_collection
+          end
          render 'edit'
       end
+    else
+#         error raised
+        @item.authors.build
+        @item.illustrators.build
+        @item.themes.build
+        @item.categories.build
+        if !params[:item][:publisher_attributes].nil?
+            @item.build_publisher(:name => params[:item][:publisher_attributes]["name"], :about => params[:item][:publisher_attributes]["about"])
+        else
+            @item.build_publisher
+        end
+        if !params[:item][:collection_attributes].nil?
+            @item.build_collection(:name => params[:item][:collection_attributes]["name"], :about => params[:item][:collection_attributes]["about"])
+        else
+            @item.build_collection
+        end
+        render 'edit'
+    end
    end
 
    def destroy
