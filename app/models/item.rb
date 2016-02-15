@@ -1,5 +1,5 @@
 class Item < ActiveRecord::Base
-  has_attached_file :cover, styles: { medium: "200x200>", thumb: "100x100>" }, default_url: "http://placehold.it/200x200"
+    has_attached_file :cover, styles: { xxxlarge: "1300x1300>", xxlarge: "1000x1000>", xlarge: "700x700>", large: "300x300>", medium: "200x200>", small: "140x140>", thumb: "100x100>" }, default_url: "http://placehold.it/200x200"
   validates_attachment_content_type :cover, content_type: /\Aimage\/.*\Z/, size: { in: 0..20.kilobytes }
   validates_presence_of :title
 #    validates :collections, :collections_name_uniqueness => true
