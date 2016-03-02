@@ -1,5 +1,7 @@
 <div class="container">
-<h1><%= @item.title %></h1>
+    <div class="page-header">
+        <h1><%= @item.title %></h1>
+    </div>
 <tiny>
    <% if can? :update, @item %>
       <%= link_to 'Edit', edit_item_path(@item), id: "edit_item_#{@item.id}" %> |
