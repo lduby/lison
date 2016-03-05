@@ -1,0 +1,78 @@
+<div class="col-md-4 watch-card">
+    <div class="artist-title col-md-12">
+        <a href=""><%= @illustrator.name %></a>
+        <% if can? :update, @illustrator %>
+        <% if can? :destroy, @illustrator %>
+        <span class="edit_link one-third"><a href="<%= url_for(edit_illustrator_path(@illustrator)) %>" id= "edit_illustrator_<%= @illustrator.id %>"><i id="edit_btn" class="fa fa-pencil-square-o"></i></a></span>
+        <span class="del_link"><a href="<%= url_for(illustrator_path(@illustrator)) %>" data-method="delete" id= "del_illustrator_<%= @illustrator.id %>"><i id="del_btn" class="fa fa-trash"></i></a></span>
+        <% else %>
+        <span class="del_link"><a href="<%= url_for(illustrator_path(@illustrator)) %>" data-method="delete" id= "del_illustrator_<%= @illustrator.id %>" class="pull-right"><i id="del_btn" class="fa fa-trash"></i></a></span>
+        <% end %>
+        <% else %>
+        <% if can? :destroy, @illustrator %>
+        <span class="del_link"><a href="<%= url_for(illustrator_path(@illustrator)) %>" data-method="delete" id= "del_illustrator_<%= @illustrator.id %>" class="pull-right"><i id="del_btn" class="fa fa-trash"></i></a></span>
+        <% end %>
+        <% end %>
+        <br/><span>Illustrator</span>
+    </div>
+    <div class="artist-collage col-md-12">
+        <div class="col-md-6"><img src="http://i.ytimg.com/i/MXDyVR2tclKWhbqNforSyA/mq1.jpg" alt="artist-image" width="150" height="150"></div>
+        <div class="col-md-6 collage-rhs">
+            <div class="col-md-12"><img src="http://i.ytimg.com/vi/8gyLR4NfMiI/mqdefault.jpg" alt="artist-image" width="150" height="84"></div>
+            <div class="col-md-12"><img src="http://i.ytimg.com/vi/zKCrSN9oXgQ/mqdefault.jpg" alt="artist-image" width="150" height="84"></div>        
+        </div>
+    </div>
+    <div class="listing-tab col-md-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="illustratorTabs" role="tablist">
+            <li role="presentation" class="active"><a href="#related-items" aria-controls="related-items" role="tab" data-toggle="tab">Related Items</a></li>
+            <li role="presentation"><a href="#lists" aria-controls="lists" role="tab" data-toggle="tab">Lists</a></li>
+            <li role="presentation"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="related-items">
+                <ul>
+                    <% @illustrator.items.each do |item| %>
+                    <li id="related-item-<%= item.id %>" class="related-item" data-item-id="<%= item.id %>"><%= link_to item.title, item_path(item), :remote => true %><span>2005</span><span>****</span></li>
+                    <% end %>
+                </ul>
+                <div class="related-artists">
+                    <h3>Related artists</h3>
+                    <div class="col-md-12">
+                        <% @illustrator.related_illustrators.each do |artist| %>
+                        <div class="col-md-4 artist-next"><a href="<%= url_for(illustrator_path(artist)) %>"><img src="http://i.ytimg.com/i/vWtix2TtWGe9kffqnwdaMw/mq1.jpg" alt="" ><%= artist.name %></a></div>
+                        <% end %>
+                        <% @illustrator.related_authors.each do |artist| %>
+                        <div class="col-md-4 artist-next"><a href="<%= url_for(author_path(artist)) %>"><img src="http://i.ytimg.com/i/vWtix2TtWGe9kffqnwdaMw/mq1.jpg" alt="" ><%= artist.name %></a></div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="lists">
+                <ul>
+                    <li><a href="#">List name</a></li>
+
+                </ul>
+                <div class="related-artists">
+                    <h3>Related artists</h3>
+                    <div class="col-md-12">
+                        <% @illustrator.related_illustrators.each do |artist| %>
+                        <div class="col-md-4 artist-next"><a href="<%= url_for(illustrator_path(artist)) %>"><img src="http://i.ytimg.com/i/vWtix2TtWGe9kffqnwdaMw/mq1.jpg" alt="" ><%= artist.name %></a></div>
+                        <% end %>
+                        <% @illustrator.related_authors.each do |artist| %>
+                        <div class="col-md-4 artist-next"><a href="<%= url_for(author_path(artist)) %>"><img src="http://i.ytimg.com/i/vWtix2TtWGe9kffqnwdaMw/mq1.jpg" alt="" ><%= artist.name %></a></div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="details">
+                <h3>About the artist</h3>
+                <div class="col-md-12">
+                    <p><%= @illustrator.about %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

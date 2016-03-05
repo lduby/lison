@@ -13,5 +13,13 @@ class Author < ActiveRecord::Base
      matched_author = Author.where(['LOWER(firstname) = LOWER(?) AND LOWER(lastname) = LOWER(?)', self.firstname, self.lastname]).first
      errors.add(:base, 'Someone is already registered with that name') if matched_author && (matched_author.id != self.id)
   end
+    
+    def related_authors
+        Author.includes(:items).where(items: { id: Author.find(self.id).items.map{|item| item.id}}).to_a - [Author.find(self.id)]
+    end
+    
+    def related_illustrators
+        Illustrator.includes(:items).where(items: { id: Author.find(self.id).items.map{|item| item.id}}).to_a
+    end
 
 end

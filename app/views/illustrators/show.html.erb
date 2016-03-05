@@ -1,26 +1,6 @@
-<h1><%= @illustrator.name %>
-  <tiny>
-  <% if can? :update, @illustrator %>
-    <%= link_to 'Edit', edit_illustrator_path(@illustrator), id: "edit_illustrator_#{@illustrator.id}" %> |
-  <% end %>
-  <% if can? :destroy, @illustrator %>
-      <%= link_to 'Destroy', illustrator_path(@illustrator), id: "del_illustrator_#{@illustrator.id}", method: :delete, data: { confirm: 'Are you sure?' } %> |
-    <% end %>
-
-    <%= link_to 'Back', illustrators_path %>
-  </tiny>
-</h1>
-<h2>About</h2>
-<p><%= @illustrator.about %></p>
-<h2>List of associated items</h2>
-<p>
-   <% if @illustrator.items.any? %>
-      <ul id="illustrator_items">
-         <% @illustrator.items.each do |item| %>
-            <li><%= link_to item.title, item %></li>
-         <% end %>
-      </ul>
-   <% else %>
-      None available
-   <% end %>
-</p>
+<div class="container">
+    <%= render "card" %>
+    <div id="items_details" class="col-md-8">
+        // Ajax query to display selected item or selected list
+    </div>
+</div>

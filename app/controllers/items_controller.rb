@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
    load_and_authorize_resource :class => Item, :instance_name => "item", :except => [:index, :list]
+    
 
    def index
       @items = Item.all
@@ -38,6 +39,8 @@ class ItemsController < ApplicationController
 
    def show
       @item = Item.find(params[:id])
+       puts @item
+       respond_to :html, :js
    end
 
    def new

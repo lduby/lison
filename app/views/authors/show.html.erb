@@ -1,23 +1,8 @@
-<h1><%= @author.name %></h1>
-<tiny>
-<% if can? :update, @author %>
-  <%= link_to 'Edit', edit_author_path(@author), id: "edit_author_#{@author.id}" %> |
-<% end %>
-<% if can? :destroy, @author %>
-    <%= link_to 'Destroy', author_path(@author), id: "del_author_#{@author.id}", method: :delete, data: { confirm: 'Are you sure?' } %> |
-  <% end %>
-  <%= link_to 'Back', authors_path %>
-</tiny>
-<h2>About</h2>
-<p><%= @author.about %></p>
-<h2>List of associated items</h2>
-<p>
-   <% if @author.items.any? %>
-      <ul id="author_items">
-         <% @author.items.each do |item| %>
-            <li><%= link_to item.title, item %></li>
-         <% end %>
-      </ul>
-   <% end %>
-</p>
-<%= link_to 'Back', authors_path %> | <%= link_to 'Edit', edit_author_path(@author) %>
+<div class="container">
+    <%= render "card" %>
+    <div id="items_details" class="col-md-8">
+        // Ajax query to display selected item or selected list
+    </div>
+</div>
+
+

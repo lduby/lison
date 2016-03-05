@@ -1,0 +1,94 @@
+<div class="container">
+    <div class="page-header">
+        <h1><%= @item.title %></h1>
+    </div>
+    <tiny>
+        <% if can? :update, @item %>
+        <%= link_to 'Edit', edit_item_path(@item), id: "edit_item_#{@item.id}" %> |
+        <% end %>
+        <% if can? :destroy, @item %>
+        <%= link_to 'Destroy', item_path(@item), id: "del_item_#{@item.id}", method: :delete, data: { confirm: 'Are you sure?' } %> |
+        <% end %>
+
+        <%= link_to 'Back', items_path %>
+    </tiny>
+    <p>
+    <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+        <div class="thumbnail">
+            <% if @item.cover.nil? %>
+            <img alt="<%= @item.title %>" src="http://placehold.it/200x200" class="thumb">
+            <% else %>
+            <%= image_tag(@item.cover.url(:medium), class: "thumb", alt: @item.title) %>
+            <% end %>
+        </div>
+    </div>
+    </p>
+<p id="item_authors"><strong>Authors: </strong>
+    <% if @item.authors.any? %>
+<ul id="item_authors_list">
+    <% @item.authors.each do |author| %>
+    <li><%= link_to_if (can? :read, author), author.name, author_path(author), id: "show_author_#{author.id}" %></li>
+    <% end %>
+</ul>
+<% else %>
+None available
+<% end %>
+</p>
+<p id="item_illustrators"><strong>Illustrators: </strong>
+    <% if @item.illustrators.any? %>
+<ul id="item_illustrators_list">
+    <% @item.illustrators.each do |illustrator| %>
+    <li><%= link_to_if (can? :read, illustrator), illustrator.name, illustrator_path(illustrator), id: "show_illustrator_#{illustrator.id}" %></li>
+    <% end %>
+</ul>
+<% else %>
+None available
+<% end %>
+</p>
+<p id="item_publisher"><strong>Publisher: </strong>
+    <% if @item.publisher %>
+    <%=link_to_if (can? :read, @item.publisher), @item.publisher.name, publisher_path(@item.publisher), id: "show_publisher_#{@item.publisher.id}" %>
+    <% else %>
+    None available
+    <% end %>
+</p>
+<p id="item_collection"><strong>Collection: </strong>
+    <% if @item.collection %>
+    <%=link_to_if (can? :read, @item.collection), @item.collection.name, collection_path(@item.collection), id: "show_collection_#{@item.collection.id}" %>
+    <% else %>
+    None available
+    <% end %>
+</p>
+<p id="item_themes"><strong>Themes: </strong>
+    <% if can? :create, Theme %>
+    <% if can? :update, @item %>
+    <%= link_to 'New', new_theme_path(), id: "new_theme" %>
+    <% end %>
+    <% end %>
+    <% if @item.themes.any? %>
+<ul id="item_themes_list">
+    <% @item.themes.each do |theme| %>
+    <li><%= link_to theme.name, theme_path(theme), id: "show_theme_#{theme.id}" %></li>
+    <% end %>
+</ul>
+<% else %>
+None available
+<% end %>
+</p>
+<p id="item_categories"><strong>Categories: </strong>
+    <% if can? :create, Category %>
+    <% if can? :update, @item %>
+    <%= link_to 'New', new_category_path(), id: "new_category" %>
+    <% end %>
+    <% end %>
+    <% if @item.categories.any? %>
+<ul id="item_categories_list">
+    <% @item.categories.each do |cat| %>
+    <li><%= link_to cat.name, category_path(cat), id: "show_category_#{cat.id}" %></li>
+    <% end %>
+</ul>
+<% else %>
+None available
+<% end %>
+</p>
+</div>
