@@ -1,5 +1,9 @@
+
+
 /* Place all the behaviors and hooks related to the matching controller here. 
  All this logic will automatically be available in application.js. */
+
+//= require circleMenu
 
 $(function(){
 
@@ -13,4 +17,21 @@ $(function(){
         isRTL: true
     });
 
+});
+
+$(function(){
+    /*var cmenus = document.getElementsByClassName("item-actions");
+    for (var i = 0, len = cmenus.length; i < len; i++){
+        cmenus[i].circleMenu({
+            item_diameter: 40,
+            circle_radius: 100,
+            direction: 'top-right'
+        });
+    }*/
+    $('ul.item-actions').circleMenu({
+        item_diameter: 40,
+        circle_radius: 100,
+        trigger:'click',
+        direction: 'bottom-left'
+    });
 });

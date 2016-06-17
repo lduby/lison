@@ -1,3 +1,48 @@
 // Place all the styles related to the items controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+    
+.actions
+    margin-top: 20px
+    
+ul.circleMenu-closed
+    background-color: red
+    
+ul.circleMenu-open
+    background-color: green
+    
+ul.item-actions
+    position: absolute
+    top: 7px
+    right: 10px
+    
+ul.item-actions li:first-child
+    font-weight: bold
+    font-family: arial black
+    font-size: 200%
+    border-color: #fff
+    border-width: 2px
+    border-style: solid
+    box-shadow: 0 0 2px 1px #aaa
+    
+ul.item-actions li
+    display: block
+    width: 30px
+    height: 30px
+    text-align: center
+    line-height: 30px
+    position: absolute
+    z-index: 1000
+    border-radius: 30px
+    transition: all 500ms ease
+    background: #000
+    color: #fff
+    font-size: 25px
+    
+ul.item-actions a
+    text-decoration: none
+    color: #fff
+    
+ul.item-actions li a i
+    color: #CA8359
