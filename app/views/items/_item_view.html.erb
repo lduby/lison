@@ -1,3 +1,80 @@
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h1><%= @item.title %>&nbsp;
+                        <span class="rating">
+                            <% 5.times do %>
+                                <i class="fa fa-star"></i>
+                            <% end %>
+                        </span>
+                        <span>
+                            <a href="#"><span class="fa-stack fa-1x"><i class="fa fa-heart-o fa-stack-1x"></i><strong class="fa-stack-1x heart-text" style="font-size:14px; margin-top: -1px;">12</strong></span></a>
+                            <a href="#"><span class="fa-stack fa-1x" style="margin-top: -10px; margin-left: -30px;"><i class="fa fa-comment-o fa-stack-1x"></i><strong class="fa-stack-1x comment-text" style="font-size:14px; ">27</strong></span></a>
+                        </span>
+                        <span class="actions pull-right">
+                            <% if can? :create, Item %>
+                            <a href="<%= url_for(new_item_path) %>" id="new_item"><i id="add_btn" class="fa fa-plus-circle"></i></a>
+                            <% end %>
+                            <% if can? :update, @item %>
+                            <a href="<%= url_for(edit_item_path(@item)) %>" id="edit_item_<%= @item.id %>"><i id="edit_btn" class="fa fa-pencil"></i></a>
+                            <% end %>
+                            <% if can? :destroy, @item %>
+                            <a href="<%= url_for(item_path(@item)) %>" id="del_item_<%= @item.id %>" data-confirm="Are you sure?" data-method="delete"><i id="del_btn" class="fa fa-trash"></i></a>
+                            <% end %>
+                        </span>
+                    </h1>
+                </div>
+                <div class="section">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                                <div class="thumbnail">
+                                    <% if @item.cover.nil? %>
+                                    <img alt="<%= @item.title %>" src="http://placehold.it/200x200" class="thumb">
+                                    <% else %>
+                                    <%= image_tag(@item.cover.url(:medium), class: "thumb", alt: @item.title) %>
+                                    <% end %>
+                                </div>
+                                <a class="btn btn-primary having-top-space"><i class="fa fa-plus"></i>&nbsp;&nbsp;Dans ma bibliothèque</a>
+                                <a class="btn btn-primary pull-right having-top-space"><i class="fa fa-heart"></i>&nbsp;&nbsp;Coup de coeur</a>
+                            </div>
+                            <div class="col-xs-6 col-sm-9 col-md-10 col-lg-10">    
+                                
+                                    <% if @item.authors.any? %>
+                                    Author<% if @item.authors.size > 1 %>s<% end %>: <%= @item.authors.map{|a| content_tag(:a, a.name, href: url_for(author_path(a)) )}.join(", ").html_safe  %><br>              
+
+                                    <% end %>
+                                    <% if @item.illustrators.any? %>    
+                                    Illustrator% if @item.illustrators.size > 1 %>s<% end %>: <%= @item.illustrators.map{|i| i.name }.join(", ") %><br> 
+                                    <% end %>
+                                    <% if !@item.publisher.nil? %> 
+                                    Publication:  <%= @item.publisher.name %> 
+                                    <% end %>
+                                    <% if !@item.collection.nil? %> 
+                                        Collection:  <%= @item.collection.title %> 
+                                    <% end %>
+                                
+                                <h4>
+                                <% if @item.themes.any? %>
+                                <p>Themes: <%= @item.themes.map{|t| t.name }.join(", ") %></p>          
+                                <% end %>
+                                <% if @item.categories.any? %>
+                                <p>Categories: <%= @item.categories.map{|c| c.name }.join(", ") %></p>          
+                                <% end %>
+                                </h4>
+                                <p class="text-justify">
+                                    <i class="fa fa-fw fa-tag"></i>Tags: princess, monsters, dragons, fun, heroin</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="page-header">
         <h1><%= @item.title %></h1>
