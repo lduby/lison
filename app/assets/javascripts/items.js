@@ -5,9 +5,9 @@
 
 //= require circleMenu
 
-$(function(){
-
-    $('#masonry-container').masonry({
+/*$(function(){
+    // init masonry
+    var grid = $('#masonry-container').masonry({
         itemSelector: '.box',
         // set columnWidth a fraction of the container width
         columnWidth: function( containerWidth ) {
@@ -16,7 +16,22 @@ $(function(){
         gutterWidth: 50,
         isRTL: true
     });
+    
+});*/
 
+$(function(){
+    var grid = $('#masonry-container').imagesLoaded( function() {
+        // init Masonry after all images have loaded
+        grid.masonry({
+            itemSelector: '.box',
+            // set columnWidth a fraction of the container width
+            columnWidth: function( containerWidth ) {
+                return containerWidth / 25;
+            },
+            gutterWidth: 50,
+            isRTL: true
+        });
+    });
 });
 
 $(function(){
